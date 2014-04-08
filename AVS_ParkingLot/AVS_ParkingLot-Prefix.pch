@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'AVS_ParkingLot' target in the 'AVS_ParkingLot' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif

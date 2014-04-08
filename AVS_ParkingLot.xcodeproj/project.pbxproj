@@ -1,0 +1,520 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		068763361844EE800028BEB3 /* libopencv_calib3d.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763251844EE800028BEB3 /* libopencv_calib3d.2.4.4.dylib */; };
+		068763371844EE800028BEB3 /* libopencv_contrib.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763261844EE800028BEB3 /* libopencv_contrib.2.4.4.dylib */; };
+		068763381844EE800028BEB3 /* libopencv_core.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763271844EE800028BEB3 /* libopencv_core.2.4.4.dylib */; };
+		068763391844EE800028BEB3 /* libopencv_features2d.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763281844EE800028BEB3 /* libopencv_features2d.2.4.4.dylib */; };
+		0687633A1844EE800028BEB3 /* libopencv_flann.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763291844EE800028BEB3 /* libopencv_flann.2.4.4.dylib */; };
+		0687633B1844EE800028BEB3 /* libopencv_gpu.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632A1844EE800028BEB3 /* libopencv_gpu.2.4.4.dylib */; };
+		0687633C1844EE800028BEB3 /* libopencv_highgui.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632B1844EE800028BEB3 /* libopencv_highgui.2.4.4.dylib */; };
+		0687633D1844EE800028BEB3 /* libopencv_imgproc.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632C1844EE800028BEB3 /* libopencv_imgproc.2.4.4.dylib */; };
+		0687633E1844EE800028BEB3 /* libopencv_legacy.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632D1844EE800028BEB3 /* libopencv_legacy.2.4.4.dylib */; };
+		0687633F1844EE800028BEB3 /* libopencv_ml.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632E1844EE800028BEB3 /* libopencv_ml.2.4.4.dylib */; };
+		068763401844EE800028BEB3 /* libopencv_nonfree.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0687632F1844EE800028BEB3 /* libopencv_nonfree.2.4.4.dylib */; };
+		068763411844EE800028BEB3 /* libopencv_objdetect.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763301844EE800028BEB3 /* libopencv_objdetect.2.4.4.dylib */; };
+		068763421844EE800028BEB3 /* libopencv_photo.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763311844EE800028BEB3 /* libopencv_photo.2.4.4.dylib */; };
+		068763431844EE800028BEB3 /* libopencv_stitching.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763321844EE800028BEB3 /* libopencv_stitching.2.4.4.dylib */; };
+		068763441844EE800028BEB3 /* libopencv_ts.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763331844EE800028BEB3 /* libopencv_ts.2.4.4.dylib */; };
+		068763451844EE800028BEB3 /* libopencv_video.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763341844EE800028BEB3 /* libopencv_video.2.4.4.dylib */; };
+		068763461844EE800028BEB3 /* libopencv_videostab.2.4.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 068763351844EE800028BEB3 /* libopencv_videostab.2.4.4.dylib */; };
+		397D163518169BC100C9EA21 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D163418169BC100C9EA21 /* Cocoa.framework */; };
+		397D163F18169BC100C9EA21 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 397D163D18169BC100C9EA21 /* InfoPlist.strings */; };
+		397D164118169BC100C9EA21 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 397D164018169BC100C9EA21 /* main.m */; };
+		397D164518169BC100C9EA21 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 397D164318169BC100C9EA21 /* Credits.rtf */; };
+		397D164818169BC100C9EA21 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 397D164718169BC100C9EA21 /* AppDelegate.m */; };
+		397D164B18169BC200C9EA21 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 397D164918169BC200C9EA21 /* MainMenu.xib */; };
+		397D165318169BC200C9EA21 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D165218169BC200C9EA21 /* SenTestingKit.framework */; };
+		397D165418169BC200C9EA21 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D163418169BC100C9EA21 /* Cocoa.framework */; };
+		763EFBE018F3E10D00CBF02C /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 763EFBDF18F3E10D00CBF02C /* ImageProcessor.m */; };
+		FA1D7BA7189AABFF003DE501 /* NSImage+IplImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		397D165518169BC200C9EA21 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 397D162718169BC100C9EA21 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 397D162F18169BC100C9EA21;
+			remoteInfo = AVS_ParkingLot;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		068763251844EE800028BEB3 /* libopencv_calib3d.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_calib3d.2.4.4.dylib; sourceTree = "<group>"; };
+		068763261844EE800028BEB3 /* libopencv_contrib.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_contrib.2.4.4.dylib; sourceTree = "<group>"; };
+		068763271844EE800028BEB3 /* libopencv_core.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_core.2.4.4.dylib; sourceTree = "<group>"; };
+		068763281844EE800028BEB3 /* libopencv_features2d.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_features2d.2.4.4.dylib; sourceTree = "<group>"; };
+		068763291844EE800028BEB3 /* libopencv_flann.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_flann.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632A1844EE800028BEB3 /* libopencv_gpu.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_gpu.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632B1844EE800028BEB3 /* libopencv_highgui.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_highgui.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632C1844EE800028BEB3 /* libopencv_imgproc.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_imgproc.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632D1844EE800028BEB3 /* libopencv_legacy.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_legacy.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632E1844EE800028BEB3 /* libopencv_ml.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_ml.2.4.4.dylib; sourceTree = "<group>"; };
+		0687632F1844EE800028BEB3 /* libopencv_nonfree.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_nonfree.2.4.4.dylib; sourceTree = "<group>"; };
+		068763301844EE800028BEB3 /* libopencv_objdetect.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_objdetect.2.4.4.dylib; sourceTree = "<group>"; };
+		068763311844EE800028BEB3 /* libopencv_photo.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_photo.2.4.4.dylib; sourceTree = "<group>"; };
+		068763321844EE800028BEB3 /* libopencv_stitching.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_stitching.2.4.4.dylib; sourceTree = "<group>"; };
+		068763331844EE800028BEB3 /* libopencv_ts.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_ts.2.4.4.dylib; sourceTree = "<group>"; };
+		068763341844EE800028BEB3 /* libopencv_video.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_video.2.4.4.dylib; sourceTree = "<group>"; };
+		068763351844EE800028BEB3 /* libopencv_videostab.2.4.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_videostab.2.4.4.dylib; sourceTree = "<group>"; };
+		397D163018169BC100C9EA21 /* AVS_ParkingLot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVS_ParkingLot.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		397D163418169BC100C9EA21 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
+		397D163718169BC100C9EA21 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		397D163818169BC100C9EA21 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		397D163918169BC100C9EA21 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		397D163C18169BC100C9EA21 /* AVS_ParkingLot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "AVS_ParkingLot-Info.plist"; sourceTree = "<group>"; };
+		397D163E18169BC100C9EA21 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		397D164018169BC100C9EA21 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		397D164218169BC100C9EA21 /* AVS_ParkingLot-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVS_ParkingLot-Prefix.pch"; sourceTree = "<group>"; };
+		397D164418169BC100C9EA21 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		397D164618169BC100C9EA21 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		397D164718169BC100C9EA21 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		397D164A18169BC200C9EA21 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		397D165118169BC200C9EA21 /* AVS_ParkingLotTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AVS_ParkingLotTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		397D165218169BC200C9EA21 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		763EFBDE18F3E10D00CBF02C /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
+		763EFBDF18F3E10D00CBF02C /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
+		763EFBE118F3EE0100CBF02C /* ImageShower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageShower.h; sourceTree = "<group>"; };
+		FA1D7BA5189AABFF003DE501 /* NSImage+IplImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+IplImage.h"; sourceTree = "<group>"; };
+		FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+IplImage.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		397D162D18169BC100C9EA21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397D163518169BC100C9EA21 /* Cocoa.framework in Frameworks */,
+				068763361844EE800028BEB3 /* libopencv_calib3d.2.4.4.dylib in Frameworks */,
+				068763371844EE800028BEB3 /* libopencv_contrib.2.4.4.dylib in Frameworks */,
+				068763381844EE800028BEB3 /* libopencv_core.2.4.4.dylib in Frameworks */,
+				068763391844EE800028BEB3 /* libopencv_features2d.2.4.4.dylib in Frameworks */,
+				0687633A1844EE800028BEB3 /* libopencv_flann.2.4.4.dylib in Frameworks */,
+				0687633B1844EE800028BEB3 /* libopencv_gpu.2.4.4.dylib in Frameworks */,
+				0687633C1844EE800028BEB3 /* libopencv_highgui.2.4.4.dylib in Frameworks */,
+				0687633D1844EE800028BEB3 /* libopencv_imgproc.2.4.4.dylib in Frameworks */,
+				0687633E1844EE800028BEB3 /* libopencv_legacy.2.4.4.dylib in Frameworks */,
+				0687633F1844EE800028BEB3 /* libopencv_ml.2.4.4.dylib in Frameworks */,
+				068763401844EE800028BEB3 /* libopencv_nonfree.2.4.4.dylib in Frameworks */,
+				068763411844EE800028BEB3 /* libopencv_objdetect.2.4.4.dylib in Frameworks */,
+				068763421844EE800028BEB3 /* libopencv_photo.2.4.4.dylib in Frameworks */,
+				068763431844EE800028BEB3 /* libopencv_stitching.2.4.4.dylib in Frameworks */,
+				068763441844EE800028BEB3 /* libopencv_ts.2.4.4.dylib in Frameworks */,
+				068763451844EE800028BEB3 /* libopencv_video.2.4.4.dylib in Frameworks */,
+				068763461844EE800028BEB3 /* libopencv_videostab.2.4.4.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397D164D18169BC200C9EA21 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397D165318169BC200C9EA21 /* SenTestingKit.framework in Frameworks */,
+				397D165418169BC200C9EA21 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0624B6DD1844EBA700FA6958 /* opencv libs */ = {
+			isa = PBXGroup;
+			children = (
+				068763251844EE800028BEB3 /* libopencv_calib3d.2.4.4.dylib */,
+				068763261844EE800028BEB3 /* libopencv_contrib.2.4.4.dylib */,
+				068763271844EE800028BEB3 /* libopencv_core.2.4.4.dylib */,
+				068763281844EE800028BEB3 /* libopencv_features2d.2.4.4.dylib */,
+				068763291844EE800028BEB3 /* libopencv_flann.2.4.4.dylib */,
+				0687632A1844EE800028BEB3 /* libopencv_gpu.2.4.4.dylib */,
+				0687632B1844EE800028BEB3 /* libopencv_highgui.2.4.4.dylib */,
+				0687632C1844EE800028BEB3 /* libopencv_imgproc.2.4.4.dylib */,
+				0687632D1844EE800028BEB3 /* libopencv_legacy.2.4.4.dylib */,
+				0687632E1844EE800028BEB3 /* libopencv_ml.2.4.4.dylib */,
+				0687632F1844EE800028BEB3 /* libopencv_nonfree.2.4.4.dylib */,
+				068763301844EE800028BEB3 /* libopencv_objdetect.2.4.4.dylib */,
+				068763311844EE800028BEB3 /* libopencv_photo.2.4.4.dylib */,
+				068763321844EE800028BEB3 /* libopencv_stitching.2.4.4.dylib */,
+				068763331844EE800028BEB3 /* libopencv_ts.2.4.4.dylib */,
+				068763341844EE800028BEB3 /* libopencv_video.2.4.4.dylib */,
+				068763351844EE800028BEB3 /* libopencv_videostab.2.4.4.dylib */,
+			);
+			name = "opencv libs";
+			sourceTree = "<group>";
+		};
+		397D162518169BC100C9EA21 = {
+			isa = PBXGroup;
+			children = (
+				397D163A18169BC100C9EA21 /* AVS_ParkingLot */,
+				397D163318169BC100C9EA21 /* Frameworks */,
+				397D163118169BC100C9EA21 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		397D163118169BC100C9EA21 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				397D163018169BC100C9EA21 /* AVS_ParkingLot.app */,
+				397D165118169BC200C9EA21 /* AVS_ParkingLotTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		397D163318169BC100C9EA21 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				397D163418169BC100C9EA21 /* Cocoa.framework */,
+				397D165218169BC200C9EA21 /* SenTestingKit.framework */,
+				397D163618169BC100C9EA21 /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		397D163618169BC100C9EA21 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				397D163718169BC100C9EA21 /* AppKit.framework */,
+				397D163818169BC100C9EA21 /* CoreData.framework */,
+				397D163918169BC100C9EA21 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		397D163A18169BC100C9EA21 /* AVS_ParkingLot */ = {
+			isa = PBXGroup;
+			children = (
+				0624B6DD1844EBA700FA6958 /* opencv libs */,
+				397D164618169BC100C9EA21 /* AppDelegate.h */,
+				397D164718169BC100C9EA21 /* AppDelegate.m */,
+				763EFBE118F3EE0100CBF02C /* ImageShower.h */,
+				763EFBDE18F3E10D00CBF02C /* ImageProcessor.h */,
+				763EFBDF18F3E10D00CBF02C /* ImageProcessor.m */,
+				FA1D7BA5189AABFF003DE501 /* NSImage+IplImage.h */,
+				FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */,
+				397D164918169BC200C9EA21 /* MainMenu.xib */,
+				397D163B18169BC100C9EA21 /* Supporting Files */,
+			);
+			path = AVS_ParkingLot;
+			sourceTree = "<group>";
+		};
+		397D163B18169BC100C9EA21 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				397D163C18169BC100C9EA21 /* AVS_ParkingLot-Info.plist */,
+				397D163D18169BC100C9EA21 /* InfoPlist.strings */,
+				397D164018169BC100C9EA21 /* main.m */,
+				397D164218169BC100C9EA21 /* AVS_ParkingLot-Prefix.pch */,
+				397D164318169BC100C9EA21 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		397D162F18169BC100C9EA21 /* AVS_ParkingLot */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 397D166218169BC200C9EA21 /* Build configuration list for PBXNativeTarget "AVS_ParkingLot" */;
+			buildPhases = (
+				397D162C18169BC100C9EA21 /* Sources */,
+				397D162D18169BC100C9EA21 /* Frameworks */,
+				397D162E18169BC100C9EA21 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AVS_ParkingLot;
+			productName = AVS_ParkingLot;
+			productReference = 397D163018169BC100C9EA21 /* AVS_ParkingLot.app */;
+			productType = "com.apple.product-type.application";
+		};
+		397D165018169BC200C9EA21 /* AVS_ParkingLotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 397D166518169BC200C9EA21 /* Build configuration list for PBXNativeTarget "AVS_ParkingLotTests" */;
+			buildPhases = (
+				397D164C18169BC200C9EA21 /* Sources */,
+				397D164D18169BC200C9EA21 /* Frameworks */,
+				397D164E18169BC200C9EA21 /* Resources */,
+				397D164F18169BC200C9EA21 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				397D165618169BC200C9EA21 /* PBXTargetDependency */,
+			);
+			name = AVS_ParkingLotTests;
+			productName = AVS_ParkingLotTests;
+			productReference = 397D165118169BC200C9EA21 /* AVS_ParkingLotTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		397D162718169BC100C9EA21 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0420;
+			};
+			buildConfigurationList = 397D162A18169BC100C9EA21 /* Build configuration list for PBXProject "AVS_ParkingLot" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 397D162518169BC100C9EA21;
+			productRefGroup = 397D163118169BC100C9EA21 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				397D162F18169BC100C9EA21 /* AVS_ParkingLot */,
+				397D165018169BC200C9EA21 /* AVS_ParkingLotTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		397D162E18169BC100C9EA21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397D163F18169BC100C9EA21 /* InfoPlist.strings in Resources */,
+				397D164518169BC100C9EA21 /* Credits.rtf in Resources */,
+				397D164B18169BC200C9EA21 /* MainMenu.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397D164E18169BC200C9EA21 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		397D164F18169BC200C9EA21 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		397D162C18169BC100C9EA21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				397D164118169BC100C9EA21 /* main.m in Sources */,
+				397D164818169BC100C9EA21 /* AppDelegate.m in Sources */,
+				FA1D7BA7189AABFF003DE501 /* NSImage+IplImage.m in Sources */,
+				763EFBE018F3E10D00CBF02C /* ImageProcessor.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		397D164C18169BC200C9EA21 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		397D165618169BC200C9EA21 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 397D162F18169BC100C9EA21 /* AVS_ParkingLot */;
+			targetProxy = 397D165518169BC200C9EA21 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		397D163D18169BC100C9EA21 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				397D163E18169BC100C9EA21 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		397D164318169BC100C9EA21 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				397D164418169BC100C9EA21 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		397D164918169BC200C9EA21 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				397D164A18169BC200C9EA21 /* en */,
+			);
+			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		397D166018169BC200C9EA21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		397D166118169BC200C9EA21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		397D166318169BC200C9EA21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "AVS_ParkingLot/AVS_ParkingLot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				PRODUCT_NAME = AVS_ParkingLot;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		397D166418169BC200C9EA21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				GCC_ENABLE_OBJC_GC = unsupported;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
+				HEADER_SEARCH_PATHS = /usr/local/include;
+				INFOPLIST_FILE = "AVS_ParkingLot/AVS_ParkingLot-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					"$(inherited)",
+				);
+				PRODUCT_NAME = AVS_ParkingLot;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		397D166618169BC200C9EA21 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AVS_ParkingLot.app/Contents/MacOS/AVS_ParkingLot";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
+				INFOPLIST_FILE = "AVS_ParkingLotTests/AVS_ParkingLotTests-Info.plist";
+				PRODUCT_NAME = AVS_ParkingLotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		397D166718169BC200C9EA21 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/AVS_ParkingLot.app/Contents/MacOS/AVS_ParkingLot";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
+				INFOPLIST_FILE = "AVS_ParkingLotTests/AVS_ParkingLotTests-Info.plist";
+				PRODUCT_NAME = AVS_ParkingLotTests;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		397D162A18169BC100C9EA21 /* Build configuration list for PBXProject "AVS_ParkingLot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397D166018169BC200C9EA21 /* Debug */,
+				397D166118169BC200C9EA21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		397D166218169BC200C9EA21 /* Build configuration list for PBXNativeTarget "AVS_ParkingLot" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397D166318169BC200C9EA21 /* Debug */,
+				397D166418169BC200C9EA21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		397D166518169BC200C9EA21 /* Build configuration list for PBXNativeTarget "AVS_ParkingLotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				397D166618169BC200C9EA21 /* Debug */,
+				397D166718169BC200C9EA21 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 397D162718169BC100C9EA21 /* Project object */;
+}
