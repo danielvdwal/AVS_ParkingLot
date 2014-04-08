@@ -11,11 +11,10 @@
 @implementation NSImage (IplImage)
 
 + (NSImage*)imageWithIplImage:(IplImage *)image {
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     // Allocating the buffer for CGImage
     NSData *data = [NSData dataWithBytes:image->imageData length:image->imageSize];
-    CGDataProviderRef provider =
-    CGDataProviderCreateWithCFData((CFDataRef)data);
+    CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)data);
     // Creating CGImage from chunk of IplImage
     CGImageRef imageRef = CGImageCreate(image->width, image->height, image->depth, 
                                         image->depth * image->nChannels, image->widthStep,
@@ -25,7 +24,7 @@
     NSSize size;
     size.height = image->height;
     size.width = image->width;
-    NSImage *ret = [[NSImage alloc] initWithCGImage:imageRef size:size];
+    NSImage *ret = [[[NSImage alloc] initWithCGImage:imageRef size:size] autorelease];
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpace);

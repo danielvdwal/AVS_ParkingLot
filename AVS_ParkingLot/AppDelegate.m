@@ -7,19 +7,31 @@
 //
 
 #import "AppDelegate.h"
+#import "NSImage+IplImage.h"
 
 @implementation AppDelegate
 
 @synthesize window;
-@synthesize imageView;
+@synthesize image1View;
+@synthesize image2View;
+@synthesize image3View;
+@synthesize image4View;
+@synthesize cameraView;
+@synthesize mode1Button;
+@synthesize mode2Button;
+@synthesize mode3Button;
 @synthesize startButton;
 @synthesize stopButton;
+@synthesize textView;
 @synthesize imageProcessor;
+@synthesize imageViews;
 
-- (id)init {
+- (id)init 
+{
     self = [super init];
     if(self) {
         imageProcessor = [[ImageProcessor alloc] init];
+        [imageProcessor setDelegate:self];
     }
     return self;
 }
@@ -31,23 +43,59 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)notification
 {
+    self.imageViews = [NSArray arrayWithObjects:
+                       self.image1View, 
+                       self.image2View,
+                       self.image3View,
+                       self.image4View, 
+                       nil];
 }
 
-- (void)showImage:(NSImage *)image {
-    imageView.image = image;
+- (void)showCameraImage:(NSImage *)image 
+{
+    [cameraView setImage:image];
 }
 
-- (IBAction)startClicked:(id)sender {
-    if([imageProcessor startWithDelegate:self]) {
-        [startButton setEnabled:NO];
-        [stopButton setEnabled:YES];
+- (void)showImages:(NSArray *)images 
+{
+    for(int i=0; i < images.count; i++) 
+    {
+        [((NSImageView*)[imageViews objectAtIndex:i]) setImage:[images objectAtIndex:i]];
     }
 }
 
-- (IBAction)stopClicked:(id)sender {
-    [imageProcessor stop];
-    [stopButton setEnabled:NO];
-    [startButton setEnabled:YES];
+- (void)setText:(NSString*)text 
+{
+    [self.textView insertText:text];
+    [self.textView insertText:@"\n"];
+}
+
+- (IBAction)mode1Clicked:(id)sender 
+{
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot.jpg"];
+}
+- (IBAction)mode2Clicked:(id)sender 
+{
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_numbers_2.jpg"];
+}
+- (IBAction)mode3Clicked:(id)sender 
+{
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_numbers.jpg"];
+}
+
+- (IBAction)startClicked:(id)sender 
+{
+    if([imageProcessor canProcessCamera]) 
+    {
+        [imageProcessor startProcessingCamera];
+    }
+}
+    
+- (IBAction)stopClicked:(id)sender 
+{
+    [imageProcessor stopProcessingCamera];
+    [self showCameraImage:nil];
 }
 
 @end
+

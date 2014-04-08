@@ -10,6 +10,8 @@
 
 @protocol ImageShower <NSObject>
 
-- (void)showImage:(NSImage*)image;
+- (void)setText:(NSString*)text;
+- (void)showCameraImage:(NSImage*)image;
+- (void)showImages:(NSArray*)images;
 
 @end

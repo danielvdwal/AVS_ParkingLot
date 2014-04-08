@@ -21,7 +21,9 @@
 @property (retain) NSThread* workerThread;
 @property (assign) id<ImageShower> delegate;
 
-- (BOOL)startWithDelegate:(id)delegate;
-- (void)stop;
+- (void)processImageWithFileName:(NSString*)fileName;
+- (BOOL)canProcessCamera;
+- (void)startProcessingCamera;
+- (void)stopProcessingCamera;
 
 @end
