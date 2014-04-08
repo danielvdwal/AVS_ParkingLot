@@ -426,9 +426,13 @@
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					AVS_ParkingLot,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = "AVS_ParkingLot/AVS_ParkingLot-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
+					AVS_ParkingLot,
 					/usr/local/lib,
 					"$(inherited)",
 				);
@@ -445,9 +449,13 @@
 				GCC_ENABLE_OBJC_GC = unsupported;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "AVS_ParkingLot/AVS_ParkingLot-Prefix.pch";
-				HEADER_SEARCH_PATHS = /usr/local/include;
+				HEADER_SEARCH_PATHS = (
+					AVS_ParkingLot,
+					/usr/local/include,
+				);
 				INFOPLIST_FILE = "AVS_ParkingLot/AVS_ParkingLot-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
+					AVS_ParkingLot,
 					/usr/local/lib,
 					"$(inherited)",
 				);
