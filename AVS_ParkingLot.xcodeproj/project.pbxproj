@@ -36,6 +36,7 @@
 		76E9C0C918FD21DC00285F64 /* parkingLot_2_cars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */; };
 		76E9C0CA18FD21DC00285F64 /* parkingLot_template.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0C818FD21DC00285F64 /* parkingLot_template.jpg */; };
 		76E9C0CC18FD328100285F64 /* parkingLot_4_cars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */; };
+		E80B1F2818FD5A870063B6E8 /* EdgeDetection.m in Sources */ = {isa = PBXBuildFile; fileRef = E80B1F2718FD5A870063B6E8 /* EdgeDetection.m */; };
 		FA1D7BA7189AABFF003DE501 /* NSImage+IplImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +89,8 @@
 		76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_2_cars.jpg; sourceTree = "<group>"; };
 		76E9C0C818FD21DC00285F64 /* parkingLot_template.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_template.jpg; sourceTree = "<group>"; };
 		76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_4_cars.jpg; sourceTree = "<group>"; };
+		E80B1F2618FD5A870063B6E8 /* EdgeDetection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EdgeDetection.h; path = ../../EdgeDetection.h; sourceTree = "<group>"; };
+		E80B1F2718FD5A870063B6E8 /* EdgeDetection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EdgeDetection.m; path = ../../EdgeDetection.m; sourceTree = "<group>"; };
 		FA1D7BA5189AABFF003DE501 /* NSImage+IplImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+IplImage.h"; sourceTree = "<group>"; };
 		FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+IplImage.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -195,6 +198,8 @@
 		397D163A18169BC100C9EA21 /* AVS_ParkingLot */ = {
 			isa = PBXGroup;
 			children = (
+				E80B1F2618FD5A870063B6E8 /* EdgeDetection.h */,
+				E80B1F2718FD5A870063B6E8 /* EdgeDetection.m */,
 				0624B6DD1844EBA700FA6958 /* opencv libs */,
 				76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */,
 				76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */,
@@ -337,6 +342,7 @@
 				397D164818169BC100C9EA21 /* AppDelegate.m in Sources */,
 				FA1D7BA7189AABFF003DE501 /* NSImage+IplImage.m in Sources */,
 				763EFBE018F3E10D00CBF02C /* ImageProcessor.m in Sources */,
+				E80B1F2818FD5A870063B6E8 /* EdgeDetection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
