@@ -21,7 +21,10 @@
 @property (retain) NSThread* workerThread;
 @property (assign) id<ImageShower> delegate;
 
-- (void)processImageWithFileName:(NSString*)fileName;
+- (void)processImageOnTemplateMethodWithFileName:(NSString*)fileName;
+- (void)processImageOnObjectDetectionMethodWithFileName:(NSString *)fileName 
+                                       WithThresholdMin:(int)min
+                                        AndThresholdMax:(int)max;
 - (BOOL)canProcessCamera;
 - (void)startProcessingCamera;
 - (void)stopProcessingCamera;

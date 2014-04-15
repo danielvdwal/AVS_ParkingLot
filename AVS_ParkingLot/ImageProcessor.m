@@ -22,7 +22,7 @@
     return self;
 }
 
--(void)processImageWithFileName:(NSString*)fileName {
+-(void)processImageOnTemplateMethodWithFileName:(NSString*)fileName {
     IplImage* blank = cvLoadImage("/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg",0);
     IplImage* blankParkingSpot01 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
     IplImage* blankParkingSpot02 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
@@ -90,8 +90,65 @@
     [self.delegate showImages:images];
 }
 
+-(void)processImageOnObjectDetectionMethodWithFileName:(NSString *)fileName 
+                                      WithThresholdMin:(int)min
+                                       AndThresholdMax:(int)max {
+    IplImage* src = cvLoadImage([fileName UTF8String] ,0);
+    IplImage* parkingSpot01 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* parkingSpot02 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* parkingSpot03 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* parkingSpot04 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage *(parkingSpots[]) = { parkingSpot01, parkingSpot02, parkingSpot03, parkingSpot04};
+        
+    IplImage* cannyParkingSpot01 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* cannyParkingSpot02 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* cannyParkingSpot03 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage* cannyParkingSpot04 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
+    IplImage *(cannyParkingSpots[]) = { cannyParkingSpot01, cannyParkingSpot02, cannyParkingSpot03, cannyParkingSpot04};
+    
+    int size = sizeof(parkingSpots) / sizeof(IplImage*);
+    for(int i=0; i < size; i++) {
+        // Say what the source region is 
+        cvSetImageROI(src, cvRect(i*158 + 45, 15, 170, 260)); 
+        
+        // Do the copy 
+        cvCopy(src, parkingSpots[i], NULL); 
+        cvResetImageROI(src);
+        
+        cvCanny(parkingSpots[i], cannyParkingSpots[i], min, max, 3);
+        
+        CvScalar white = CV_RGB( 255, 255, 255 );
+        
+        CvMemStorage* storage = cvCreateMemStorage(0);
+        CvSeq* contour = 0;
+        
+        cvFindContours(cannyParkingSpots[i], storage, &contour, sizeof(CvContour), CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE, cvPoint(0, 0) );
+        
+        for( ; contour != 0; contour = contour->h_next )
+        {
+            cvDrawContours( cannyParkingSpots[i], contour, white, white, 1, CV_FILLED, 8, cvPoint(0, 0));
+        }
+
+        double n = cvCountNonZero(cannyParkingSpots[i]);
+        double x = cannyParkingSpots[i]->height * cannyParkingSpots[i]->width;
+        NSLog(@"%f / %f", n, x);  
+        if(n/x > 0.2) {
+            [self.delegate setText:[NSString stringWithFormat:@"Parking slot %d is occupied!", i+1]]; 
+        } else {
+            [self.delegate setText:[NSString stringWithFormat:@"Parking slot %d is free!", i+1]]; 
+        }
+    }
+        
+    NSImage* image1 = [NSImage imageWithIplImage:cannyParkingSpot01];
+    NSImage* image2 = [NSImage imageWithIplImage:cannyParkingSpot02];
+    NSImage* image3 = [NSImage imageWithIplImage:cannyParkingSpot03];
+    NSImage* image4 = [NSImage imageWithIplImage:cannyParkingSpot04];
+    NSArray* images = [NSArray arrayWithObjects:image1, image2, image3, image4, nil];
+    [self.delegate showImages:images];
+}
+
 -(BOOL)canProcessCamera {
-    self.capture = cvCaptureFromCAM(-1);
+    self.capture = cvCaptureFromCAM(0);
     if (!self.capture) {
         NSLog(@"Cannot initialize webcam");
         return NO;
@@ -120,7 +177,9 @@
         while(_continue) {
             IplImage *capturedImage = cvQueryFrame(capture);
             NSImage *image = [NSImage imageWithIplImage:capturedImage];
+            capturedImage = nil;
             [self.delegate showCameraImage:image];
+            cvWaitKey(33);
         }
     }
     [pool release];

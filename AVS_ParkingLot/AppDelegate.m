@@ -20,11 +20,19 @@
 @synthesize mode1Button;
 @synthesize mode2Button;
 @synthesize mode3Button;
+@synthesize mode4Button;
+@synthesize mode5Button;
+@synthesize mode6Button;
 @synthesize startButton;
 @synthesize stopButton;
 @synthesize textView;
 @synthesize imageProcessor;
 @synthesize imageViews;
+@synthesize lastButtonPressed;
+@synthesize minValueTextField;
+@synthesize maxValueTextField;
+@synthesize minValue;
+@synthesize maxValue;
 
 - (id)init 
 {
@@ -32,6 +40,8 @@
     if(self) {
         imageProcessor = [[ImageProcessor alloc] init];
         [imageProcessor setDelegate:self];
+        minValue = 0;
+        maxValue = 45;
     }
     return self;
 }
@@ -49,6 +59,9 @@
                        self.image3View,
                        self.image4View, 
                        nil];
+    
+    [minValueTextField setStringValue:[NSString stringWithFormat:@"%d", minValue]];
+    [maxValueTextField setStringValue:[NSString stringWithFormat:@"%d", maxValue]];
 }
 
 - (void)showCameraImage:(NSImage *)image 
@@ -72,15 +85,33 @@
 
 - (IBAction)mode1Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg"];
+    lastButtonPressed = mode1Button;
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg"];
 }
 - (IBAction)mode2Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg"];
+    lastButtonPressed = mode2Button;
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg"];
 }
 - (IBAction)mode3Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg"];
+    lastButtonPressed = mode3Button;
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg"];
+}
+
+- (IBAction)mode4Clicked:(id)sender {
+    lastButtonPressed = mode4Button;
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:0 AndThresholdMax:45];
+}
+
+- (IBAction)mode5Clicked:(id)sender {
+    lastButtonPressed = mode5Button;
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
+}
+
+- (IBAction)mode6Clicked:(id)sender {
+    lastButtonPressed = mode6Button;
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
 }
 
 - (IBAction)startClicked:(id)sender 
@@ -95,6 +126,31 @@
 {
     [imageProcessor stopProcessingCamera];
     [self showCameraImage:nil];
+}
+
+- (IBAction)minSliderValueChanged:(id)sender {
+    NSSlider *slider = (NSSlider *)sender;
+    minValue = slider.intValue;
+    [minValueTextField setStringValue:[NSString stringWithFormat:@"%d", minValue]];
+    if(lastButtonPressed == mode4Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    } else if(lastButtonPressed == mode5Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    } else if(lastButtonPressed == mode6Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    }
+}
+- (IBAction)maxSliderValueChanged:(id)sender {
+    NSSlider *slider = (NSSlider *)sender;
+    maxValue = slider.intValue;
+    [maxValueTextField setStringValue:[NSString stringWithFormat:@"%d", maxValue]];
+    if(lastButtonPressed == mode4Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    } else if(lastButtonPressed == mode5Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    } else if(lastButtonPressed == mode6Button) {
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+    }
 }
 
 @end
