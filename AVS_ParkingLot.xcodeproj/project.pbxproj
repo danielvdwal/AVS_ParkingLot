@@ -33,7 +33,9 @@
 		397D165318169BC200C9EA21 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D165218169BC200C9EA21 /* SenTestingKit.framework */; };
 		397D165418169BC200C9EA21 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 397D163418169BC100C9EA21 /* Cocoa.framework */; };
 		763EFBE018F3E10D00CBF02C /* ImageProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = 763EFBDF18F3E10D00CBF02C /* ImageProcessor.m */; };
-		763EFBEE18F40B5700CBF02C /* parkingLot.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 763EFBED18F40B5700CBF02C /* parkingLot.jpg */; };
+		76E9C0C918FD21DC00285F64 /* parkingLot_2_cars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */; };
+		76E9C0CA18FD21DC00285F64 /* parkingLot_template.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0C818FD21DC00285F64 /* parkingLot_template.jpg */; };
+		76E9C0CC18FD328100285F64 /* parkingLot_4_cars.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */; };
 		FA1D7BA7189AABFF003DE501 /* NSImage+IplImage.m in Sources */ = {isa = PBXBuildFile; fileRef = FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */; };
 /* End PBXBuildFile section */
 
@@ -83,7 +85,9 @@
 		763EFBDE18F3E10D00CBF02C /* ImageProcessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessor.h; sourceTree = "<group>"; };
 		763EFBDF18F3E10D00CBF02C /* ImageProcessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessor.m; sourceTree = "<group>"; };
 		763EFBE118F3EE0100CBF02C /* ImageShower.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageShower.h; sourceTree = "<group>"; };
-		763EFBED18F40B5700CBF02C /* parkingLot.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot.jpg; sourceTree = "<group>"; };
+		76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_2_cars.jpg; sourceTree = "<group>"; };
+		76E9C0C818FD21DC00285F64 /* parkingLot_template.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_template.jpg; sourceTree = "<group>"; };
+		76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = parkingLot_4_cars.jpg; sourceTree = "<group>"; };
 		FA1D7BA5189AABFF003DE501 /* NSImage+IplImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSImage+IplImage.h"; sourceTree = "<group>"; };
 		FA1D7BA6189AABFF003DE501 /* NSImage+IplImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSImage+IplImage.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,7 +196,9 @@
 			isa = PBXGroup;
 			children = (
 				0624B6DD1844EBA700FA6958 /* opencv libs */,
-				763EFBED18F40B5700CBF02C /* parkingLot.jpg */,
+				76E9C0C718FD21DC00285F64 /* parkingLot_2_cars.jpg */,
+				76E9C0CB18FD328000285F64 /* parkingLot_4_cars.jpg */,
+				76E9C0C818FD21DC00285F64 /* parkingLot_template.jpg */,
 				397D164618169BC100C9EA21 /* AppDelegate.h */,
 				397D164718169BC100C9EA21 /* AppDelegate.m */,
 				763EFBE118F3EE0100CBF02C /* ImageShower.h */,
@@ -291,7 +297,9 @@
 				397D163F18169BC100C9EA21 /* InfoPlist.strings in Resources */,
 				397D164518169BC100C9EA21 /* Credits.rtf in Resources */,
 				397D164B18169BC200C9EA21 /* MainMenu.xib in Resources */,
-				763EFBEE18F40B5700CBF02C /* parkingLot.jpg in Resources */,
+				76E9C0C918FD21DC00285F64 /* parkingLot_2_cars.jpg in Resources */,
+				76E9C0CA18FD21DC00285F64 /* parkingLot_template.jpg in Resources */,
+				76E9C0CC18FD328100285F64 /* parkingLot_4_cars.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

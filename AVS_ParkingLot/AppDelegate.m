@@ -72,15 +72,15 @@
 
 - (IBAction)mode1Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot.jpg"];
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg"];
 }
 - (IBAction)mode2Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_numbers_2.jpg"];
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg"];
 }
 - (IBAction)mode3Clicked:(id)sender 
 {
-    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_numbers.jpg"];
+    [imageProcessor processImageWithFileName:@"/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg"];
 }
 
 - (IBAction)startClicked:(id)sender 
