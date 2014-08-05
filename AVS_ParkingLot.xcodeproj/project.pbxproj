@@ -758,6 +758,7 @@
 				EB6DCC7C1990D3960037F627 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EB6DCC7D1990D3960037F627 /* Build configuration list for PBXNativeTarget "AVS_ParkingLotTests" */ = {
 			isa = XCConfigurationList;
@@ -766,6 +767,7 @@
 				EB6DCC7F1990D3960037F627 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

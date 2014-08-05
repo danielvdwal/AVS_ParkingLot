@@ -23,7 +23,7 @@
 }
 
 -(void)processImageOnTemplateMethodWithFileName:(NSString*)fileName {
-    IplImage* blank = cvLoadImage("/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg",0);
+    IplImage* blank = cvLoadImage("AVS_ParkingLot.app/Contents/Resources/parkingLot_template.jpg",0);
     IplImage* blankParkingSpot01 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
     IplImage* blankParkingSpot02 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
     IplImage* blankParkingSpot03 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);

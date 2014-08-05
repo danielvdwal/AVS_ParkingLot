@@ -82,32 +82,32 @@
 - (IBAction)mode1Clicked:(id)sender
 {
     lastButtonPressed = mode1Button;
-    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg"];
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_template.jpg"];
 }
 - (IBAction)mode2Clicked:(id)sender
 {
     lastButtonPressed = mode2Button;
-    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg"];
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_2_cars.jpg"];
 }
 - (IBAction)mode3Clicked:(id)sender
 {
     lastButtonPressed = mode3Button;
-    [imageProcessor processImageOnTemplateMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg"];
+    [imageProcessor processImageOnTemplateMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_4_cars.jpg"];
 }
 
 - (IBAction)mode4Clicked:(id)sender {
     lastButtonPressed = mode4Button;
-    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:0 AndThresholdMax:45];
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_template.jpg" WithThresholdMin:0 AndThresholdMax:45];
 }
 
 - (IBAction)mode5Clicked:(id)sender {
     lastButtonPressed = mode5Button;
-    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_2_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
 }
 
 - (IBAction)mode6Clicked:(id)sender {
     lastButtonPressed = mode6Button;
-    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
+    [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_4_cars.jpg" WithThresholdMin:0 AndThresholdMax:45];
 }
 
 - (IBAction)startClicked:(id)sender
@@ -129,11 +129,11 @@
     minValue = slider.intValue;
     [minValueTextField setStringValue:[NSString stringWithFormat:@"%d", minValue]];
     if(lastButtonPressed == mode4Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     } else if(lastButtonPressed == mode5Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     } else if(lastButtonPressed == mode6Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     }
 }
 - (IBAction)maxSliderValueChanged:(id)sender {
@@ -141,11 +141,11 @@
     maxValue = slider.intValue;
     [maxValueTextField setStringValue:[NSString stringWithFormat:@"%d", maxValue]];
     if(lastButtonPressed == mode4Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_template.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     } else if(lastButtonPressed == mode5Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_2_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     } else if(lastButtonPressed == mode6Button) {
-        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
+        [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     }
 }
 
