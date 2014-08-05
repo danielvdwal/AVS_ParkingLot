@@ -5,7 +5,6 @@
 //  Created by Daniel van der Wal on 08.04.14.
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
-// TEST
 
 #import "AppDelegate.h"
 #import "NSImage+IplImage.h"
