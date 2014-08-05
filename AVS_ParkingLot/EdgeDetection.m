@@ -23,13 +23,13 @@ int i;
     IplImage *probabilistic_hough = [self canny:src];
     
     // Use Probabilistic Hough Transform
-    lines = cvHoughLines2( probabilistic_hough, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 100, 500, 0 );
+    lines = cvHoughLines2( probabilistic_hough, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 50, 150, 25 );
     
     // Show the result
     for( i = 0; i < lines->total; i++ )
     {
         CvPoint* line = (CvPoint*)cvGetSeqElem(lines,i);
-        cvLine( probabilistic_hough, line[0], line[1], CV_RGB(255,0,0), 3, CV_AA, 0 );
+        cvLine( probabilistic_hough, line[0], line[1], CV_RGB(255,255,255), 25, CV_AA, 0 );
     }
     
     return probabilistic_hough;
