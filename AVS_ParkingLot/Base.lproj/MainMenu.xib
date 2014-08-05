@@ -881,7 +881,7 @@
                         </textFieldCell>
                     </textField>
                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TV-5C-bQa">
-                        <rect key="frame" x="17" y="95" width="928" height="494"/>
+                        <rect key="frame" x="17" y="73" width="621" height="516"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="6K1-6e-ox4"/>
                     </imageView>

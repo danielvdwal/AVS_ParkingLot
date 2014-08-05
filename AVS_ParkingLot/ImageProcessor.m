@@ -110,6 +110,7 @@
     EdgeDetection *edgeDec = [[EdgeDetection alloc] init];
     IplImage* edgeImg = [edgeDec probabilisticHough:src];
     
+    /*
     int size = sizeof(parkingSpots) / sizeof(IplImage*);
     for(int i=0; i < size; i++) {
         // Say what the source region is 
@@ -142,13 +143,14 @@
             [self.delegate setText:[NSString stringWithFormat:@"Parking slot %d is free!", i+1]]; 
         }
     }
+    */
         
-    NSImage* image1 = [NSImage imageWithIplImage:cannyParkingSpot01];
-    NSImage* image2 = [NSImage imageWithIplImage:cannyParkingSpot02];
-    NSImage* image3 = [NSImage imageWithIplImage:cannyParkingSpot03];
-    NSImage* image4 = [NSImage imageWithIplImage:cannyParkingSpot04];
+    //NSImage* image1 = [NSImage imageWithIplImage:cannyParkingSpot01];
+    //NSImage* image2 = [NSImage imageWithIplImage:cannyParkingSpot02];
+    //NSImage* image3 = [NSImage imageWithIplImage:cannyParkingSpot03];
+    //NSImage* image4 = [NSImage imageWithIplImage:cannyParkingSpot04];
     NSImage* edgeImage = [NSImage imageWithIplImage:edgeImg];
-    NSArray* images = [NSArray arrayWithObjects:edgeImage, image2, image3, image4, nil];
+    NSArray* images = [NSArray arrayWithObjects:edgeImage, nil];//image1, image2, image3, image4, nil];
     [self.delegate showImages:images];
 }
 
@@ -182,7 +184,7 @@
             NSImage *image = [NSImage imageWithIplImage:capturedImage];
             capturedImage = nil;
             [self.delegate showCameraImage:image];
-            cvWaitKey(33);
+            cvWaitKey(100);
         }
     }
 }
