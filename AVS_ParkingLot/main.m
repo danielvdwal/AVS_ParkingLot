@@ -2,13 +2,13 @@
 //  main.m
 //  AVS_ParkingLot
 //
-//  Created by Daniel van der Wal on 08.04.14.
-//  Copyright (c) 2014 __MyCompanyName__. All rights reserved.
+//  Created by Daniel van der Wal on 05.08.14.
+//  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
 
-int main(int argc, char *argv[])
+int main(int argc, const char * argv[])
 {
-    return NSApplicationMain(argc, (const char **)argv);
+    return NSApplicationMain(argc, argv);
 }

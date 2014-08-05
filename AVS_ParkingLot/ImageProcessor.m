@@ -23,7 +23,7 @@
 }
 
 -(void)processImageOnTemplateMethodWithFileName:(NSString*)fileName {
-    IplImage* blank = cvLoadImage("/Users/danielvanderwal/Developer/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg",0);
+    IplImage* blank = cvLoadImage("/Users/dvanderw/Xcode/AVS_ParkingLot/AVS_ParkingLot/parkingLot_template.jpg",0);
     IplImage* blankParkingSpot01 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
     IplImage* blankParkingSpot02 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
     IplImage* blankParkingSpot03 = cvCreateImage(cvSize(170,260), blank->depth, blank->nChannels);
@@ -171,8 +171,6 @@
 }
 
 -(void)doWork:(id)arg {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
     @autoreleasepool {
         while(_continue) {
             IplImage *capturedImage = cvQueryFrame(capture);
@@ -182,7 +180,6 @@
             cvWaitKey(33);
         }
     }
-    [pool release];
 }
 
 @end

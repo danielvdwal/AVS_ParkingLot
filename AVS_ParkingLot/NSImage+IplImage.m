@@ -24,7 +24,7 @@
     NSSize size;
     size.height = image->height;
     size.width = image->width;
-    NSImage *ret = [[[NSImage alloc] initWithCGImage:imageRef size:size] autorelease];
+    NSImage *ret = [[NSImage alloc] initWithCGImage:imageRef size:size];
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpace);

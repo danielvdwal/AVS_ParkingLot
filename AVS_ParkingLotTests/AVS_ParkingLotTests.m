@@ -1,32 +1,34 @@
 //
-//  DObjectsTestTests.m
-//  DObjectsTestTests
+//  AVS_ParkingLotTests.m
+//  AVS_ParkingLotTests
 //
-//  Created by Patrick Englert on 22.10.13.
-//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
+//  Created by Daniel van der Wal on 05.08.14.
+//  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#import "DObjectsTestTests.h"
+#import <XCTest/XCTest.h>
 
-@implementation DObjectsTestTests
+@interface AVS_ParkingLotTests : XCTestCase
+
+@end
+
+@implementation AVS_ParkingLotTests
 
 - (void)setUp
 {
     [super setUp];
-    
-    // Set-up code here.
+    // Put setup code here. This method is called before the invocation of each test method in the class.
 }
 
 - (void)tearDown
 {
-    // Tear-down code here.
-    
+    // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
 
 - (void)testExample
 {
-    STFail(@"Unit tests are not implemented yet in DObjectsTestTests");
+    XCTFail(@"No implementation for \"%s\"", __PRETTY_FUNCTION__);
 }
 
 @end
