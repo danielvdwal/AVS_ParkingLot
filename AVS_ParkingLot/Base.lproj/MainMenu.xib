@@ -691,11 +691,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="1120" height="606"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TV-5C-bQa">
-                        <rect key="frame" x="17" y="289" width="270" height="300"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="6K1-6e-ox4"/>
-                    </imageView>
                     <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tSY-gv-20K">
                         <rect key="frame" x="289" y="289" width="270" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -885,6 +880,11 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TV-5C-bQa">
+                        <rect key="frame" x="17" y="95" width="928" height="494"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="6K1-6e-ox4"/>
+                    </imageView>
                 </subviews>
             </view>
         </window>
