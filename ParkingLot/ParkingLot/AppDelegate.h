@@ -6,9 +6,12 @@
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#include "CameraConnector.h"
 
-@interface AppDelegate : NSObject <NSApplicationDelegate>
+@interface AppDelegate : NSObject <NSApplicationDelegate> {
+    @private
+    CameraConnector* _cameraConnector;
+}
 
 @property (assign) IBOutlet NSWindow *window;
 @property (weak) IBOutlet NSImageView *cameraView;

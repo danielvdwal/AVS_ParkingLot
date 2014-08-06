@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>BAF25348-8B50-4C24-ACFE-AEE62B032F23</string>
+	<string>93AAAB09-202F-4234-8BE7-5828FCC7F991</string>
 	<key>IDESourceControlProjectName</key>
 	<string>AVS_ParkingLot</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>28B9357B-E860-4E4D-B741-E8128CA65CCE</key>
+		<key>1FCF2751-4C0B-4BFB-912A-2C09B4BB1C6F</key>
 		<string>https://github.com/danielvdwal/AVS_ParkingLot.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>AVS_ParkingLot.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>28B9357B-E860-4E4D-B741-E8128CA65CCE</key>
+		<key>1FCF2751-4C0B-4BFB-912A-2C09B4BB1C6F</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>28B9357B-E860-4E4D-B741-E8128CA65CCE</string>
+	<string>1FCF2751-4C0B-4BFB-912A-2C09B4BB1C6F</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>28B9357B-E860-4E4D-B741-E8128CA65CCE</string>
+			<string>1FCF2751-4C0B-4BFB-912A-2C09B4BB1C6F</string>
 			<key>IDESourceControlWCCName</key>
 			<string>AVS_ParkingLot</string>
 		</dict>

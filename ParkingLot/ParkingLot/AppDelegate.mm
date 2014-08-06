@@ -15,9 +15,11 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    _cameraConnector = [[CameraConnector alloc] init];
 }
 
 - (IBAction)startCamera:(id)sender {
+    [_cameraConnector connectToCamera:0];
 }
 
 - (IBAction)stopCamera:(id)sender {
