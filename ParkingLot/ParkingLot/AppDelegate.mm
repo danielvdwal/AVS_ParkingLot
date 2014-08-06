@@ -15,7 +15,7 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    _cameraConnector = [[CameraConnector alloc] init];
+    _cameraConnector = [[CameraConnector alloc] initWithDelegate:self];
 }
 
 - (IBAction)startCamera:(id)sender {
@@ -23,7 +23,7 @@
 }
 
 - (IBAction)stopCamera:(id)sender {
-    [_cameraConnector connectToCamera:0 AndSendImageTo:_cameraView];
+    [_cameraConnector connectToCamera:0];
 }
 
 - (IBAction)showClusterManagerWindow:(id)sender {
@@ -35,4 +35,15 @@
     }
     [_clusterManagerWindow showWindow:self];    
 }
+
+- (void)setImage:(NSImage *)image {
+    @autoreleasepool {
+        [image setDataRetained:NO];
+        [image setCacheMode:NSImageCacheNever];
+        [image setScalesWhenResized:NO];
+        [image setCacheDepthMatchesImageDepth:YES];
+        [[self cameraView] setImage:image];
+    }
+}
+
 @end

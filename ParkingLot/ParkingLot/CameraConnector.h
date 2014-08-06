@@ -12,6 +12,7 @@
     @private
     cv::VideoCapture _camera;
     BOOL _connected;
+    id _delegate;
     //CvCapture* _camera;
     //BOOL _connected;
     //CvMat _frame;
@@ -19,9 +20,9 @@
     //CvMat _image;
 }
 
+- (id)initWithDelegate:(id)delegate;
 - (void)connectToCameraOpenCV:(int)camId;
-- (void)connectToCamera:(int)camId
-         AndSendImageTo:(NSImageView*)view;
+- (void)connectToCamera:(int)camId;
 - (void)closeCameraConnection:(int)camId;
 
 @end

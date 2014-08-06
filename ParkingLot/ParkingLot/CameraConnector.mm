@@ -11,10 +11,11 @@
 
 @implementation CameraConnector
 
-- (id)init {
+- (id)initWithDelegate:(id)delegate {
     if (self = [super init])
     {
         _connected = NO;
+        _delegate = delegate;
     }
     return self;
 }
@@ -37,32 +38,31 @@
     cv::destroyWindow("Camera");
 }
 
-- (void)connectToCamera:(int)camId
-         AndSendImageTo:(NSImageView *)view {
-    
+- (void)connectToCamera:(int)camId {
     // 0=default, -1=any camera, 1..99 your camera
     _camera = cv::VideoCapture(camId);
     NSThread *workerThread = [[NSThread alloc] initWithTarget:self
                                                      selector:@selector(doWork:)
-                                                       object:view];
+                                                       object:nil];
     _connected = YES;
     [workerThread start];
 }
 
 -(void)doWork:(id)arg {
-    NSImage *img;
-        while(_connected) {
+    while(_connected) {
+        @autoreleasepool {
             cv::Mat frame;
             _camera >> frame;
-            img = [NSImage imageWithCVMat:frame];
-            //[(NSImageView*)arg setImage:img];
+            NSImage *img = [NSImage imageWithCVMat:frame];
+            [_delegate setImage:img];
             frame.release();
             if(cv::waitKey(30) >= 0) {
                 _connected = false;
                 break;
             }
         }
-        _camera.release();
+    }
+    _camera.release();
 }
 
 - (void)closeCameraConnection:(int)camId {

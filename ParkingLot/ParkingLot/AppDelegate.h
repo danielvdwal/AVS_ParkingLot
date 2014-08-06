@@ -11,15 +11,16 @@
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     @private
-    CameraConnector* _cameraConnector;
+    CameraConnector *_cameraConnector;
     ClusterManagerWindow *_clusterManagerWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
-@property (weak) IBOutlet NSImageView *cameraView;
+@property (strong) IBOutlet NSImageView *cameraView;
 
 - (IBAction)startCamera:(id)sender;
 - (IBAction)stopCamera:(id)sender;
 - (IBAction)showClusterManagerWindow:(id)sender;
+- (void)setImage:(NSImage *)image;
 
 @end

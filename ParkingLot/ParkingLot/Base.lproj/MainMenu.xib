@@ -13,7 +13,7 @@
         <customObject id="-3" userLabel="Application"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
-                <outlet property="cameraView" destination="04G-mG-nQ7" id="R80-gn-lBd"/>
+                <outlet property="cameraView" destination="VTj-ei-Lq4" id="I8B-Qy-r9r"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -698,10 +698,10 @@
                             <action selector="stopCamera:" target="Voe-Tx-rLC" id="fCS-JK-gBy"/>
                         </connections>
                     </button>
-                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="04G-mG-nQ7">
-                        <rect key="frame" x="141" y="316" width="465" height="379"/>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VTj-ei-Lq4">
+                        <rect key="frame" x="135" y="258" width="491" height="437"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="SIf-Nk-2kJ"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="WNB-gI-NbD"/>
                     </imageView>
                     <box autoresizesSubviews="NO" horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="80g-sw-cCX">
                         <rect key="frame" x="629" y="0.0" width="5" height="712"/>
