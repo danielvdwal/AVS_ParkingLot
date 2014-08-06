@@ -26,29 +26,13 @@
     [_cameraConnector connectToCamera:0 AndSendImageTo:_cameraView];
 }
 
-- (IBAction)startClusterManger:(id)sender {
-    
-    ClusterManager *clusterManager = [[ClusterManager alloc] init];
-    [clusterManager startClusterManager];
-    
-}
-
-- (IBAction)stopClusterManager:(id)sender {
-    ClusterManager *clusterManager = [[ClusterManager alloc] init];
-    [clusterManager stopClusterManager];    
-}
-
-- (IBAction)addClient:(id)sender {
-    
-    ImageProcessorWorker *imageProcessorWorker = [[ImageProcessorWorker alloc] init];
-    [imageProcessorWorker startImageProcessorWorker];
-    
-}
-
-- (IBAction)removeClient:(id)sender {
-    
-    NSHost *hostname = [NSHost currentHost];
-    NSLog(@"%@",[hostname name]);
-    
+- (IBAction)showClusterManagerWindow:(id)sender {
+   
+    if(!_clusterManagerWindow){
+        
+        _clusterManagerWindow = [[ClusterManagerWindow alloc] initWithWindowNibName:@"ClusterManagerWindow"];
+        
+    }
+    [_clusterManagerWindow showWindow:self];    
 }
 @end

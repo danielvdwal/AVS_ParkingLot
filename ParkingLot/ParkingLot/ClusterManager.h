@@ -10,12 +10,13 @@
 
 @interface ClusterManager : NSObject
 
-{
-    int      *_numberOfClients;
+{@private
+    
     NSMutableArray *_imageProcessorWorker;
-    NSHost *hostname;
-    NSConnection *theConnection;
-    NSSocketPort *sockPort;
+    NSHost *_hostname;
+    NSConnection *_theConnection;
+    NSSocketPort *_sockPort;
+
 }
 
 -(void)startClusterManager;

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E89092711992676600B06822 /* ClusterManagerWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = E890926F1992676600B06822 /* ClusterManagerWindow.m */; };
+		E89092721992676600B06822 /* ClusterManagerWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = E89092701992676600B06822 /* ClusterManagerWindow.xib */; };
 		E8B8880819921C0400E42D38 /* ClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E8B8880719921C0400E42D38 /* ClusterManager.m */; };
 		E8B8880C199221AA00E42D38 /* ImageProcessorWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = E8B8880B199221AA00E42D38 /* ImageProcessorWorker.m */; };
 		EB12A7C21992324D0012A41A /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1D9319922AFA00C6592E /* libc++.dylib */; };
@@ -91,6 +93,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E890926E1992676600B06822 /* ClusterManagerWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterManagerWindow.h; sourceTree = "<group>"; };
+		E890926F1992676600B06822 /* ClusterManagerWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterManagerWindow.m; sourceTree = "<group>"; };
+		E89092701992676600B06822 /* ClusterManagerWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ClusterManagerWindow.xib; sourceTree = "<group>"; };
 		E8B8880619921C0400E42D38 /* ClusterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterManager.h; sourceTree = "<group>"; };
 		E8B8880719921C0400E42D38 /* ClusterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterManager.m; sourceTree = "<group>"; };
 		E8B8880919921E5B00E42D38 /* MessageProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageProtocol.h; path = ParkingLot/MessageProtocol.h; sourceTree = "<group>"; };
@@ -422,6 +427,9 @@
 				E8B8880719921C0400E42D38 /* ClusterManager.m */,
 				E8B8880A199221AA00E42D38 /* ImageProcessorWorker.h */,
 				E8B8880B199221AA00E42D38 /* ImageProcessorWorker.m */,
+				E890926E1992676600B06822 /* ClusterManagerWindow.h */,
+				E890926F1992676600B06822 /* ClusterManagerWindow.m */,
+				E89092701992676600B06822 /* ClusterManagerWindow.xib */,
 			);
 			name = ClusterManager;
 			sourceTree = "<group>";
@@ -504,6 +512,7 @@
 			files = (
 				EBDB1D65199215F000C6592E /* InfoPlist.strings in Resources */,
 				EBDB1D73199215F000C6592E /* Images.xcassets in Resources */,
+				E89092721992676600B06822 /* ClusterManagerWindow.xib in Resources */,
 				EBDB1D6B199215F000C6592E /* Credits.rtf in Resources */,
 				EBDB1D71199215F000C6592E /* MainMenu.xib in Resources */,
 			);
@@ -524,6 +533,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E89092711992676600B06822 /* ClusterManagerWindow.m in Sources */,
 				EBDB1D6E199215F000C6592E /* AppDelegate.mm in Sources */,
 				EBDB1D92199219CB00C6592E /* CameraConnector.mm in Sources */,
 				EBDB1D67199215F000C6592E /* main.m in Sources */,

@@ -7,10 +7,12 @@
 //
 
 #include "CameraConnector.h"
+#include "ClusterManagerWindow.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     @private
     CameraConnector* _cameraConnector;
+    ClusterManagerWindow *_clusterManagerWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
@@ -18,9 +20,6 @@
 
 - (IBAction)startCamera:(id)sender;
 - (IBAction)stopCamera:(id)sender;
-- (IBAction)startClusterManger:(id)sender;
-- (IBAction)stopClusterManager:(id)sender;
-- (IBAction)addClient:(id)sender;
-- (IBAction)removeClient:(id)sender;
+- (IBAction)showClusterManagerWindow:(id)sender;
 
 @end
