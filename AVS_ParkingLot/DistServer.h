@@ -10,6 +10,11 @@
 
 @interface DistServer : NSObject
 
+{
+    int      *_numberOfClients;
+}
+
 -(void)startServer;
+-(void)stopServer;
 
 @end

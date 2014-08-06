@@ -33,6 +33,7 @@
 @property (strong) IBOutlet NSTextField *maxValueTextField;
 @property (assign) int minValue;
 @property (assign) int maxValue;
+@property (strong) IBOutlet NSButton *startServer;
 
 - (IBAction)mode1Clicked:(id)sender;
 - (IBAction)mode2Clicked:(id)sender;
@@ -44,5 +45,7 @@
 - (IBAction)stopClicked:(id)sender;
 - (IBAction)minSliderValueChanged:(id)sender;
 - (IBAction)maxSliderValueChanged:(id)sender;
+- (IBAction)startServer:(id)sender;
+- (IBAction)stopServer:(id)sender;
 
 @end

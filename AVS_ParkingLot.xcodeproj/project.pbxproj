@@ -96,6 +96,7 @@
 /* Begin PBXFileReference section */
 		E8A2A88019910E470099CEC8 /* DistServer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DistServer.h; sourceTree = "<group>"; };
 		E8A2A88119910E470099CEC8 /* DistServer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DistServer.m; sourceTree = "<group>"; };
+		E8A2A883199117C80099CEC8 /* MessageProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MessageProtocol.h; path = AVS_ParkingLot/MessageProtocol.h; sourceTree = "<group>"; };
 		EB6DCC491990D3960037F627 /* AVS_ParkingLot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVS_ParkingLot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB6DCC4C1990D3960037F627 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		EB6DCC4F1990D3960037F627 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -262,6 +263,7 @@
 		EB6DCC401990D3960037F627 = {
 			isa = PBXGroup;
 			children = (
+				E8A2A883199117C80099CEC8 /* MessageProtocol.h */,
 				EB6DCC801990D3C40037F627 /* opencv */,
 				EB6DCC521990D3960037F627 /* AVS_ParkingLot */,
 				EB6DCC701990D3960037F627 /* AVS_ParkingLotTests */,
