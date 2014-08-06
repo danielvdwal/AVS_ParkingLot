@@ -16,6 +16,5 @@
 @interface EdgeDetection : NSObject
 
 -(IplImage*)probabilisticHough:(IplImage*) src;
--(IplImage*)canny:(IplImage*) src;
 
 @end

@@ -12,45 +12,37 @@
 @implementation EdgeDetection
 
 /** General variables */
-
-IplImage *src; 
-IplImage *edges;
-IplImage *src_gray;
-IplImage *standard_hough, *probabilistic_hough;
 CvSeq* lines = 0;
 
 int i;
 
 
 -(IplImage*)probabilisticHough:(IplImage*)src{
-    CvMemStorage* storage = cvCreateMemStorage(0);
     
+    @autoreleasepool {
+        CvMemStorage* storage = cvCreateMemStorage(0);
+        
+        IplImage *edges = cvCreateImage(cvSize(src->width, src->height), src->depth, 3);
+        IplImage *cannyImg = cvCreateImage(cvSize(src->width, src->height), src->depth, src->nChannels);
+
+        // Apply Canny edge detector
+        cvCanny( src, cannyImg, 50, 200, 3 );
     
-    probabilistic_hough = [self canny:src];
+        // Image into Gray
+        cvCvtColor( cannyImg, edges, CV_GRAY2BGR );
     
-    /// 2. Use Probabilistic Hough Transform
-    lines = cvHoughLines2( probabilistic_hough, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 50, 50, 10 );
+        // Use Probabilistic Hough Transform
+        lines = cvHoughLines2( cannyImg, storage, CV_HOUGH_PROBABILISTIC, 1, CV_PI/180, 50, 150, 25 );
     
-    /// Show the result
-    for( i = 0; i < lines->total; i++ )
-    {
-        CvPoint* line = (CvPoint*)cvGetSeqElem(lines,i);
-        cvLine( probabilistic_hough, line[0], line[1], CV_RGB(255,0,0), 3, CV_AA, 0 );
+        // Show the result
+        for( i = 0; i < lines->total; i++ )
+        {
+            CvPoint* line = (CvPoint*)cvGetSeqElem(lines,i);
+            cvLine( edges, line[0], line[1], CV_RGB(255,0,0), 10, CV_AA, 0 );
+        }
+        
+        return edges;
     }
-    return probabilistic_hough;
 }
-
--(IplImage*)canny:(IplImage*)src {
-
-    // Image into Gray
-    cvCvtColor( src, src_gray, CV_GRAY2BGR );
-
-    // Apply Canny edge detector
-    cvCanny( src_gray, edges, 50, 200, 3 );
-
-    
-    return edges;
-}
-
 
 @end

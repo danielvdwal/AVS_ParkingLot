@@ -11,24 +11,38 @@
 @implementation NSImage (IplImage)
 
 + (NSImage*)imageWithIplImage:(IplImage *)image {
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+ 
+    IplImage *rgbImage = cvCreateImage(cvSize(image->width, image->height), image->depth, image->nChannels);
+    cvCvtColor(image, rgbImage, CV_BGR2RGB);
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     // Allocating the buffer for CGImage
-    NSData *data = [NSData dataWithBytes:image->imageData length:image->imageSize];
+    NSData *data = [NSData dataWithBytes:rgbImage->imageData length:rgbImage->imageSize];
     CGDataProviderRef provider = CGDataProviderCreateWithCFData((CFDataRef)data);
     // Creating CGImage from chunk of IplImage
-    CGImageRef imageRef = CGImageCreate(image->width, image->height, image->depth, 
-                                        image->depth * image->nChannels, image->widthStep,
-                                        colorSpace, kCGImageAlphaNone|kCGBitmapByteOrderDefault,
-                                        provider, NULL, false, kCGRenderingIntentDefault);
+    CGImageRef imageRef = CGImageCreate(rgbImage->width,
+                                        rgbImage->height,
+                                        rgbImage->depth,
+                                        rgbImage->depth * rgbImage->nChannels,
+                                        rgbImage->widthStep,
+                                        colorSpace,
+                                        kCGImageAlphaNone|kCGBitmapByteOrderDefault,
+                                        provider,
+                                        NULL,
+                                        false,
+                                        kCGRenderingIntentDefault);
     // Getting UIImage from CGImage
     NSSize size;
-    size.height = image->height;
-    size.width = image->width;
+    size.height = rgbImage->height;
+    size.width = rgbImage->width;
     NSImage *ret = [[NSImage alloc] initWithCGImage:imageRef size:size];
+    rgbImage = nil;
+    image = nil;
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpace);
     
     return ret;
 }
+
 @end

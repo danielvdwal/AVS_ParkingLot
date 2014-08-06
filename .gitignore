@@ -12,3 +12,5 @@ AVS_ParkingLot.xcodeproj/project.xcworkspace/xcuserdata/dvanderw.xcuserdatad/Use
 .DS_Store
 
 AVS_ParkingLot.xcodeproj/project.xcworkspace/xcuserdata/dvanderw.xcuserdatad/WorkspaceSettings.xcsettings
+
+*.xcbkptlist

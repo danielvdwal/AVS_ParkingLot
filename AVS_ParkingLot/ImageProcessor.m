@@ -8,6 +8,7 @@
 
 #import "ImageProcessor.h"
 #import "NSImage+IplImage.h"
+#import "EdgeDetection.h"
 
 @implementation ImageProcessor
 
@@ -106,13 +107,17 @@
     IplImage* cannyParkingSpot04 = cvCreateImage(cvSize(170,260), src->depth, src->nChannels);
     IplImage *(cannyParkingSpots[]) = { cannyParkingSpot01, cannyParkingSpot02, cannyParkingSpot03, cannyParkingSpot04};
     
+    EdgeDetection *edgeDec = [[EdgeDetection alloc] init];
+    IplImage* edgeImg = [edgeDec probabilisticHough:src];
+    
+    /*
     int size = sizeof(parkingSpots) / sizeof(IplImage*);
     for(int i=0; i < size; i++) {
         // Say what the source region is 
-        cvSetImageROI(src, cvRect(i*158 + 45, 15, 170, 260)); 
+        cvSetImageROI(src, cvRect(i*158 + 45, 15, 170, 260));
         
-        // Do the copy 
-        cvCopy(src, parkingSpots[i], NULL); 
+        // Do the copy
+        cvCopy(src, parkingSpots[i], NULL);
         cvResetImageROI(src);
         
         cvCanny(parkingSpots[i], cannyParkingSpots[i], min, max, 3);
@@ -138,12 +143,14 @@
             [self.delegate setText:[NSString stringWithFormat:@"Parking slot %d is free!", i+1]]; 
         }
     }
+    */
         
-    NSImage* image1 = [NSImage imageWithIplImage:cannyParkingSpot01];
-    NSImage* image2 = [NSImage imageWithIplImage:cannyParkingSpot02];
-    NSImage* image3 = [NSImage imageWithIplImage:cannyParkingSpot03];
-    NSImage* image4 = [NSImage imageWithIplImage:cannyParkingSpot04];
-    NSArray* images = [NSArray arrayWithObjects:image1, image2, image3, image4, nil];
+    //NSImage* image1 = [NSImage imageWithIplImage:cannyParkingSpot01];
+    //NSImage* image2 = [NSImage imageWithIplImage:cannyParkingSpot02];
+    //NSImage* image3 = [NSImage imageWithIplImage:cannyParkingSpot03];
+    //NSImage* image4 = [NSImage imageWithIplImage:cannyParkingSpot04];
+    NSImage* edgeImage = [NSImage imageWithIplImage:edgeImg];
+    NSArray* images = [NSArray arrayWithObjects:edgeImage, nil];//image1, image2, image3, image4, nil];
     [self.delegate showImages:images];
 }
 
@@ -175,9 +182,9 @@
         while(_continue) {
             IplImage *capturedImage = cvQueryFrame(capture);
             NSImage *image = [NSImage imageWithIplImage:capturedImage];
-            capturedImage = nil;
+            capturedImage dealloc;
             [self.delegate showCameraImage:image];
-            cvWaitKey(33);
+            cvWaitKey(100);
         }
     }
 }
