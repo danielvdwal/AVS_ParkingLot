@@ -11,7 +11,7 @@
 @implementation NSImage (IplImage)
 
 + (NSImage*)imageWithIplImage:(IplImage *)image {
-    
+ 
     IplImage *rgbImage = cvCreateImage(cvSize(image->width, image->height), image->depth, image->nChannels);
     cvCvtColor(image, rgbImage, CV_BGR2RGB);
     
@@ -36,10 +36,13 @@
     size.height = rgbImage->height;
     size.width = rgbImage->width;
     NSImage *ret = [[NSImage alloc] initWithCGImage:imageRef size:size];
+    rgbImage = nil;
+    image = nil;
     CGImageRelease(imageRef);
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpace);
     
     return ret;
 }
+
 @end

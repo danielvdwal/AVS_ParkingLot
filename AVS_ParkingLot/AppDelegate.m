@@ -61,14 +61,14 @@
 
 - (void)showCameraImage:(NSImage *)image
 {
-    [cameraView setImage:image];
+    //[cameraView setImage:image];
 }
 
 - (void)showImages:(NSArray *)images
 {
     for(int i=0; i < images.count; i++)
     {
-        [((NSImageView*)[imageViews objectAtIndex:i]) setImage:[images objectAtIndex:i]];
+        //[((NSImageView*)[imageViews objectAtIndex:i]) setImage:[images objectAtIndex:i]];
     }
 }
 
