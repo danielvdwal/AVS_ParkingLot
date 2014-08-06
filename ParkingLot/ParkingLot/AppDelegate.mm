@@ -1,5 +1,5 @@
 //
-//  AppDelegate.m
+//  AppDelegate.mm
 //  ParkingLot
 //
 //  Created by Daniel van der Wal on 06.08.14.
@@ -19,10 +19,11 @@
 }
 
 - (IBAction)startCamera:(id)sender {
-    [_cameraConnector connectToCamera:0];
+    [_cameraConnector connectToCameraOpenCV:0];
 }
 
 - (IBAction)stopCamera:(id)sender {
+    [_cameraConnector connectToCamera:0 AndSendImageTo:_cameraView];
 }
 
 - (IBAction)startClusterManger:(id)sender {
@@ -33,10 +34,8 @@
 }
 
 - (IBAction)stopClusterManager:(id)sender {
-    
     ClusterManager *clusterManager = [[ClusterManager alloc] init];
-    [clusterManager stopClusterManager];
-    
+    [clusterManager stopClusterManager];    
 }
 
 - (IBAction)addClient:(id)sender {

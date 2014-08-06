@@ -11,6 +11,7 @@
 @interface CameraConnector : NSObject {
     @private
     cv::VideoCapture _camera;
+    BOOL _connected;
     //CvCapture* _camera;
     //BOOL _connected;
     //CvMat _frame;
@@ -18,7 +19,9 @@
     //CvMat _image;
 }
 
-- (void)connectToCamera:(int)camId;
+- (void)connectToCameraOpenCV:(int)camId;
+- (void)connectToCamera:(int)camId
+         AndSendImageTo:(NSImageView*)view;
 - (void)closeCameraConnection:(int)camId;
 
 @end
