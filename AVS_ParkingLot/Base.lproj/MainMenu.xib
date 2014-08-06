@@ -882,6 +882,13 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+
+                    <imageView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1TV-5C-bQa">
+                        <rect key="frame" x="17" y="73" width="621" height="516"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="6K1-6e-ox4"/>
+                    </imageView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="85y-f0-7AL">
                         <rect key="frame" x="988" y="35" width="118" height="32"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -893,17 +900,19 @@
                             <action selector="startServer:" target="Voe-Tx-rLC" id="hgL-my-hSE"/>
                         </connections>
                     </button>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tg4-ia-fYg">
-                        <rect key="frame" x="988" y="8" width="118" height="32"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <buttonCell key="cell" type="push" title="StopServer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hJ0-yI-xEp">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="stopServer:" target="Voe-Tx-rLC" id="fCZ-zU-1wh"/>
-                        </connections>
-                    </button>
+ <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tg4-ia-fYg">
+ <rect key="frame" x="988" y="8" width="118" height="32"/>
+<autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+<buttonCell key="cell" type="push" title="StopServer" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="hJ0-yI-xEp">
+<behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+<font key="font" metaFont="system"/>
+</buttonCell>
+<connections>
+<action selector="stopServer:" target="Voe-Tx-rLC" id="fCZ-zU-1wh"/>
+</connections>
+</button>
+
+
                 </subviews>
             </view>
         </window>

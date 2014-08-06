@@ -182,7 +182,7 @@
         while(_continue) {
             IplImage *capturedImage = cvQueryFrame(capture);
             NSImage *image = [NSImage imageWithIplImage:capturedImage];
-            capturedImage dealloc;
+            capturedImage =nil;
             [self.delegate showCameraImage:image];
             cvWaitKey(100);
         }
