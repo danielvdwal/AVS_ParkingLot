@@ -10,30 +10,30 @@
 
 @implementation ClusterManager
 
-
 -(id) init {
     if(self=[super init]){
         _imageProcessorWorker = [[NSMutableArray alloc] init];
-        hostname = [NSHost currentHost];
+        _hostname = [NSHost currentHost];
         
+        
+        // Create a new socket port for your connection.
+        _sockPort = [[NSSocketPort alloc] initWithTCPPort:1234];
+        
+        //Create a connection object
+        _theConnection = [[NSConnection alloc] init];
+
     }
     return self;
 }
 
 - (void)startClusterManager{
-    
-    /*
-     * Create a new socket port for your connection.
-     */
-    sockPort = [[NSSocketPort alloc] initWithTCPPort:1234];
-    theConnection = [[NSConnection alloc] init];
-    
-    theConnection = [NSConnection connectionWithReceivePort:sockPort sendPort:sockPort];
+
+    _theConnection = [NSConnection connectionWithReceivePort:_sockPort sendPort:_sockPort];
     
     //Set object to vend
-    [theConnection setRootObject:self];
+    [_theConnection setRootObject:self];
     
-    if ([theConnection registerName:@"clusterManager" withNameServer: [NSSocketPortNameServer sharedInstance]] == NO) {
+    if ([_theConnection registerName:@"clusterManager" withNameServer: [NSSocketPortNameServer sharedInstance]] == NO) {
         NSLog(@"Impossible to vend this object.");
     } else {
         NSLog(@"Object vended.");
@@ -47,11 +47,11 @@
 
 -(void)stopClusterManager{
 
-    [theConnection registerName:nil];
-    //[[theConnection sendPort] invalidate];
-    //[[theConnection receivePort] invalidate];
-    //[theConnection invalidate];
-    theConnection = nil;
+    //Funktioniert nicht. Wahrscheinlich bleibt der Port und ein Connection-Objekt irgendwie im
+    //Arbeitsspeicher bestehen.
+    
+    _sockPort = nil;
+    _theConnection = [NSConnection connectionWithReceivePort:_sockPort sendPort:_sockPort];
     
     NSLog(@"Server closed.");
     
@@ -68,7 +68,7 @@
 
 - (void)addClient
 {
-    _numberOfClients++;
+
     NSLog(@"Added client");
 }
 
@@ -92,7 +92,7 @@
 
 - (BOOL)removeClient
 {
-    _numberOfClients--;
+
     NSLog(@"Removed client");
     
     return YES;
