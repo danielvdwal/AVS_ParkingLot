@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "NSImage+IplImage.h"
+#import "DistServer.h"
 
 @implementation AppDelegate
 
@@ -33,6 +34,8 @@
 @synthesize maxValueTextField;
 @synthesize minValue;
 @synthesize maxValue;
+@synthesize startServer;
+
 
 - (id)init
 {
@@ -146,6 +149,19 @@
     } else if(lastButtonPressed == mode6Button) {
         [imageProcessor processImageOnObjectDetectionMethodWithFileName:@"AVS_ParkingLot.app/Contents/Resources/parkingLot_4_cars.jpg" WithThresholdMin:minValue AndThresholdMax:maxValue];
     }
+}
+
+- (IBAction)startServer:(id)sender {
+    
+    DistServer *server = [[DistServer alloc] init];
+    [server startServer];
+    
+}
+
+- (IBAction)stopServer:(id)sender {
+    
+    DistServer *server = [[DistServer alloc] init];
+    [server stopServer];
 }
 
 @end

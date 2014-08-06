@@ -63,6 +63,8 @@
 		EB12A82F199237E70012A41A /* libopencv_videostab.2.4.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB12A7F8199237E70012A41A /* libopencv_videostab.2.4.9.dylib */; };
 		EB12A830199237E70012A41A /* libopencv_videostab.2.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB12A7F9199237E70012A41A /* libopencv_videostab.2.4.dylib */; };
 		EB12A831199237E70012A41A /* libopencv_videostab.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EB12A7FA199237E70012A41A /* libopencv_videostab.dylib */; };
+		E8B8880819921C0400E42D38 /* ClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E8B8880719921C0400E42D38 /* ClusterManager.m */; };
+		E8B8880C199221AA00E42D38 /* ImageProcessorWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = E8B8880B199221AA00E42D38 /* ImageProcessorWorker.m */; };
 		EBDB1D5B199215F000C6592E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBDB1D5A199215F000C6592E /* Cocoa.framework */; };
 		EBDB1D65199215F000C6592E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EBDB1D63199215F000C6592E /* InfoPlist.strings */; };
 		EBDB1D67199215F000C6592E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EBDB1D66199215F000C6592E /* main.m */; };
@@ -143,6 +145,11 @@
 		EB12A7F8199237E70012A41A /* libopencv_videostab.2.4.9.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.2.4.9.dylib; path = ../../../../usr/local/lib/libopencv_videostab.2.4.9.dylib; sourceTree = "<group>"; };
 		EB12A7F9199237E70012A41A /* libopencv_videostab.2.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.2.4.dylib; path = ../../../../usr/local/lib/libopencv_videostab.2.4.dylib; sourceTree = "<group>"; };
 		EB12A7FA199237E70012A41A /* libopencv_videostab.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libopencv_videostab.dylib; path = ../../../../usr/local/lib/libopencv_videostab.dylib; sourceTree = "<group>"; };
+		E8B8880619921C0400E42D38 /* ClusterManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterManager.h; sourceTree = "<group>"; };
+		E8B8880719921C0400E42D38 /* ClusterManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterManager.m; sourceTree = "<group>"; };
+		E8B8880919921E5B00E42D38 /* MessageProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MessageProtocol.h; path = ParkingLot/MessageProtocol.h; sourceTree = "<group>"; };
+		E8B8880A199221AA00E42D38 /* ImageProcessorWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageProcessorWorker.h; sourceTree = "<group>"; };
+		E8B8880B199221AA00E42D38 /* ImageProcessorWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageProcessorWorker.m; sourceTree = "<group>"; };
 		EBDB1D57199215F000C6592E /* ParkingLot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ParkingLot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EBDB1D5A199215F000C6592E /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		EBDB1D5D199215F000C6592E /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -311,6 +318,7 @@
 			isa = PBXGroup;
 			children = (
 				EB12A7C3199237D80012A41A /* opencv */,
+				E8B8880919921E5B00E42D38 /* MessageProtocol.h */,
 				EBDB1D60199215F000C6592E /* ParkingLot */,
 				EBDB1D7E199215F000C6592E /* ParkingLotTests */,
 				EBDB1D59199215F000C6592E /* Frameworks */,
@@ -405,6 +413,10 @@
 		EBDB1D8F1992168200C6592E /* ClusterManager */ = {
 			isa = PBXGroup;
 			children = (
+				E8B8880619921C0400E42D38 /* ClusterManager.h */,
+				E8B8880719921C0400E42D38 /* ClusterManager.m */,
+				E8B8880A199221AA00E42D38 /* ImageProcessorWorker.h */,
+				E8B8880B199221AA00E42D38 /* ImageProcessorWorker.m */,
 			);
 			name = ClusterManager;
 			sourceTree = "<group>";
@@ -510,6 +522,8 @@
 				EBDB1D6E199215F000C6592E /* AppDelegate.mm in Sources */,
 				EBDB1D92199219CB00C6592E /* CameraConnector.mm in Sources */,
 				EBDB1D67199215F000C6592E /* main.m in Sources */,
+				E8B8880C199221AA00E42D38 /* ImageProcessorWorker.m in Sources */,
+				E8B8880819921C0400E42D38 /* ClusterManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
