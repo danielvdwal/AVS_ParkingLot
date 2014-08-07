@@ -7,6 +7,7 @@
 //
 
 #import "ImageCapturer.h"
+#import "NSImage_OpenCV.h"
 
 @implementation ImageCapturer
 
@@ -33,11 +34,11 @@
 
 - (void)imageCaptured:(cv::Mat)image {
     cv::Mat displayedImage;
-    [_clusterManagerConnector forwardImage:image.clone()];
-    
     cv::resize(image, displayedImage, cv::Size(960,720));
     cv::imshow("Camera Image", displayedImage);
     displayedImage.release();
+    
+    [_clusterManagerConnector forwardImage:[NSImage imageWithCVMat:image]];
 }
 
 - (void)connectToClusterManager {

@@ -14,7 +14,7 @@
 @required
 - (void)addImageCapturerWorker:(NSHost*)worker;
 - (void)removeImageCapturerWorker:(NSHost*)worker;
-- (oneway void)forwardImage:(bycopy cv::Mat)image
+- (oneway void)forwardImage:(NSImage*)image
                  fromWorker:(NSHost*)worker;
 
 @end

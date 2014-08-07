@@ -7,6 +7,7 @@
 //
 
 #import "ClusterManager.h"
+#import "NSImage_OpenCV.h"
 
 @implementation ClusterManager
 
@@ -116,13 +117,13 @@
     NSLog(@"ImageCapturerWorkers active : %lu", [_imageCapturerWorkers count]);
 }
 
-- (oneway void)forwardImage:(bycopy cv::Mat)image
+- (oneway void)forwardImage:(NSImage*)image
                  fromWorker:(NSHost*)worker {
     //cv::Mat displayedImage;
-    //cv::resize(unwrappedImage, displayedImage, cv::Size(960,720));
-    //cv::imshow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding], unwrappedImage);
+    //cv::resize(image, displayedImage, cv::Size(960,720));
+    //cv::imshow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding], image);
     //displayedImage.release();
-    image.release();
+    [[self _delegate] showImage:image];
 }
 
 @end

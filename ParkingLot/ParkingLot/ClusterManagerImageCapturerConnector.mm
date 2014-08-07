@@ -36,7 +36,7 @@
     [_clusterManager removeImageCapturerWorker:_worker];
 }
 
-- (void)forwardImage:(bycopy cv::Mat)image {
+- (void)forwardImage:(NSImage*)image {
     if(_clusterManager) {
         [_clusterManager forwardImage:image
                            fromWorker:_worker];

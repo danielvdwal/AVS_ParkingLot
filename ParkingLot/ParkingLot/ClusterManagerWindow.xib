@@ -6,6 +6,7 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ClusterManagerWindow">
             <connections>
+                <outlet property="camView" destination="bpB-7x-jy0" id="2N6-4K-C5p"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -73,6 +74,11 @@
                             <action selector="removeClient:" target="-2" id="5KB-NP-EQS"/>
                         </connections>
                     </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="oVq-3V-wCq">
+                        <rect key="frame" x="222" y="135" width="473" height="355"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="bpB-7x-jy0"/>
+                    </imageView>
                 </subviews>
             </view>
             <connections>
