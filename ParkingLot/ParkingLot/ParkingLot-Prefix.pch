@@ -5,7 +5,7 @@
 //
 
 #ifdef __cplusplus
-    #include <opencv2/opencv.hpp>
+    #import <opencv2/opencv.hpp>
 #endif
 
 #ifdef __OBJC__

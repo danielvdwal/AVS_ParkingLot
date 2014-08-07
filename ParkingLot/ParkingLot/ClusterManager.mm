@@ -13,6 +13,9 @@
 -(id) init {
     if(self=[super init]){
         _imageProcessorWorker = [[NSMutableArray alloc] init];
+        
+        _imageCapturerWorkers = [[NSMutableArray alloc] init];
+        
         _hostname = [NSHost currentHost];
         
         
@@ -98,5 +101,28 @@
     return YES;
 }
 
+- (void)addImageCapturerWorker:(NSHost*)worker {
+    [_imageCapturerWorkers addObject: worker];
+    cv::namedWindow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding]);
+    NSLog(@"Added ImageCapturerWorker with Hostname %@",[worker name]);
+    NSLog(@"ImageCapturerWorkers active : %lu", [_imageCapturerWorkers count]);
+
+}
+
+- (void)removeImageCapturerWorker:(NSHost*)worker {
+    [_imageCapturerWorkers removeObjectIdenticalTo: worker];
+    cv::destroyWindow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding]);
+    NSLog(@"Removed ImageCapturerWorker with Hostname %@",[worker name]);
+    NSLog(@"ImageCapturerWorkers active : %lu", [_imageCapturerWorkers count]);
+}
+
+- (oneway void)forwardImage:(bycopy cv::Mat)image
+                 fromWorker:(NSHost*)worker {
+    //cv::Mat displayedImage;
+    //cv::resize(unwrappedImage, displayedImage, cv::Size(960,720));
+    //cv::imshow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding], unwrappedImage);
+    //displayedImage.release();
+    image.release();
+}
 
 @end

@@ -6,21 +6,18 @@
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#include "CameraConnector.h"
-#include "ClusterManagerWindow.h"
+#import "ImageCapturerWindow.h"
+#import "ClusterManagerWindow.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
     @private
-    CameraConnector *_cameraConnector;
+    ImageCapturerWindow *_imageCapturerWindow;
     ClusterManagerWindow *_clusterManagerWindow;
 }
 
 @property (assign) IBOutlet NSWindow *window;
-@property (strong) IBOutlet NSImageView *cameraView;
 
-- (IBAction)startCamera:(id)sender;
-- (IBAction)stopCamera:(id)sender;
+- (IBAction)showImageCapturer:(id)sender;
 - (IBAction)showClusterManagerWindow:(id)sender;
-- (void)setImage:(NSImage *)image;
 
 @end

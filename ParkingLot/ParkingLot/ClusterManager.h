@@ -7,16 +7,20 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MessageProtocol.h"
+#import "ImageCapturerProtocol.h"
 
-@interface ClusterManager : NSObject
-
-{@private
+@interface ClusterManager : NSObject<MessageProtocol, ImageCapturerProtocol> {
     
+    @private
     NSMutableArray *_imageProcessorWorker;
+
+    NSMutableArray *_imageCapturerWorkers;
+    
     NSHost *_hostname;
     NSConnection *_theConnection;
     NSSocketPort *_sockPort;
-
+    
 }
 
 -(void)startClusterManager;

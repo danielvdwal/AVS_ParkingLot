@@ -6,8 +6,6 @@
     <objects>
         <customObject id="-2" userLabel="File's Owner" customClass="ClusterManagerWindow">
             <connections>
-                <outlet property="ClusterManagerWindow" destination="se5-gp-TjO" id="onb-tw-Lc4"/>
-                <outlet property="startClusterManager" destination="se5-gp-TjO" id="rW3-OP-AYQ"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>

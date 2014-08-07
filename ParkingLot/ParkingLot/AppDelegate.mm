@@ -7,23 +7,20 @@
 //
 
 #import "AppDelegate.h"
-#import "ClusterManager.h"
-#import "ImageProcessorWorker.h"
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    _cameraConnector = [[CameraConnector alloc] initWithDelegate:self];
 }
 
-- (IBAction)startCamera:(id)sender {
-    [_cameraConnector connectToCameraOpenCV:0];
-}
-
-- (IBAction)stopCamera:(id)sender {
-    [_cameraConnector connectToCamera:0];
+- (IBAction)showImageCapturer:(id)sender {
+    
+    if(!_imageCapturerWindow) {
+        _imageCapturerWindow = [[ImageCapturerWindow alloc] initWithWindowNibName:@"ImageCapturerWindow"];
+    }
+    [_imageCapturerWindow showWindow:self];
 }
 
 - (IBAction)showClusterManagerWindow:(id)sender {
@@ -34,16 +31,6 @@
         
     }
     [_clusterManagerWindow showWindow:self];    
-}
-
-- (void)setImage:(NSImage *)image {
-    @autoreleasepool {
-        [image setDataRetained:NO];
-        [image setCacheMode:NSImageCacheNever];
-        [image setScalesWhenResized:NO];
-        [image setCacheDepthMatchesImageDepth:YES];
-        [[self cameraView] setImage:image];
-    }
 }
 
 @end

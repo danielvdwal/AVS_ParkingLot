@@ -6,23 +6,19 @@
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#import <opencv2/opencv.hpp>
+#import "ImageCapturedDelegate.h"
 
 @interface CameraConnector : NSObject {
     @private
     cv::VideoCapture _camera;
     BOOL _connected;
-    id _delegate;
-    //CvCapture* _camera;
-    //BOOL _connected;
-    //CvMat _frame;
-    //CvMat _frameCopy;
-    //CvMat _image;
+    id<ImageCapturedDelegate> _delegate;
+    NSThread *_captureThread;
 }
 
-- (id)initWithDelegate:(id)delegate;
-- (void)connectToCameraOpenCV:(int)camId;
-- (void)connectToCamera:(int)camId;
-- (void)closeCameraConnection:(int)camId;
+- (id)initWithDelegate:(id<ImageCapturedDelegate>)delegate;
+- (void)connectToDefaultCamera;
+- (void)closeDefaultCameraConnection;
+- (void)startCapturing;
 
 @end

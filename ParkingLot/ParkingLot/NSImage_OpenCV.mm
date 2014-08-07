@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#include "NSImage_OpenCV.h"
+#import "NSImage_OpenCV.h"
 
 @interface NSImage (Private)
 

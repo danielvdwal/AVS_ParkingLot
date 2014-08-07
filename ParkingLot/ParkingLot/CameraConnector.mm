@@ -11,63 +11,50 @@
 
 @implementation CameraConnector
 
-- (id)initWithDelegate:(id)delegate {
+- (id)initWithDelegate:(id<ImageCapturedDelegate>)delegate {
     if (self = [super init])
     {
-        _connected = NO;
         _delegate = delegate;
+        _connected = NO;
     }
     return self;
 }
 
 
-- (void)connectToCameraOpenCV:(int)camId {
+- (void)connectToDefaultCamera {
     // 0=default, -1=any camera, 1..99 your camera
-    _camera = cv::VideoCapture(camId);
-    cv::namedWindow("Camera");
+    _camera = cv::VideoCapture(0);
+    _connected = YES;
+}
+
+- (void)closeDefaultCameraConnection {
+    _connected = NO;
+    [_captureThread cancel];
+}
+
+- (void)startCapturing {
+    _captureThread = [[NSThread alloc] initWithTarget:self
+                                             selector:@selector(capture:)
+                                               object:nil];
+    [_captureThread start];
+}
+
+
+-(void)capture:(id)arg {
     while (_camera.isOpened()) {
         cv::Mat frame;
         _camera >> frame;
-        cv::imshow("Camera", frame);
+        
+        [_delegate imageCaptured:frame];
+        
         frame.release();
-        if(cv::waitKey(30) >= 0) {
-            break;
+        
+        cv::waitKey(33);
+        
+        if(!_connected) {
+            _camera.release();
         }
     }
-    _camera.release();
-    cv::destroyWindow("Camera");
-}
-
-- (void)connectToCamera:(int)camId {
-    // 0=default, -1=any camera, 1..99 your camera
-    _camera = cv::VideoCapture(camId);
-    NSThread *workerThread = [[NSThread alloc] initWithTarget:self
-                                                     selector:@selector(doWork:)
-                                                       object:nil];
-    _connected = YES;
-    [workerThread start];
-}
-
--(void)doWork:(id)arg {
-    while(_connected) {
-        @autoreleasepool {
-            cv::Mat frame;
-            _camera >> frame;
-            NSImage *img = [NSImage imageWithCVMat:frame];
-            [_delegate setImage:img];
-            frame.release();
-            if(cv::waitKey(30) >= 0) {
-                _connected = false;
-                break;
-            }
-        }
-    }
-    _camera.release();
-}
-
-- (void)closeCameraConnection:(int)camId {
-    //cvReleaseCapture(&_camera);
-    //cvDestroyWindow("result");
 }
 
 @end
