@@ -21,7 +21,7 @@
 
 - (void)startCamera {
     [_cameraConnector connectToDefaultCamera];
-    cv::namedWindow("Camera Image", CV_WINDOW_NORMAL);
+    cv::namedWindow("Camera Image");
     [_cameraConnector startCapturing];
 }
 

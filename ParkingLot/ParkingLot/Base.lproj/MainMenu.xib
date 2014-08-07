@@ -13,6 +13,7 @@
         <customObject id="-3" userLabel="Application"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="camView" destination="ZMz-wo-SPC" id="MRK-Rl-3a5"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -686,7 +687,7 @@
                         </connections>
                     </button>
                     <box autoresizesSubviews="NO" horizontalHuggingPriority="750" fixedFrame="YES" title="Box" boxType="separator" titlePosition="noTitle" translatesAutoresizingMaskIntoConstraints="NO" id="80g-sw-cCX">
-                        <rect key="frame" x="629" y="0.0" width="9" height="712"/>
+                        <rect key="frame" x="629" y="0.0" width="5" height="712"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -701,6 +702,22 @@
                         </buttonCell>
                         <connections>
                             <action selector="showClusterManagerWindow:" target="Voe-Tx-rLC" id="K90-pr-NLw"/>
+                        </connections>
+                    </button>
+                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="65o-ro-tQ7">
+                        <rect key="frame" x="17" y="224" width="547" height="408"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" imageFrameStyle="grayBezel" id="ZMz-wo-SPC"/>
+                    </imageView>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0IV-KN-fD8">
+                        <rect key="frame" x="312" y="179" width="69" height="32"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                        <buttonCell key="cell" type="push" title="start" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="2Ay-mV-E27">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="start:" target="Voe-Tx-rLC" id="gWY-Z2-D6T"/>
                         </connections>
                     </button>
                 </subviews>

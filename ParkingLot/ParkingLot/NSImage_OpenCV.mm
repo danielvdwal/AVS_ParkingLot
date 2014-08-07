@@ -25,6 +25,8 @@
     
     cv::cvtColor(cvMat, arrMat, CV_BGR2RGB);
     
+    cvMat.release();
+    
     CGColorSpaceRef colorspace = NULL;
     CGDataProviderRef provider = NULL;
     int width = arrMat.cols;
@@ -45,6 +47,9 @@
     [image addRepresentation:bitmap];
     
     CGDataProviderRelease(provider);
+    CGImageRelease(imageRef);
+    CGColorSpaceRelease(colorspace);
+    
     arrMat.release();
     
     return image;
