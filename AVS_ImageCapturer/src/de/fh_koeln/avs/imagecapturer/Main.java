@@ -2,7 +2,6 @@ package de.fh_koeln.avs.imagecapturer;
 
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.highgui.Highgui;
 import org.opencv.highgui.VideoCapture;
 
 /**
@@ -11,37 +10,26 @@ import org.opencv.highgui.VideoCapture;
  */
 public class Main {
 
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+
     public static void main(String[] args) {
-        System.out.println("Hello, OpenCV");
-    // Load the native library.
-    System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        VideoCapture camera = new VideoCapture(0);
+        if (camera.isOpened()) {
+            System.out.println("Camera started");
+        } else {
+            System.out.println("Camera Error");
+            System.exit(-1);
+        }
 
-    VideoCapture camera = new VideoCapture(0);
-    camera.open(0); //Useless
-    if(!camera.isOpened()){
-        System.out.println("Camera Error");
-    }
-    else{
-        System.out.println("Camera OK?");
-    }
-
-    Mat frame = new Mat();
-
-    //camera.grab();
-    //System.out.println("Frame Grabbed");
-    //camera.retrieve(frame);
-    //System.out.println("Frame Decoded");
-
-    camera.read(frame);
-    System.out.println("Frame Obtained");
-
-    /* No difference
-    camera.release();
-    */
-
-    System.out.println("Captured Frame Width " + frame.width());
-
-    Highgui.imwrite("camera.jpg", frame);
-    System.out.println("OK");
+        int i = 0;
+        while(camera.isOpened() && i < 100) {
+            Mat frame = new Mat();
+            camera.read(frame);
+            i++;
+        }
+        
+        camera.release();
     }
 }
