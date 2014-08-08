@@ -2,6 +2,7 @@ package de.fh_koeln.avs.imagecapturer.controller;
 
 import de.fh_koeln.avs.imagecapturer.converter.MatToBufferedImageConverter;
 import java.awt.image.BufferedImage;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.highgui.VideoCapture;
 
@@ -11,18 +12,26 @@ import org.opencv.highgui.VideoCapture;
  */
 public class ImageCapturerController implements IImageCapturerController {
 
-    private final VideoCapture camera;
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+    
+    private VideoCapture camera;
     private final MatToBufferedImageConverter matToBufferedImageConverter;
     private BufferedImage capturedBufferedImage;
 
     public ImageCapturerController() {
-        camera = new VideoCapture();
         matToBufferedImageConverter = new MatToBufferedImageConverter();
     }
 
     @Override
     public void startCamera() {
-        if (camera.open(0)) {
+        if(camera == null) {
+            camera = new VideoCapture(0);
+        } else {
+            camera.open(0);
+        }
+        if (camera.isOpened()) {
             System.out.println("Camera started");
         } else {
             System.out.println("Couldn't start camera");
@@ -42,7 +51,7 @@ public class ImageCapturerController implements IImageCapturerController {
     @Override
     public BufferedImage getCapturedImage() {
         if (camera.isOpened()) {
-            Mat image = null;
+            Mat image = new Mat();
             camera.read(image);
             capturedBufferedImage
                     = matToBufferedImageConverter.convertToBufferedImage(image);
