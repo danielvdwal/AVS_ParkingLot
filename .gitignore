@@ -37,3 +37,5 @@ AVS_ParkingLot.xcodeproj/project.xcworkspace/xcshareddata/AVS_ParkingLot.xccheck
 
 ParkingLot/ParkingLot.xcodeproj/project.pbxproj
 /AVS_ImageCapturer/nbproject/private/
+/AVS_ImageCapturer/build/
+/AVS_ImageCapturer/dist/
