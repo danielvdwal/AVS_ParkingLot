@@ -10,8 +10,33 @@ import org.opencv.core.Mat;
  */
 public final class MatToBufferedImageConverter {
 
+    private BufferedImage img;
+    private byte[] data;
+
     public BufferedImage convertToBufferedImage(Mat matImage) {
-        int type = BufferedImage.TYPE_BYTE_GRAY;
+        getSpace(matImage);
+        matImage.get(0, 0, data);
+        img.getRaster().setDataElements(0, 0, matImage.cols(), matImage.rows(),
+                data);
+        
+        return img;
+    }
+    
+
+    private void getSpace(Mat imageMat) {
+        int w = imageMat.cols();
+        int h = imageMat.rows();
+        if (data == null || data.length != w * h * 3) {
+            data = new byte[w * h * 3];
+        }
+        if (img == null || img.getWidth() != w || img.getHeight() != h
+                || img.getType() != BufferedImage.TYPE_3BYTE_BGR) {
+            img = new BufferedImage(w, h,
+                    BufferedImage.TYPE_3BYTE_BGR);
+        }
+    }
+    /*
+    int type = BufferedImage.TYPE_BYTE_GRAY;
         if (matImage.channels() > 1) {
             type = BufferedImage.TYPE_3BYTE_BGR;
         }
@@ -25,5 +50,5 @@ public final class MatToBufferedImageConverter {
                 getDataBuffer()).getData();
         System.arraycopy(b, 0, targetPixels, 0, b.length);
         return image;
-    }
+    */
 }
