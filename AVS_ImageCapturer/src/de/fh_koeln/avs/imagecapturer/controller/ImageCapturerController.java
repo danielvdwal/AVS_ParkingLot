@@ -28,11 +28,9 @@ public class ImageCapturerController implements IImageCapturerController {
     public void startCamera() {
         if(camera == null) {
             camera = new VideoCapture(0);
-        } else {
-            camera.open(0);
         }
         if (camera.isOpened()) {
-            System.out.println("Camera started");
+            System.out.println("Camera is running");
         } else {
             System.out.println("Couldn't start camera");
         }
@@ -40,12 +38,7 @@ public class ImageCapturerController implements IImageCapturerController {
 
     @Override
     public void stopCamera() {
-        camera.release();
-        if (!camera.isOpened()) {
-            System.out.println("Camera stopped");
-        } else {
-            System.out.println("Couldn't stop camera");
-        }
+        camera = null;
     }
 
     @Override
