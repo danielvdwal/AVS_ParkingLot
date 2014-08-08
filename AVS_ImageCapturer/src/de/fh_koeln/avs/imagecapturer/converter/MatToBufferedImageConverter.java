@@ -18,10 +18,17 @@ public final class MatToBufferedImageConverter {
         matImage.get(0, 0, data);
         img.getRaster().setDataElements(0, 0, matImage.cols(), matImage.rows(),
                 data);
-        
+
+        switchFromBGRToRBG();
+
         return img;
     }
-    
+
+    private void switchFromBGRToRBG() {
+        final byte[] targetPixels = ((DataBufferByte) img.getRaster().
+                getDataBuffer()).getData();
+        System.arraycopy(data, 0, targetPixels, 0, data.length);
+    }
 
     private void getSpace(Mat imageMat) {
         int w = imageMat.cols();
@@ -35,20 +42,4 @@ public final class MatToBufferedImageConverter {
                     BufferedImage.TYPE_3BYTE_BGR);
         }
     }
-    /*
-    int type = BufferedImage.TYPE_BYTE_GRAY;
-        if (matImage.channels() > 1) {
-            type = BufferedImage.TYPE_3BYTE_BGR;
-        }
-        int bufferSize
-                = matImage.channels() * matImage.cols() * matImage.rows();
-        byte[] b = new byte[bufferSize];
-        matImage.get(0, 0, b); // get all the pixels
-        BufferedImage image = new BufferedImage(matImage.cols(),
-                matImage.rows(), type);
-        final byte[] targetPixels = ((DataBufferByte) image.getRaster().
-                getDataBuffer()).getData();
-        System.arraycopy(b, 0, targetPixels, 0, b.length);
-        return image;
-    */
 }
