@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "NSImage_OpenCV.h"
 
 @implementation AppDelegate
 
@@ -32,18 +31,6 @@
         
     }
     [_clusterManagerWindow showWindow:self];    
-}
-
-- (IBAction)start:(id)sender {
-    CameraConnector *cam = [[CameraConnector alloc] initWithDelegate:self];
-    [cam connectToDefaultCamera];
-    [cam startCapturing];
-}
-
-- (void)imageCaptured:(cv::Mat)image {
-    NSImage *img = [NSImage imageWithCVMat:image];
-    [[self camView] setImage:img];
-    image.release();
 }
 
 @end

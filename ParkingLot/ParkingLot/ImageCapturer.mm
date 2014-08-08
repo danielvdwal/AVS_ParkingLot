@@ -32,13 +32,13 @@
     cv::destroyWindow("Camera Image");
 }
 
-- (void)imageCaptured:(cv::Mat)image {
-    cv::Mat displayedImage;
-    cv::resize(image, displayedImage, cv::Size(960,720));
-    cv::imshow("Camera Image", displayedImage);
-    displayedImage.release();
+- (void)imageCaptured:(const cv::Mat&)image {
+    //cv::Mat displayedImage;
+    //cv::resize(image, displayedImage, cv::Size(960,720));
+    //cv::imshow("Camera Image", displayedImage);
+    //displayedImage.release();
     
-    [_clusterManagerConnector forwardImage:[NSImage imageWithCVMat:image]];
+    [_clusterManagerConnector forwardImage:image];
 }
 
 - (void)connectToClusterManager {

@@ -9,11 +9,8 @@
 #import <Cocoa/Cocoa.h>
 #import "ClusterManager.h"
 #import "ImageProcessorWorker.h"
-#import "ShowImageProtocol.h"
 
-@interface ClusterManagerWindow : NSWindowController<ShowImageProtocol>
-
-@property (strong) IBOutlet NSImageCell *camView;
+@interface ClusterManagerWindow : NSWindowController
 
 
 - (IBAction)startClusterManger:(id)sender;

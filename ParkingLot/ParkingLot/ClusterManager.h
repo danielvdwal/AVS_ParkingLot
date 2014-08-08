@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "MessageProtocol.h"
 #import "ImageCapturerProtocol.h"
-#import "ShowImageProtocol.h"
 
 @interface ClusterManager : NSObject<MessageProtocol, ImageCapturerProtocol> {
     
@@ -23,8 +22,6 @@
     NSSocketPort *_sockPort;
     
 }
-
-@property (strong) id<ShowImageProtocol> _delegate;
 
 -(void)startClusterManager;
 -(void)stopClusterManager;

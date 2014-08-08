@@ -36,7 +36,6 @@
 - (IBAction)startClusterManger:(id)sender {
     
     ClusterManager *clusterManager = [[ClusterManager alloc] init];
-    [clusterManager set_delegate:self];
     [clusterManager startClusterManager];
     
 }
@@ -60,10 +59,6 @@
     NSHost *hostname = [NSHost currentHost];
     NSLog(@"%@",[hostname name]);
     
-}
-
-- (void)showImage:(NSImage*)image {
-    [[self camView] setImage:image];
 }
 
 @end

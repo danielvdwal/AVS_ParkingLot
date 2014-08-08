@@ -11,6 +11,6 @@
 @protocol ImageCapturedDelegate <NSObject>
 
 @required
-- (void)imageCaptured:(cv::Mat)image;
+- (void)imageCaptured:(const cv::Mat&)image;
 
 @end

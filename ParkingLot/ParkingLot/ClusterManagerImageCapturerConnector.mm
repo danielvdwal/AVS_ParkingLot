@@ -8,6 +8,7 @@
 
 #import "ClusterManagerImageCapturerConnector.h"
 #import "ImageCapturerProtocol.h"
+#import "WrappedImage.h"
 
 @implementation ClusterManagerConnector
 
@@ -36,9 +37,10 @@
     [_clusterManager removeImageCapturerWorker:_worker];
 }
 
-- (void)forwardImage:(NSImage*)image {
+- (void)forwardImage:(const cv::Mat&)image {
     if(_clusterManager) {
-        [_clusterManager forwardImage:image
+        WrappedImage *wrappedImage = [[WrappedImage alloc] initWithCvMat:image];
+        [_clusterManager forwardImage:wrappedImage
                            fromWorker:_worker];
     }
 }

@@ -6,15 +6,15 @@
 //  Copyright (c) 2014 VirginCode. All rights reserved.
 //
 
-#import <opencv2/opencv.hpp>
 #import <Foundation/Foundation.h>
+#import "WrappedImage.h"
 
 @protocol ImageCapturerProtocol <NSObject>
 
 @required
 - (void)addImageCapturerWorker:(NSHost*)worker;
 - (void)removeImageCapturerWorker:(NSHost*)worker;
-- (oneway void)forwardImage:(NSImage*)image
-                 fromWorker:(NSHost*)worker;
+- (void)forwardImage:(WrappedImage*)image
+          fromWorker:(NSHost*)worker;
 
 @end

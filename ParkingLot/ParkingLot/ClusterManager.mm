@@ -117,13 +117,13 @@
     NSLog(@"ImageCapturerWorkers active : %lu", [_imageCapturerWorkers count]);
 }
 
-- (oneway void)forwardImage:(NSImage*)image
-                 fromWorker:(NSHost*)worker {
-    //cv::Mat displayedImage;
+- (void)forwardImage:(WrappedImage*)image
+          fromWorker:(NSHost*)worker {
+    cv::Mat displayedImage = [image cvMat];
     //cv::resize(image, displayedImage, cv::Size(960,720));
     //cv::imshow([[worker name] cStringUsingEncoding:NSASCIIStringEncoding], image);
     //displayedImage.release();
-    [[self _delegate] showImage:image];
+    //[[self _delegate] showImage:image];
 }
 
 @end

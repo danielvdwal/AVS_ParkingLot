@@ -10,6 +10,6 @@
 
 @interface NSImage (NSImage_OpenCV)
 
-+(NSImage*)imageWithCVMat:(cv::Mat&)cvMat;
++(NSImage*)imageWithCVMat:(const cv::Mat&)cvMat;
 
 @end

@@ -16,6 +16,6 @@
 
 - (void)connectToClusterManager;
 - (void)closeConnectionToClusterManager;
-- (void)forwardImage:(NSImage*)image;
+- (void)forwardImage:(const cv::Mat&)image;
 
 @end
