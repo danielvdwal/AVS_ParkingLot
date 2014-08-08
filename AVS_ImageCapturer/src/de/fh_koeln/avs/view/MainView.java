@@ -11,6 +11,7 @@ import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 /**
@@ -117,8 +118,8 @@ public class MainView extends javax.swing.JFrame {
                 public void run() {
                     while (streamTButton.isSelected()) {
                         try {
-                            streamView.setIcon((Icon) imgCapCon.getCapturedImage());
-                            Thread.sleep(1000);
+                            streamView.setIcon(new ImageIcon(imgCapCon.getCapturedImage()));
+                            Thread.sleep(33);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                         }
