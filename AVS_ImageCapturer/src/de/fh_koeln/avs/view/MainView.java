@@ -10,9 +10,7 @@ import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -124,14 +122,14 @@ public class MainView extends javax.swing.JFrame {
                             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
+                    imgCapCon.stopCamera();
+                    imgCapCon = null;
+                    streamView.setIcon(null);
                 }
 
             }).start();
         }
-        else {
-            imgCapCon.stopCamera();
-            imgCapCon = null;
-        }
+            
     }//GEN-LAST:event_streamTButtonActionPerformed
 
     /**
