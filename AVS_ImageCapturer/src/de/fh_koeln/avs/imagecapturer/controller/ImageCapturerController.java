@@ -47,6 +47,16 @@ public class ImageCapturerController implements IImageCapturerController {
             Mat image = new Mat();
             camera.read(image);
             capturedBufferedImage
+                    = matToBufferedImageConverter.convertToBufferedImageST(image);
+        }
+        return capturedBufferedImage;
+    }
+    
+    public BufferedImage getCapturedImageMT() {
+        if (camera.isOpened()) {
+            Mat image = new Mat();
+            camera.read(image);
+            capturedBufferedImage
                     = matToBufferedImageConverter.convertToBufferedImage(image);
         }
         return capturedBufferedImage;
