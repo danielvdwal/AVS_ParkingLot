@@ -10,5 +10,5 @@ public interface IImageCapturerController {
     
     void startCamera();
     void stopCamera();
-    BufferedImage getCapturedImage();
+    BufferedImage getCapturedImage(boolean multiThreaded);
 }

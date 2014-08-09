@@ -12,50 +12,36 @@ import org.opencv.core.Mat;
  */
 public final class MatToBufferedImageConverter {
 
+    private final static ForkJoinPool pool = new ForkJoinPool();
+
     private BufferedImage img;
     private byte[] data;
-    private byte[] rgbData;
 
-    public MatToBufferedImageConverter() {
-    }
-
-    public BufferedImage convertToBufferedImageST(Mat matImage) {
+    public BufferedImage convertToBufferedImage(Mat matImage, boolean multiThreaded) {
         getSpace(matImage);
         matImage.get(0, 0, data);
         img.getRaster().setDataElements(0, 0, matImage.cols(), matImage.rows(),
                 data);
 
-        switchFromBGRToRBGST();
-
-        return img;
-    }
-
-    public BufferedImage convertToBufferedImage(Mat matImage) {
-        getSpace(matImage);
-        matImage.get(0, 0, data);
-        img.getRaster().setDataElements(0, 0, matImage.cols(), matImage.rows(),
-                data);
-
-        switchFromBGRToRBG(matImage);
-
-        return img;
-    }
-
-    private void switchFromBGRToRBGST() {
-        rgbData = ((DataBufferByte) img.getRaster().
+        byte[] rgbData = ((DataBufferByte) img.getRaster().
                 getDataBuffer()).getData();
+
+        if (multiThreaded) {
+            switchFromBGRToRBG(rgbData);
+        } else {
+            switchFromBGRToRBGSingleThreaded(rgbData);
+        }
+
+        return img;
+    }
+
+    private void switchFromBGRToRBG(byte[] rgbData) {
+        BGRToRGBSwitcher switcher = new BGRToRGBSwitcher(0, data.length, data, rgbData);
+        pool.invoke(switcher);
+    }
+
+    private void switchFromBGRToRBGSingleThreaded(byte[] rgbData) {
         System.arraycopy(data, 0, rgbData, 0, data.length);
-    }
-
-    private void switchFromBGRToRBG(Mat matImage) {
-        rgbData = ((DataBufferByte) img.getRaster().
-                getDataBuffer()).getData();
-
-        BGRToRGBSwitcher con = new BGRToRGBSwitcher(img, 0, matImage.cols() * matImage.rows() * 3 - 1, data, rgbData);
-
-        ForkJoinPool pool = new ForkJoinPool();
-
-        pool.invoke(con);
     }
 
     private void getSpace(Mat imageMat) {
@@ -73,33 +59,32 @@ public final class MatToBufferedImageConverter {
 
     private class BGRToRGBSwitcher extends RecursiveAction {
 
-        private final BufferedImage img;
+        private static final int SPLIT_LENGTH = 350_000; // Due to best results in benchmarking
         private final int i;
-        private final int j;
+        private final int length;
         private final byte[] data;
         private final byte[] rgbData;
-
-        public BGRToRGBSwitcher(BufferedImage img, int i, int j, byte[] data, byte[] rgbData) {
-            this.img = img;
+        
+        public BGRToRGBSwitcher(int i, int length, byte[] data, byte[] rgbData) {
             this.i = i;
-            this.j = j;
+            this.length = length;
             this.data = data;
             this.rgbData = rgbData;
         }
 
         private void computeDirectly() {
-            rgbData[i] = data[j];
-            rgbData[j] = data[i];
+            System.arraycopy(data, i, rgbData, i, length);
         }
 
         @Override
         protected void compute() {
-            if (i + 1000000 >= j) {
+            if (length > SPLIT_LENGTH) {
+                int midLength = length / 2;
+                invokeAll(new BGRToRGBSwitcher(i, midLength, data, rgbData),
+                        new BGRToRGBSwitcher(i + midLength, midLength, data, rgbData));
+            } else {
                 computeDirectly();
-                return;
             }
-            invokeAll(new BGRToRGBSwitcher(img, i, j, data, rgbData),
-                    new BGRToRGBSwitcher(img, i + 1, j - 1, data, rgbData));
         }
     }
 }
