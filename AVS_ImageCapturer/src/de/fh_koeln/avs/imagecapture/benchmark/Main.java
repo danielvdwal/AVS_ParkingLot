@@ -1,43 +1,47 @@
 package de.fh_koeln.avs.imagecapture.benchmark;
 
-
-import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
-import de.fh_koeln.avs.imagecapturer.converter.MatToBufferedImageConverter;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
- * @author dvanderw
+ * @author Daniel van der Wal
  */
 public class Main {
 
     public static void main(String[] args) {
         final ImageCapturerController imgCapCon = new ImageCapturerController();
-        final int nFrames = 100;
+        final int nFrames = 10;
         imgCapCon.startCamera();
         System.out.printf("Started single threaded camera capture of %d frames\n", nFrames);
-        long startTime = System.nanoTime();
+        long totalStartTime = System.nanoTime();
         for (int i = 0; i < nFrames; i++) {
-            //imgCapCon.getCapturedImage();
+
+            long startTime = System.nanoTime();
+            imgCapCon.getCapturedImage();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.printf("Capturing one frame took: %d ns - %f µs - %f ms - %f s\n", duration, duration / 1000.0f, duration / 1000.0f / 1000.0f, duration / 1000.0f / 1000.0f / 1000.0f);
         }
-        long endTime = System.nanoTime();
+        long totalEndTime = System.nanoTime();
         System.out.printf("Stopped single threaded camera capture of %d frames\n", nFrames);
-        long duration = (endTime - startTime);
-        System.out.printf("Capturing %d took: %d ns - %f µs - %f ms - %f s\n", nFrames, duration, duration/1000.0f, duration/1000.0f/1000.0f, duration/1000.0f/1000.0f/1000.0f);
-        
+        long totalDuration = (totalEndTime - totalStartTime);
+        System.out.printf("Capturing %d frames took: %d ns - %f µs - %f ms - %f s\n", nFrames,
+                totalDuration, totalDuration / 1000.0f, totalDuration / 1000.0f / 1000.0f, totalDuration / 1000.0f / 1000.0f / 1000.0f);
+
         System.out.printf("Started multi threaded camera capture of %d frames\n", nFrames);
-        startTime = System.nanoTime();
+        totalStartTime = System.nanoTime();
         for (int i = 0; i < nFrames; i++) {
+            long startTime = System.nanoTime();
             imgCapCon.getCapturedImageMT();
+            long endTime = System.nanoTime();
+            long duration = (endTime - startTime);
+            System.out.printf("Capturing one frame took: %d ns - %f µs - %f ms - %f s\n", duration, duration / 1000.0f, duration / 1000.0f / 1000.0f, duration / 1000.0f / 1000.0f / 1000.0f);
+
         }
-        endTime = System.nanoTime();
+        totalEndTime = System.nanoTime();
         System.out.printf("Stopped multi threaded camera capture of %d frames\n", nFrames);
-        duration = (endTime - startTime);
-        System.out.printf("Capturing %d took: %d ns - %f µs - %f ms - %f s\n", nFrames, duration, duration/1000.0f, duration/1000.0f/1000.0f, duration/1000.0f/1000.0f/1000.0f);
+        totalDuration = (totalEndTime - totalStartTime);
+        System.out.printf("Capturing %d frames took: %d ns - %f µs - %f ms - %f s\n", nFrames,
+                totalDuration, totalDuration / 1000.0f, totalDuration / 1000.0f / 1000.0f, totalDuration / 1000.0f / 1000.0f / 1000.0f);
     }
 }

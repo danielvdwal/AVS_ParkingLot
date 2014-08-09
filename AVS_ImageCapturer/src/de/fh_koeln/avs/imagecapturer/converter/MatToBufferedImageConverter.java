@@ -51,7 +51,7 @@ public final class MatToBufferedImageConverter {
         rgbData = ((DataBufferByte) img.getRaster().
                 getDataBuffer()).getData();
 
-        BGRToRGBSwitcher con = new BGRToRGBSwitcher(img, 0, matImage.cols() * matImage.rows() * 3 - 1, data, rgbData);
+        BGRToRGBSwitcher con = new BGRToRGBSwitcher(0, data.length, data, rgbData);
 
         ForkJoinPool pool = new ForkJoinPool();
 
@@ -73,33 +73,33 @@ public final class MatToBufferedImageConverter {
 
     private class BGRToRGBSwitcher extends RecursiveAction {
 
-        private final BufferedImage img;
+        private final int splitLength = 350_000;
         private final int i;
-        private final int j;
+        private final int length;
         private final byte[] data;
         private final byte[] rgbData;
 
-        public BGRToRGBSwitcher(BufferedImage img, int i, int j, byte[] data, byte[] rgbData) {
-            this.img = img;
+        public BGRToRGBSwitcher(int i, int length, byte[] data, byte[] rgbData) {
             this.i = i;
-            this.j = j;
+            this.length = length;
             this.data = data;
             this.rgbData = rgbData;
         }
 
         private void computeDirectly() {
-            rgbData[i] = data[j];
-            rgbData[j] = data[i];
+            System.arraycopy(data, i, rgbData, i, length);
         }
 
         @Override
         protected void compute() {
-            if (i + 1000000 >= j) {
-                computeDirectly();
-                return;
+            if (length > splitLength) {
+                int midLength = length / 2;
+                invokeAll(new BGRToRGBSwitcher(i, midLength, data, rgbData),
+                        new BGRToRGBSwitcher(i + midLength, midLength, data, rgbData));
             }
-            invokeAll(new BGRToRGBSwitcher(img, i, j, data, rgbData),
-                    new BGRToRGBSwitcher(img, i + 1, j - 1, data, rgbData));
+            else {
+                computeDirectly();
+            }
         }
     }
 }
