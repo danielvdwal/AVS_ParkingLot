@@ -6,6 +6,12 @@
 
 package de.fh_koeln.avs.imagecapturer.view;
 
+import com.hazelcast.client.HazelcastClient;
+import com.hazelcast.client.config.ClientConfig;
+import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.ITopic;
+import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
 import java.awt.Dimension;
@@ -13,6 +19,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -24,7 +31,10 @@ import javax.swing.ImageIcon;
 public class MainView extends javax.swing.JFrame {
 
     IImageCapturerController imgCapCon;
-    
+    private HazelcastInstance hz;
+    private ITopic topic;
+    private boolean stream;
+
     /**
      * Creates new form MainView
      */
@@ -61,6 +71,11 @@ public class MainView extends javax.swing.JFrame {
         });
 
         clusterTButton.setText("Cluster"); // NOI18N
+        clusterTButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clusterTButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -112,7 +127,7 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -120,7 +135,7 @@ public class MainView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                    .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -130,7 +145,7 @@ public class MainView extends javax.swing.JFrame {
 
     private void streamTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamTButtonActionPerformed
         imgCapCon = new ImageCapturerController();
-        
+
         if (streamTButton.isSelected()) {
             imgCapCon.startCamera();
             new Thread(new Runnable() {
@@ -139,7 +154,19 @@ public class MainView extends javax.swing.JFrame {
                 public void run() {
                     while (streamTButton.isSelected()) {
                         try {
-                            streamView.setIcon(getScaledImage(imgCapCon.getCapturedImage(true), streamView.getHeight(), streamView.getHeight()));
+                            BufferedImage image = imgCapCon.getCapturedImage(true);
+                            streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
+                            if (stream) {
+                                if (topic != null) {
+                                    ClientNetworkConfig networkConfig = new ClientNetworkConfig();
+                                    networkConfig.addAddress("139.6.65.26:5701");
+                                    ClientConfig clientConfig = new ClientConfig();
+                                    clientConfig.setNetworkConfig(networkConfig);
+                                    hz = HazelcastClient.newHazelcastClient(clientConfig);
+                                    topic = hz.getTopic("ImageCapturer");
+                                }
+                                topic.publish(new ImageData(image));
+                            }
                             Thread.sleep(33);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -152,17 +179,22 @@ public class MainView extends javax.swing.JFrame {
 
             }).start();
         }
-            
+
     }//GEN-LAST:event_streamTButtonActionPerformed
+
+    private void clusterTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterTButtonActionPerformed
+        stream = true;
+    }//GEN-LAST:event_clusterTButtonActionPerformed
 
     /**
      * Resizes an image using a Graphics2D object backed by a BufferedImage.
+     *
      * @param srcImg - source image to scale
      * @param w - desired width
      * @param h - desired height
      * @return - the new resized image
      */
-    private ImageIcon getScaledImage(Image srcImg, int w, int h){
+    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = resizedImg.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -170,7 +202,7 @@ public class MainView extends javax.swing.JFrame {
         g2.dispose();
         return new ImageIcon(resizedImg);
     }
-    
+
     /**
      * @param args the command line arguments
      */
