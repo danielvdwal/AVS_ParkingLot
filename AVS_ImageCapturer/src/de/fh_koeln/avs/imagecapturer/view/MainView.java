@@ -1,21 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.fh_koeln.avs.imagecapturer.view;
 
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.TrayIcon;
 import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -51,7 +47,7 @@ public class MainView extends javax.swing.JFrame {
         setTitle("AVS Parking Lot Monitor - PrePreAlpha"); // NOI18N
         setResizable(false);
 
-        controlPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Menü"));
 
         streamTButton.setText("Stream"); // NOI18N
         streamTButton.addActionListener(new java.awt.event.ActionListener() {
@@ -82,10 +78,10 @@ public class MainView extends javax.swing.JFrame {
                 .addComponent(streamTButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clusterTButton)
-                .addContainerGap(426, Short.MAX_VALUE))
+                .addContainerGap(407, Short.MAX_VALUE))
         );
 
-        streamPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Stream"));
+        streamPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Stream"));
         streamPanel.setMaximumSize(new java.awt.Dimension(1280, 1024));
 
         streamView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -112,7 +108,7 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -130,29 +126,24 @@ public class MainView extends javax.swing.JFrame {
 
     private void streamTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamTButtonActionPerformed
         imgCapCon = new ImageCapturerController();
-        
+
         if (streamTButton.isSelected()) {
             imgCapCon.startCamera();
-            new Thread(new Runnable() {
-
-                @Override
-                public void run() {
-                    while (streamTButton.isSelected()) {
-                        try {
-                            streamView.setIcon(getScaledImage(imgCapCon.getCapturedImage(true), streamView.getHeight(), streamView.getHeight()));
-                            Thread.sleep(33);
-                        } catch (InterruptedException ex) {
-                            Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+            new Thread(() -> {
+                while (streamTButton.isSelected()) {
+                    try {
+                        streamView.setIcon(getScaledImage(imgCapCon.getCapturedImage(true), streamView.getHeight(), streamView.getHeight()));
+                        Thread.sleep(33);
+                    } catch (InterruptedException ex) {
+                        JOptionPane.showMessageDialog(null, "Fehler: Das Bild konnte leider nicht angezeigt werden.", "Fehler: Bildanzeige", JOptionPane.ERROR_MESSAGE);
                     }
-                    imgCapCon.stopCamera();
-                    imgCapCon = null;
-                    streamView.setIcon(null);
                 }
-
+                imgCapCon.stopCamera();
+                imgCapCon = null;
+                streamView.setIcon(null);
             }).start();
         }
-            
+
     }//GEN-LAST:event_streamTButtonActionPerformed
 
     /**
@@ -162,7 +153,7 @@ public class MainView extends javax.swing.JFrame {
      * @param h - desired height
      * @return - the new resized image
      */
-    private ImageIcon getScaledImage(Image srcImg, int w, int h){
+    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = resizedImg.createGraphics();
         g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -187,22 +178,14 @@ public class MainView extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainView.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainView().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new MainView().setVisible(true);
         });
     }
 
