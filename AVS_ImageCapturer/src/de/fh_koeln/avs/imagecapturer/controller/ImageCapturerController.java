@@ -15,7 +15,7 @@ public class ImageCapturerController implements IImageCapturerController {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
-    
+
     private VideoCapture camera;
     private final MatToBufferedImageConverter matToBufferedImageConverter;
     private BufferedImage capturedBufferedImage;
@@ -26,7 +26,7 @@ public class ImageCapturerController implements IImageCapturerController {
 
     @Override
     public void startCamera() {
-        if(camera == null) {
+        if (camera == null) {
             camera = new VideoCapture(0);
         }
         if (camera.isOpened()) {
@@ -42,22 +42,12 @@ public class ImageCapturerController implements IImageCapturerController {
     }
 
     @Override
-    public BufferedImage getCapturedImage() {
+    public BufferedImage getCapturedImage(boolean multiThreaded) {
         if (camera.isOpened()) {
             Mat image = new Mat();
             camera.read(image);
             capturedBufferedImage
-                    = matToBufferedImageConverter.convertToBufferedImageST(image);
-        }
-        return capturedBufferedImage;
-    }
-    
-    public BufferedImage getCapturedImageMT() {
-        if (camera.isOpened()) {
-            Mat image = new Mat();
-            camera.read(image);
-            capturedBufferedImage
-                    = matToBufferedImageConverter.convertToBufferedImage(image);
+                    = matToBufferedImageConverter.convertToBufferedImage(image, multiThreaded);
         }
         return capturedBufferedImage;
     }

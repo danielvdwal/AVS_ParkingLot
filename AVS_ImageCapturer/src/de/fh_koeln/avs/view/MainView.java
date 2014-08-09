@@ -116,7 +116,7 @@ public class MainView extends javax.swing.JFrame {
                 public void run() {
                     while (streamTButton.isSelected()) {
                         try {
-                            streamView.setIcon(new ImageIcon(imgCapCon.getCapturedImage()));
+                            streamView.setIcon(new ImageIcon(imgCapCon.getCapturedImage(true)));
                             Thread.sleep(33);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
