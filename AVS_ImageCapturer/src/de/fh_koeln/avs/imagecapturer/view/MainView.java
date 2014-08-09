@@ -8,6 +8,11 @@ package de.fh_koeln.avs.imagecapturer.view;
 
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -38,12 +43,13 @@ public class MainView extends javax.swing.JFrame {
 
         controlPanel = new javax.swing.JPanel();
         streamTButton = new javax.swing.JToggleButton();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        clusterTButton = new javax.swing.JToggleButton();
         streamPanel = new javax.swing.JPanel();
         streamView = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("AVS Parking Lot Monitor - PrePreAlpha"); // NOI18N
+        setResizable(false);
 
         controlPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -54,7 +60,7 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
-        jToggleButton1.setText("Cluster"); // NOI18N
+        clusterTButton.setText("Cluster"); // NOI18N
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -62,7 +68,7 @@ public class MainView extends javax.swing.JFrame {
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlPanelLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jToggleButton1)
+                .addComponent(clusterTButton)
                 .addContainerGap())
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
@@ -75,25 +81,25 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(streamTButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jToggleButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(clusterTButton)
+                .addContainerGap(426, Short.MAX_VALUE))
         );
 
         streamPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Stream"));
+        streamPanel.setMaximumSize(new java.awt.Dimension(1280, 1024));
 
+        streamView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         streamView.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        streamView.setPreferredSize(new java.awt.Dimension(1280, 1024));
-        streamView.setSize(new java.awt.Dimension(1280, 1024));
 
         javax.swing.GroupLayout streamPanelLayout = new javax.swing.GroupLayout(streamPanel);
         streamPanel.setLayout(streamPanelLayout);
         streamPanelLayout.setHorizontalGroup(
             streamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(streamView, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1324, Short.MAX_VALUE)
+            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         streamPanelLayout.setVerticalGroup(
             streamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, 776, Short.MAX_VALUE)
+            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         streamView.getAccessibleContext().setAccessibleName("jLabel1");
@@ -106,18 +112,16 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -135,7 +139,7 @@ public class MainView extends javax.swing.JFrame {
                 public void run() {
                     while (streamTButton.isSelected()) {
                         try {
-                            streamView.setIcon(new ImageIcon(imgCapCon.getCapturedImage(true)));
+                            streamView.setIcon(getScaledImage(imgCapCon.getCapturedImage(true), streamView.getHeight(), streamView.getHeight()));
                             Thread.sleep(33);
                         } catch (InterruptedException ex) {
                             Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -151,6 +155,22 @@ public class MainView extends javax.swing.JFrame {
             
     }//GEN-LAST:event_streamTButtonActionPerformed
 
+    /**
+     * Resizes an image using a Graphics2D object backed by a BufferedImage.
+     * @param srcImg - source image to scale
+     * @param w - desired width
+     * @param h - desired height
+     * @return - the new resized image
+     */
+    private ImageIcon getScaledImage(Image srcImg, int w, int h){
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return new ImageIcon(resizedImg);
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -187,8 +207,8 @@ public class MainView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton clusterTButton;
     private javax.swing.JPanel controlPanel;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JPanel streamPanel;
     private javax.swing.JToggleButton streamTButton;
     private javax.swing.JLabel streamView;
