@@ -51,4 +51,14 @@ public class ImageCapturerController implements IImageCapturerController {
         }
         return capturedBufferedImage;
     }
+
+    @Override
+    public Mat getRawCapturedImage() {
+        Mat image = null;
+        if (camera.isOpened()) {
+            image = new Mat();
+            camera.read(image);
+        }
+        return image; 
+    }
 }

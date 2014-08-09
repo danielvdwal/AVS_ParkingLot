@@ -5,9 +5,11 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
+import com.sun.javafx.geom.Vec2f;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
+import de.fh_koeln.avs.imagecapturer.converter.MatToBufferedImageConverter;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -15,6 +17,14 @@ import java.awt.image.BufferedImage;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import org.opencv.core.Core;
+import org.opencv.core.CvType;
+import org.opencv.core.Mat;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
+import org.opencv.imgproc.Imgproc;
 
 /**
  *
@@ -22,7 +32,8 @@ import javax.swing.ImageIcon;
  */
 public class MainView extends javax.swing.JFrame {
 
-    IImageCapturerController imgCapCon;
+    private IImageCapturerController imgCapCon;
+    private MatToBufferedImageConverter bufferedImageConverter;
     private HazelcastInstance hz;
     private ITopic topic;
     private boolean stream;
@@ -143,8 +154,12 @@ public class MainView extends javax.swing.JFrame {
             new Thread(() -> {
                 while (streamTButton.isSelected()) {
                     try {
-                        BufferedImage image = imgCapCon.getCapturedImage(true);
-                        streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
+                        //BufferedImage image = imgCapCon.getCapturedImage(true);
+                        Mat houghImage = houghLinesP(imgCapCon.getRawCapturedImage());
+                        bufferedImageConverter = new MatToBufferedImageConverter();
+                        BufferedImage bufferedHoughImage = bufferedImageConverter.convertToBufferedImage(houghImage, true);
+                        
+                        streamView.setIcon(getScaledImage(bufferedHoughImage, streamView.getHeight(), streamView.getHeight()));
                         if (stream) {
                             if (topic == null) {
                                 ClientNetworkConfig networkConfig = new ClientNetworkConfig();
@@ -154,8 +169,13 @@ public class MainView extends javax.swing.JFrame {
                                 hz = HazelcastClient.newHazelcastClient(clientConfig);
                                 topic = hz.getTopic("ImageCapturer");
                             }
-                            topic.publish(new ImageData(image));
+                            //topic.publish(new ImageData(image));
                         }
+                        
+                        //image = null;
+                        houghImage = null;
+                        bufferedHoughImage = null;
+                        
                         Thread.sleep(33);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -189,7 +209,37 @@ public class MainView extends javax.swing.JFrame {
         g2.dispose();
         return new ImageIcon(resizedImg);
     }
-
+    
+    private Mat houghLinesP(Mat image) {
+        if (image.empty()) {
+            JOptionPane.showMessageDialog(null, "Fehler: Das eingelesene Image ist leer!", "Fehler: Bild einlesen", JOptionPane.ERROR_MESSAGE);
+        }
+        else {
+            Mat thresholdImage = new Mat(streamView.getHeight(), streamView.getWidth(), CvType.CV_8UC1);
+            Imgproc.cvtColor(image, thresholdImage, Imgproc.COLOR_RGB2GRAY, 4);
+            Imgproc.Canny(thresholdImage, thresholdImage, 80, 100);
+            Mat lines = new Mat();
+            int threshold = 50;
+            int minLineSize = 20;
+            int lineGap = 20;
+            
+            Imgproc.HoughLinesP(thresholdImage, lines, 1, Math.PI/180, threshold, minLineSize, lineGap);
+            
+            for (int i = 0; i < lines.cols(); i++) {
+                double[] vec = lines.get(0, i);
+                double x1 = vec[0],
+                        y1 = vec[1],
+                        x2 = vec[2],
+                        y2 = vec[3];
+                Point start = new Point(x1, y1);
+                Point end = new Point (x2, y2);
+                
+                Core.line(image, start, end, new Scalar(255, 0 ,0), 3);
+            }
+        }
+        return image;
+    }
+    
     /**
      * @param args the command line arguments
      */
