@@ -64,6 +64,7 @@ public final class MatToBufferedImageConverter {
         private final int length;
         private final byte[] data;
         private final byte[] rgbData;
+        
         public BGRToRGBSwitcher(int i, int length, byte[] data, byte[] rgbData) {
             this.i = i;
             this.length = length;
