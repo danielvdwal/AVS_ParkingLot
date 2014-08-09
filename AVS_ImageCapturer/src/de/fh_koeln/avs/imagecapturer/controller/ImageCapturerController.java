@@ -39,6 +39,11 @@ public class ImageCapturerController implements IImageCapturerController {
     @Override
     public void stopCamera() {
         camera = null;
+        if (camera == null) {
+            System.out.println("Camera stopped");
+        } else {
+            System.out.println("Couldn't stop camera");
+        }
     }
 
     @Override

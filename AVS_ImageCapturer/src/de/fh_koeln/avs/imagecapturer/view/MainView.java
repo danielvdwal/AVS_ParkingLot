@@ -5,7 +5,6 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ITopic;
-import com.sun.javafx.geom.Vec2f;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
@@ -23,7 +22,6 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -37,6 +35,7 @@ public class MainView extends javax.swing.JFrame {
     private HazelcastInstance hz;
     private ITopic topic;
     private boolean stream;
+    private int frameCounter;
 
     /**
      * Creates new form MainView
@@ -57,6 +56,7 @@ public class MainView extends javax.swing.JFrame {
         controlPanel = new javax.swing.JPanel();
         streamTButton = new javax.swing.JToggleButton();
         clusterTButton = new javax.swing.JToggleButton();
+        fpsLabel = new javax.swing.JLabel();
         streamPanel = new javax.swing.JPanel();
         streamView = new javax.swing.JLabel();
 
@@ -80,17 +80,18 @@ public class MainView extends javax.swing.JFrame {
             }
         });
 
+        fpsLabel.setText("FPS: ");
+
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
         controlPanelLayout.setHorizontalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, controlPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(clusterTButton)
-                .addContainerGap())
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(streamTButton)
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(streamTButton)
+                    .addComponent(fpsLabel)
+                    .addComponent(clusterTButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         controlPanelLayout.setVerticalGroup(
@@ -99,8 +100,10 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(streamTButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(fpsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clusterTButton)
-                .addContainerGap(407, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         streamPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Stream"));
@@ -108,6 +111,7 @@ public class MainView extends javax.swing.JFrame {
 
         streamView.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         streamView.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        streamView.setPreferredSize(new java.awt.Dimension(500, 500));
 
         javax.swing.GroupLayout streamPanelLayout = new javax.swing.GroupLayout(streamPanel);
         streamPanel.setLayout(streamPanelLayout);
@@ -117,7 +121,7 @@ public class MainView extends javax.swing.JFrame {
         );
         streamPanelLayout.setVerticalGroup(
             streamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
         );
 
         streamView.getAccessibleContext().setAccessibleName("jLabel1");
@@ -130,7 +134,7 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -155,7 +159,8 @@ public class MainView extends javax.swing.JFrame {
                 while (streamTButton.isSelected()) {
                     try {
                         BufferedImage image = houghLinesP(imgCapCon.getRawCapturedImage());
-                        
+                        //BufferedImage image = imgCapCon.getCapturedImage(true);
+                        frameCounter++;
                         streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
                         if (stream) {
                             if (topic == null) {
@@ -168,8 +173,8 @@ public class MainView extends javax.swing.JFrame {
                             }
                             topic.publish(new ImageData(image));
                         }
-                        image = null;
-                        
+                        image.flush();
+
                         Thread.sleep(40);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -178,6 +183,18 @@ public class MainView extends javax.swing.JFrame {
                 imgCapCon.stopCamera();
                 imgCapCon = null;
                 streamView.setIcon(null);
+            }).start();
+
+            new Thread(() -> {
+                frameCounter = 0;
+                while (streamTButton.isSelected()) {
+                    fpsLabel.setText("FPS: " + frameCounter);
+                    frameCounter = 0;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException ex) {}
+                }
+                fpsLabel.setText("FPS: ");
             }).start();
         }
 
@@ -204,13 +221,18 @@ public class MainView extends javax.swing.JFrame {
         return new ImageIcon(resizedImg);
     }
     
+    /**
+     * Detects lines with houghlines algorithm.
+     * 
+     * @param image The source image.
+     * @return The new image containing the source image and the detected lines.
+     */
     private BufferedImage houghLinesP(Mat image) {
         bufferedImageConverter = new MatToBufferedImageConverter();
-        
+
         if (image.empty()) {
             JOptionPane.showMessageDialog(null, "Fehler: Das eingelesene Image ist leer!", "Fehler: Bild einlesen", JOptionPane.ERROR_MESSAGE);
-        }
-        else {
+        } else {
             Mat thresholdImage = new Mat(streamView.getHeight(), streamView.getWidth(), CvType.CV_8UC1);
             Imgproc.cvtColor(image, thresholdImage, Imgproc.COLOR_RGB2GRAY, 4);
             Imgproc.Canny(thresholdImage, thresholdImage, 80, 100);
@@ -218,9 +240,9 @@ public class MainView extends javax.swing.JFrame {
             int threshold = 50;
             int minLineSize = 20;
             int lineGap = 20;
-            
-            Imgproc.HoughLinesP(thresholdImage, lines, 1, Math.PI/180, threshold, minLineSize, lineGap);
-            
+
+            Imgproc.HoughLinesP(thresholdImage, lines, 1, Math.PI / 180, threshold, minLineSize, lineGap);
+
             for (int i = 0; i < lines.cols(); i++) {
                 double[] vec = lines.get(0, i);
                 double x1 = vec[0],
@@ -228,16 +250,16 @@ public class MainView extends javax.swing.JFrame {
                         x2 = vec[2],
                         y2 = vec[3];
                 Point start = new Point(x1, y1);
-                Point end = new Point (x2, y2);
-                
-                Core.line(image, start, end, new Scalar(255, 0 ,0), 3);
+                Point end = new Point(x2, y2);
+
+                Core.line(image, start, end, new Scalar(255, 0, 0), 3);
             }
-            thresholdImage = null;
-            lines = null;
+            thresholdImage.release();
+            lines.release();
         }
         BufferedImage bufferedHoughImage = bufferedImageConverter.convertToBufferedImage(image, true);
         bufferedImageConverter = null;
-        
+
         return bufferedHoughImage;
     }
     
@@ -271,6 +293,7 @@ public class MainView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton clusterTButton;
     private javax.swing.JPanel controlPanel;
+    private javax.swing.JLabel fpsLabel;
     private javax.swing.JPanel streamPanel;
     private javax.swing.JToggleButton streamTButton;
     private javax.swing.JLabel streamView;
