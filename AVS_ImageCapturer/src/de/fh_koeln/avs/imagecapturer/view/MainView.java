@@ -154,12 +154,9 @@ public class MainView extends javax.swing.JFrame {
             new Thread(() -> {
                 while (streamTButton.isSelected()) {
                     try {
-                        //BufferedImage image = imgCapCon.getCapturedImage(true);
-                        Mat houghImage = houghLinesP(imgCapCon.getRawCapturedImage());
-                        bufferedImageConverter = new MatToBufferedImageConverter();
-                        BufferedImage bufferedHoughImage = bufferedImageConverter.convertToBufferedImage(houghImage, true);
+                        BufferedImage image = houghLinesP(imgCapCon.getRawCapturedImage());
                         
-                        streamView.setIcon(getScaledImage(bufferedHoughImage, streamView.getHeight(), streamView.getHeight()));
+                        streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
                         if (stream) {
                             if (topic == null) {
                                 ClientNetworkConfig networkConfig = new ClientNetworkConfig();
@@ -169,14 +166,11 @@ public class MainView extends javax.swing.JFrame {
                                 hz = HazelcastClient.newHazelcastClient(clientConfig);
                                 topic = hz.getTopic("ImageCapturer");
                             }
-                            //topic.publish(new ImageData(image));
+                            topic.publish(new ImageData(image));
                         }
+                        image = null;
                         
-                        //image = null;
-                        houghImage = null;
-                        bufferedHoughImage = null;
-                        
-                        Thread.sleep(33);
+                        Thread.sleep(40);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -210,7 +204,9 @@ public class MainView extends javax.swing.JFrame {
         return new ImageIcon(resizedImg);
     }
     
-    private Mat houghLinesP(Mat image) {
+    private BufferedImage houghLinesP(Mat image) {
+        bufferedImageConverter = new MatToBufferedImageConverter();
+        
         if (image.empty()) {
             JOptionPane.showMessageDialog(null, "Fehler: Das eingelesene Image ist leer!", "Fehler: Bild einlesen", JOptionPane.ERROR_MESSAGE);
         }
@@ -236,8 +232,13 @@ public class MainView extends javax.swing.JFrame {
                 
                 Core.line(image, start, end, new Scalar(255, 0 ,0), 3);
             }
+            thresholdImage = null;
+            lines = null;
         }
-        return image;
+        BufferedImage bufferedHoughImage = bufferedImageConverter.convertToBufferedImage(image, true);
+        bufferedImageConverter = null;
+        
+        return bufferedHoughImage;
     }
     
     /**
