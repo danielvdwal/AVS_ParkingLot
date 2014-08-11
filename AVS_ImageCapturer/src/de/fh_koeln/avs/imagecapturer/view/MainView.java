@@ -4,11 +4,11 @@ import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.ITopic;
+import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
+import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
 import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
-import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -41,7 +41,7 @@ public class MainView extends javax.swing.JFrame {
 
     private IImageCapturerController imgCapCon;
     private HazelcastInstance hz;
-    private ITopic topic;
+    private IQueue queue;
     private BufferedImage displayedImage;
     private MatToBufferedImageConverter bufferedImageConverter;
     private int frameCounter;
@@ -65,19 +65,19 @@ public class MainView extends javax.swing.JFrame {
         this.imageForwardRunnable = () -> {
             if (stream.get()) {
                 synchronized (forwardLock) {
-                    if (topic == null) {
+                    if (queue == null) {
                         ClientNetworkConfig networkConfig = new ClientNetworkConfig();
                         networkConfig.addAddress("139.6.65.26:5701");
                         ClientConfig clientConfig = new ClientConfig();
                         clientConfig.setNetworkConfig(networkConfig);
                         hz = HazelcastClient.newHazelcastClient(clientConfig);
-                        topic = hz.getTopic("ImageCapturer");
+                        queue = hz.getQueue("ImageCapturer");
                     }
                     ImageData imageData;
-                    //synchronized (captureLock) {
+                    synchronized (captureLock) {
                         imageData = new ImageData(displayedImage);
-                    //}
-                    topic.publish(imageData);
+                    }
+                    queue.offer(imageData);
                 }
             }
         };
@@ -197,7 +197,7 @@ public class MainView extends javax.swing.JFrame {
                 imgCapCon.startCamera();
             }
             executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
-            executorService.scheduleWithFixedDelay(imageForwardRunnable, 10, 40, TimeUnit.MILLISECONDS);
+            executorService.scheduleWithFixedDelay(imageForwardRunnable, 10, 1000, TimeUnit.MILLISECONDS);
         } else {
             executorService.shutdown();
             synchronized (captureLock) {
@@ -209,17 +209,6 @@ public class MainView extends javax.swing.JFrame {
                         //BufferedImage image = imgCapCon.getCapturedImage(true);
                         frameCounter++;
                         streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
-                        if (stream) {
-                            if (topic == null) {
-                                ClientNetworkConfig networkConfig = new ClientNetworkConfig();
-                                networkConfig.addAddress("139.6.65.26:5701");
-                                ClientConfig clientConfig = new ClientConfig();
-                                clientConfig.setNetworkConfig(networkConfig);
-                                hz = HazelcastClient.newHazelcastClient(clientConfig);
-                                topic = hz.getTopic("ImageCapturer");
-                            }
-                            topic.publish(new ImageData(image));
-                        }
                         image.flush();
 
                         Thread.sleep(40);

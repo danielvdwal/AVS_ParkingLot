@@ -3,8 +3,8 @@ package de.fh_koeln.avs.clustermanager;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IQueue;
 import java.util.Map;
-import java.util.Queue;
 
 /**
  *
@@ -23,7 +23,7 @@ public class Main {
         System.out.println("Customer with key 1: "+ mapCustomers.get(1));
         System.out.println("Map Size:" + mapCustomers.size());
  
-        Queue<String> queueCustomers = instance.getQueue("customers");
+        IQueue<String> queueCustomers = instance.getQueue("customers");
         queueCustomers.offer("Tom");
         queueCustomers.offer("Mary");
         queueCustomers.offer("Jane");
