@@ -3,12 +3,17 @@ package de.fh_koeln.avs.clustermanager.view;
 import com.hazelcast.config.Config;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IQueue;
 import com.hazelcast.core.ITopic;
+import com.hazelcast.core.ItemEvent;
+import com.hazelcast.core.ItemListener;
 import com.hazelcast.core.Message;
 import com.hazelcast.core.MessageListener;
 import de.fh_koeln.avs.global.ImageData;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 
 /**
@@ -19,7 +24,8 @@ public class MainView extends javax.swing.JFrame {
 
     private final ImageCapturerMessageReceiver messageReceiver;
     private final HazelcastInstance hz;
-    private final ITopic topic;
+    //private final ITopic topic;
+    private final IQueue queue;
     private String registrationId;
 
     /**
@@ -29,7 +35,8 @@ public class MainView extends javax.swing.JFrame {
         initComponents();
         messageReceiver = new ImageCapturerMessageReceiver();
         hz = Hazelcast.newHazelcastInstance(new Config());
-        topic = hz.getTopic("ImageCapturer");
+        //topic = hz.getTopic("ImageCapturer");
+        queue = hz.getQueue("ImageCapturer");
     }
 
     /**
@@ -84,10 +91,29 @@ public class MainView extends javax.swing.JFrame {
     private void subToImageCapturingButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subToImageCapturingButtonActionPerformed
         if (subToImageCapturingButton.isSelected()) {
             subToImageCapturingButton.setText("Unsub from ImageCapturer");
-            registrationId = topic.addMessageListener(messageReceiver);
+            //registrationId = topic.addMessageListener(messageReceiver);
+            registrationId = queue.addItemListener(messageReceiver, true);
+
+            new Thread(() -> {
+                while (subToImageCapturingButton.isSelected()) {
+                    try {
+                        ImageData imageData = (ImageData) queue.take();
+                        BufferedImage img = new BufferedImage(imageData.getWidth(),
+                                imageData.getHeight(), imageData.getImageType());
+                        byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+                        System.arraycopy(imageData.getData(), 0, data, 0, imageData.getData().length);
+                        image.setIcon(new ImageIcon(img));
+                        repaint();
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }).start();
+
         } else {
             subToImageCapturingButton.setText("Sub to ImageCapturer");
-            topic.removeMessageListener(registrationId);
+            //topic.removeMessageListener(registrationId);
+            queue.removeItemListener(registrationId);
         }
     }//GEN-LAST:event_subToImageCapturingButtonActionPerformed
 
@@ -124,18 +150,30 @@ public class MainView extends javax.swing.JFrame {
         });
     }
 
-    private class ImageCapturerMessageReceiver implements MessageListener<ImageData> {
+    private class ImageCapturerMessageReceiver implements ItemListener<ImageData> { //MessageListener<ImageData> {
 
         @Override
-        public void onMessage(Message<ImageData> message) {
-            ImageData imageData = message.getMessageObject();
-            BufferedImage img = new BufferedImage(imageData.getWidth(), 
-                    imageData.getHeight(), imageData.getImageType());
-            byte[] data = ((DataBufferByte)img.getRaster().getDataBuffer()).getData();
-            System.arraycopy(imageData.getData(), 0, data, 0, imageData.getData().length);
-            image.setIcon(new ImageIcon(img));
-            repaint();
+        public void itemAdded(ItemEvent<ImageData> item) {
+            if (queue.size() > 10) {
+                queue.poll();
+            }
         }
+
+        @Override
+        public void itemRemoved(ItemEvent<ImageData> item) {
+            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        /*@Override
+         public void onMessage(Message<ImageData> message) {
+         ImageData imageData = message.getMessageObject();
+         BufferedImage img = new BufferedImage(imageData.getWidth(), 
+         imageData.getHeight(), imageData.getImageType());
+         byte[] data = ((DataBufferByte)img.getRaster().getDataBuffer()).getData();
+         System.arraycopy(imageData.getData(), 0, data, 0, imageData.getData().length);
+         image.setIcon(new ImageIcon(img));
+         repaint();
+         }*/
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
