@@ -46,7 +46,7 @@ public class ImageCapturerController implements IImageCapturerController {
             System.out.println("Camera stopped");
         } else {
             System.out.println("Couldn't stop camera");
-    }
+        }
     }
 
     @Override
@@ -60,13 +60,13 @@ public class ImageCapturerController implements IImageCapturerController {
         return capturedBufferedImage;
     }
 
-    @Override
+    //@Override
     public Mat getRawCapturedImage() {
         Mat image = null;
         if (camera.isOpened()) {
             image = new Mat();
             camera.read(image);
-}
+        }
         return image; 
     }
 }
