@@ -12,8 +12,10 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.ImageIcon;
 
 /**
@@ -22,16 +24,53 @@ import javax.swing.ImageIcon;
  */
 public class MainView extends javax.swing.JFrame {
 
-    IImageCapturerController imgCapCon;
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(2);
+    private final Object captureLock;
+    private final Object forwardLock;
+    private final AtomicBoolean stream;
+    private final Runnable imageCaptureRunnable;
+    private final Runnable imageForwardRunnable;
+
+    private IImageCapturerController imgCapCon;
     private HazelcastInstance hz;
     private ITopic topic;
-    private boolean stream;
+    private BufferedImage displayedImage;
 
     /**
      * Creates new form MainView
      */
     public MainView() {
         initComponents();
+        this.captureLock = new Object();
+        this.forwardLock = new Object();
+        this.stream = new AtomicBoolean(false);
+
+        this.imageCaptureRunnable = () -> {
+            synchronized (captureLock) {
+                displayedImage = imgCapCon.getCapturedImage(true);
+                streamView.setIcon(getScaledImage(displayedImage, streamView.getHeight(), streamView.getHeight()));
+            }
+        };
+
+        this.imageForwardRunnable = () -> {
+            if (stream.get()) {
+                synchronized (forwardLock) {
+                    if (topic == null) {
+                        ClientNetworkConfig networkConfig = new ClientNetworkConfig();
+                        networkConfig.addAddress("139.6.65.26:5701");
+                        ClientConfig clientConfig = new ClientConfig();
+                        clientConfig.setNetworkConfig(networkConfig);
+                        hz = HazelcastClient.newHazelcastClient(clientConfig);
+                        topic = hz.getTopic("ImageCapturer");
+                    }
+                    ImageData imageData;
+                    //synchronized (captureLock) {
+                        imageData = new ImageData(displayedImage);
+                    //}
+                    topic.publish(imageData);
+                }
+            }
+        };
     }
 
     /**
@@ -102,7 +141,7 @@ public class MainView extends javax.swing.JFrame {
         streamPanel.setLayout(streamPanelLayout);
         streamPanelLayout.setHorizontalGroup(
             streamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(streamView, javax.swing.GroupLayout.DEFAULT_SIZE, 513, Short.MAX_VALUE)
         );
         streamPanelLayout.setVerticalGroup(
             streamPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +158,7 @@ public class MainView extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 494, Short.MAX_VALUE)
+                .addComponent(streamPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -139,38 +178,28 @@ public class MainView extends javax.swing.JFrame {
         imgCapCon = new ImageCapturerController();
 
         if (streamTButton.isSelected()) {
-            imgCapCon.startCamera();
-            new Thread(() -> {
-                while (streamTButton.isSelected()) {
-                    try {
-                        BufferedImage image = imgCapCon.getCapturedImage(true);
-                        streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
-                        if (stream) {
-                            if (topic == null) {
-                                ClientNetworkConfig networkConfig = new ClientNetworkConfig();
-                                networkConfig.addAddress("139.6.65.26:5701");
-                                ClientConfig clientConfig = new ClientConfig();
-                                clientConfig.setNetworkConfig(networkConfig);
-                                hz = HazelcastClient.newHazelcastClient(clientConfig);
-                                topic = hz.getTopic("ImageCapturer");
-                            }
-                            topic.publish(new ImageData(image));
-                        }
-                        Thread.sleep(33);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+            synchronized (captureLock) {
+                imgCapCon.startCamera();
+            }
+            executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
+            executorService.scheduleWithFixedDelay(imageForwardRunnable, 10, 40, TimeUnit.MILLISECONDS);
+        } else {
+            executorService.shutdown();
+            synchronized (captureLock) {
                 imgCapCon.stopCamera();
                 imgCapCon = null;
-                streamView.setIcon(null);
-            }).start();
+            }
+            streamView.setIcon(null);
         }
 
     }//GEN-LAST:event_streamTButtonActionPerformed
 
     private void clusterTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterTButtonActionPerformed
-        stream = true;
+        if (clusterTButton.isSelected()) {
+            stream.set(true);
+        } else {
+            stream.set(false);
+        }
     }//GEN-LAST:event_clusterTButtonActionPerformed
 
     /**

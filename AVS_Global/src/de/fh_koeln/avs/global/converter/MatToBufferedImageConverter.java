@@ -1,8 +1,9 @@
-package de.fh_koeln.avs.imagecapturer.converter;
+package de.fh_koeln.avs.global.converter;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.concurrent.ForkJoinPool;
+import static java.util.concurrent.ForkJoinTask.invokeAll;
 import java.util.concurrent.RecursiveAction;
 import org.opencv.core.Mat;
 
