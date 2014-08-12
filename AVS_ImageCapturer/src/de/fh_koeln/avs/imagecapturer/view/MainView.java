@@ -55,12 +55,7 @@ public class MainView extends javax.swing.JFrame {
         this.forwardLock = new Object();
         this.stream = new AtomicBoolean(false);
 
-        this.imageCaptureRunnable = () -> {
-            synchronized (captureLock) {
-                displayedImage = imgCapCon.getCapturedImage(true);
-                streamView.setIcon(getScaledImage(displayedImage, streamView.getHeight(), streamView.getHeight()));
-            }
-        };
+        this.imageCaptureRunnable = new CaptureTask();
 
         this.imageForwardRunnable = () -> {
             if (stream.get()) {
@@ -197,7 +192,7 @@ public class MainView extends javax.swing.JFrame {
                 imgCapCon.startCamera();
             }
             executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
-            executorService.scheduleWithFixedDelay(imageForwardRunnable, 10, 1000, TimeUnit.MILLISECONDS);
+            executorService.scheduleAtFixedRate(imageForwardRunnable, 10, 1000, TimeUnit.MILLISECONDS);
         } else {
             executorService.shutdown();
             synchronized (captureLock) {
@@ -302,6 +297,17 @@ public class MainView extends javax.swing.JFrame {
         bufferedImageConverter = null;
 
         return bufferedHoughImage;
+    }
+    
+    private class CaptureTask implements Runnable {
+
+        @Override
+        public void run() {
+            synchronized (captureLock) {
+                displayedImage = imgCapCon.getCapturedImage(true);
+                streamView.setIcon(getScaledImage(displayedImage, streamView.getHeight(), streamView.getHeight()));
+            }
+        }
     }
     
     /**

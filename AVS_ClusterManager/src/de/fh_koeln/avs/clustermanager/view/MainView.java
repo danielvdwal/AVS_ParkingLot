@@ -163,17 +163,6 @@ public class MainView extends javax.swing.JFrame {
         public void itemRemoved(ItemEvent<ImageData> item) {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
-
-        /*@Override
-         public void onMessage(Message<ImageData> message) {
-         ImageData imageData = message.getMessageObject();
-         BufferedImage img = new BufferedImage(imageData.getWidth(), 
-         imageData.getHeight(), imageData.getImageType());
-         byte[] data = ((DataBufferByte)img.getRaster().getDataBuffer()).getData();
-         System.arraycopy(imageData.getData(), 0, data, 0, imageData.getData().length);
-         image.setIcon(new ImageIcon(img));
-         repaint();
-         }*/
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
