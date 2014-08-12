@@ -1,4 +1,4 @@
-package de.fh_koeln.avs.clustermanager;
+package examples;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;

@@ -1,11 +1,7 @@
-package de.fh_koeln.avs.imagecapturer.controller;
+package de.fh_koeln.avs.imagecapturer;
 
-import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
 import java.awt.image.BufferedImage;
 import org.opencv.core.Core;
-import org.opencv.core.Mat;
-import org.opencv.highgui.Highgui;
-import org.opencv.highgui.VideoCapture;
 
 /**
  *
@@ -13,11 +9,8 @@ import org.opencv.highgui.VideoCapture;
  */
 public class ImageCapturerController implements IImageCapturerController {
 
-    static {
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
-    }
 
-    private VideoCapture camera;
+    /*private VideoCapture camera;
     private final MatToBufferedImageConverter matToBufferedImageConverter;
     private BufferedImage capturedBufferedImage;
 
@@ -68,5 +61,30 @@ public class ImageCapturerController implements IImageCapturerController {
             camera.read(image);
         }
         return image; 
+    }*/
+
+    @Override
+    public boolean openCapture(int camId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean closeCapture() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public BufferedImage nextFrame() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean connectToCluster() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean disconnectFromCluster() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

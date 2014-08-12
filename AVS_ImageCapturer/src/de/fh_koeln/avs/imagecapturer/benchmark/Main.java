@@ -1,6 +1,6 @@
 package de.fh_koeln.avs.imagecapturer.benchmark;
 
-import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
+import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
 
 /**
  *
@@ -9,7 +9,7 @@ import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
 public class Main {
 
     public static void main(String[] args) {
-        final ImageCapturerController imgCapCon = new ImageCapturerController();
+        /*final ImageCapturerController imgCapCon = new ImageCapturerController();
         final int nFrames = 100;
         imgCapCon.startCamera();
         System.out.printf("Started single threaded camera capture of %d frames\n", nFrames);
@@ -42,5 +42,6 @@ public class Main {
         totalDuration = (totalEndTime - totalStartTime);
         System.out.printf("Capturing %d frames took: %d ns - %f µs - %f ms - %f s\n", nFrames,
                 totalDuration, totalDuration / 1000.0f, totalDuration / 1000.0f / 1000.0f, totalDuration / 1000.0f / 1000.0f / 1000.0f);
+                */
     }
 }

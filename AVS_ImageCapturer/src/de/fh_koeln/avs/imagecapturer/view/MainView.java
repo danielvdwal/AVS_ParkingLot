@@ -7,8 +7,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
-import de.fh_koeln.avs.imagecapturer.controller.IImageCapturerController;
-import de.fh_koeln.avs.imagecapturer.controller.ImageCapturerController;
+import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -39,7 +38,7 @@ public class MainView extends javax.swing.JFrame {
     private final Runnable imageCaptureRunnable;
     private final Runnable imageForwardRunnable;
 
-    private IImageCapturerController imgCapCon;
+    //private IImageCapturerController imgCapCon;
     private HazelcastInstance hz;
     private IQueue queue;
     private BufferedImage displayedImage;
@@ -185,7 +184,7 @@ public class MainView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void streamTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamTButtonActionPerformed
-        imgCapCon = new ImageCapturerController();
+        /*imgCapCon = new ImageCapturerController();
 
         if (streamTButton.isSelected()) {
             synchronized (captureLock) {
@@ -199,7 +198,7 @@ public class MainView extends javax.swing.JFrame {
                 imgCapCon.stopCamera();
                 imgCapCon = null;
             }
-            streamView.setIcon(null);
+            streamView.setIcon(null);*/
             /*BufferedImage image = houghLinesP(imgCapCon.getRawCapturedImage());
                         //BufferedImage image = imgCapCon.getCapturedImage(true);
                         frameCounter++;
@@ -227,17 +226,17 @@ public class MainView extends javax.swing.JFrame {
                 }
                 fpsLabel.setText("FPS: ");
             }).start();
-             */
-        }
+             
+        }*/
 
     }//GEN-LAST:event_streamTButtonActionPerformed
 
     private void clusterTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterTButtonActionPerformed
-        if (clusterTButton.isSelected()) {
+        /*if (clusterTButton.isSelected()) {
             stream.set(true);
         } else {
             stream.set(false);
-        }
+        }*/
     }//GEN-LAST:event_clusterTButtonActionPerformed
 
     /**
@@ -304,8 +303,8 @@ public class MainView extends javax.swing.JFrame {
         @Override
         public void run() {
             synchronized (captureLock) {
-                displayedImage = imgCapCon.getCapturedImage(true);
-                streamView.setIcon(getScaledImage(displayedImage, streamView.getHeight(), streamView.getHeight()));
+                //displayedImage = imgCapCon.getCapturedImage(true);
+                //streamView.setIcon(getScaledImage(displayedImage, streamView.getHeight(), streamView.getHeight()));
             }
         }
     }
