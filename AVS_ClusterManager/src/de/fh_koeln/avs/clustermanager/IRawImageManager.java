@@ -8,8 +8,8 @@ import de.fh_koeln.avs.global.ImageData;
  */
 public interface IRawImageManager {
     
-    void createRawImageCollection(int id);
-    void destroyRawImageCollection(int id);
-    ImageData getNextRawImage(int id);
-    void putNewRawImage(int id, ImageData image);
+    void createRawImageCollection(String id);
+    void destroyRawImageCollection(String id);
+    ImageData getNextRawImage(String id);
+    void putNewRawImage(String id, ImageData image);
 }

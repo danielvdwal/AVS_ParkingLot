@@ -24,42 +24,42 @@ public class ClusterManagerController implements IClusterManagerController {
     }
 
     @Override
-    public void createRawImageCollection(int id) {
+    public void createRawImageCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void destroyRawImageCollection(int id) {
+    public void destroyRawImageCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ImageData getNextRawImage(int id) {
+    public ImageData getNextRawImage(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void putNewRawImage(int id, ImageData image) {
+    public void putNewRawImage(String id, ImageData image) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void createProcessedImageChunksCollection(int id) {
+    public void createProcessedImageChunksCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void destroyProcessedImageChunksCollection(int id) {
+    public void destroyProcessedImageChunksCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ImageChunkData[] getProcessedImageChunks(int id) {
+    public ImageChunkData[] getProcessedImageChunks(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void putProcessedImageChunks(int id, ImageChunkData[] imageChunks) {
+    public void putProcessedImageChunks(String id, ImageChunkData[] imageChunks) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

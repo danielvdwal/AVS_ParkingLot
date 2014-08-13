@@ -1,8 +1,7 @@
 package de.fh_koeln.avs.global;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.Serializable;
+import org.opencv.core.Mat;
 
 /**
  *
@@ -13,13 +12,16 @@ public class ImageData implements Serializable {
     private final byte[] data;
     private final int width;
     private final int height;
-    private final int imageType;
     
-    public ImageData(BufferedImage image) {
-        this.data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
-        this.width = image.getWidth();
-        this.height = image.getHeight();
-        this.imageType = image.getType();
+    public ImageData(Mat image) {
+        this(image.width(), image.height(), new byte[image.width() * image.height() * 3]);
+        image.get(0, 0, this.data);
+    }
+    
+    private ImageData(int width, int height, byte[] data) {
+        this.width = width;
+        this.height = height;
+        this.data = data;
     }
     
     public byte[] getData() {
@@ -32,9 +34,5 @@ public class ImageData implements Serializable {
 
     public int getHeight() {
         return height;
-    }
-
-    public int getImageType() {
-        return imageType;
     }
 }

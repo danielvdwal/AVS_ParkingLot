@@ -8,8 +8,8 @@ import de.fh_koeln.avs.global.ImageChunkData;
  */
 public interface IProcessedImageManager {
     
-    void createProcessedImageChunksCollection(int id);
-    void destroyProcessedImageChunksCollection(int id);
-    ImageChunkData[] getProcessedImageChunks(int id);
-    void putProcessedImageChunks(int id, ImageChunkData[] imageChunks);
+    void createProcessedImageChunksCollection(String id);
+    void destroyProcessedImageChunksCollection(String id);
+    ImageChunkData[] getProcessedImageChunks(String id);
+    void putProcessedImageChunks(String id, ImageChunkData[] imageChunks);
 }

@@ -98,11 +98,11 @@ public class MainView extends javax.swing.JFrame {
                 while (subToImageCapturingButton.isSelected()) {
                     try {
                         ImageData imageData = (ImageData) queue.take();
-                        BufferedImage img = new BufferedImage(imageData.getWidth(),
+                        /*BufferedImage img = new BufferedImage(imageData.getWidth(),
                                 imageData.getHeight(), imageData.getImageType());
                         byte[] data = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
                         System.arraycopy(imageData.getData(), 0, data, 0, imageData.getData().length);
-                        image.setIcon(new ImageIcon(img));
+                        image.setIcon(new ImageIcon(img));*/
                         repaint();
                     } catch (InterruptedException ex) {
                         Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);

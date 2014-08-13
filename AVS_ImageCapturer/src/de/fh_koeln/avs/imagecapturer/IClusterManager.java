@@ -10,5 +10,6 @@ public interface IClusterManager {
     
     boolean connect();
     boolean disconnect();
+    boolean isConnected();
     void sendRawImage(ImageData image);
 }

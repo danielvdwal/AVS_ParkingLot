@@ -29,6 +29,7 @@ public class CameraImageCapture implements IImageCapture {
             System.out.printf("Camera is running with %sx%s\n", camera.get(Highgui.CV_CAP_PROP_FRAME_WIDTH), camera.get(Highgui.CV_CAP_PROP_FRAME_HEIGHT));
             return true;
         } else {
+            camera = null;
             System.out.println("Couldn't start camera");
             return false;
         }

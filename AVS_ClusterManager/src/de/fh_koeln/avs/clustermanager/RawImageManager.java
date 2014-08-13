@@ -10,26 +10,26 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class RawImageManager implements IRawImageManager {
 
-    private ConcurrentMap<Integer, BlockingQueue<ImageData>> rawImageCollections;
+    private ConcurrentMap<String, BlockingQueue<ImageData>> rawImageCollections;
     
     @Override
-    public void createRawImageCollection(int id) {
+    public void createRawImageCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void destroyRawImageCollection(int id) {
+    public void destroyRawImageCollection(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public ImageData getNextRawImage(int id) {
+    public ImageData getNextRawImage(String id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void putNewRawImage(int id, ImageData image) {
+    public void putNewRawImage(String id, ImageData image) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
 }

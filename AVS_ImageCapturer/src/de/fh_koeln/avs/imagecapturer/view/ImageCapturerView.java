@@ -1,6 +1,15 @@
 package de.fh_koeln.avs.imagecapturer.view;
 
 import de.fh_koeln.avs.imagecapturer.IImageCapturerController;
+import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -8,13 +17,86 @@ import de.fh_koeln.avs.imagecapturer.IImageCapturerController;
  */
 public class ImageCapturerView extends javax.swing.JFrame {
 
-    private IImageCapturerController imageCapturerController;
-    
+    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private final Runnable imageCaptureRunnable;
+    private final Runnable clusterConnectionRunnable;
+    private final IImageCapturerController imageCapturerController;
+
     /**
      * Creates new form ImageCaptureView
      */
     public ImageCapturerView() {
         initComponents();
+        this.imageCaptureRunnable = new CaptureTask();
+        this.clusterConnectionRunnable = new ClusterConnectTask();
+        this.imageCapturerController = new ImageCapturerController();
+    }
+
+    private class CaptureTask implements Runnable {
+
+        @Override
+        public void run() {
+            synchronized (imageCapturerController) {
+                BufferedImage displayedImage = imageCapturerController.nextFrame();
+                capturedImage.setIcon(getScaledImage(displayedImage, capturedImage.getHeight(), capturedImage.getHeight()));
+            }
+        }
+    }
+
+    private class ClusterConnectTask implements Runnable {
+
+        @Override
+        public void run() {
+            boolean buttonActive;
+            synchronized (clusterToggleButton) {
+                buttonActive = clusterToggleButton.isSelected();
+            }
+            if (buttonActive) {
+                boolean connected;
+                synchronized (imageCapturerController) {
+                    connected = imageCapturerController.connectToCluster();
+                }
+                synchronized (clusterToggleButton) {
+                    if (connected) {
+                        clusterToggleButton.setText("Cluster: on");
+                    } else {
+                        clusterToggleButton.setSelected(false);
+                    }
+                }
+            } else {
+                boolean disconnected;
+                synchronized (imageCapturerController) {
+                    disconnected = imageCapturerController.disconnectFromCluster();
+                }
+                synchronized (clusterToggleButton) {
+                    if (disconnected) {
+                        clusterToggleButton.setText("Cluster: off");
+                    } else {
+                        clusterToggleButton.setSelected(true);
+                    }
+                }
+            }
+            synchronized (clusterToggleButton) {
+                clusterToggleButton.setEnabled(true);
+            }
+        }
+    }
+
+    /**
+     * Resizes an image using a Graphics2D object backed by a BufferedImage.
+     *
+     * @param srcImg - source image to scale
+     * @param w - desired width
+     * @param h - desired height
+     * @return - the new resized image
+     */
+    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return new ImageIcon(resizedImg);
     }
 
     /**
@@ -26,21 +108,138 @@ public class ImageCapturerView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        controlPanel = new javax.swing.JPanel();
+        camIdLabel = new javax.swing.JLabel();
+        camIdSpinner = new javax.swing.JSpinner();
+        captureToggleButton = new javax.swing.JToggleButton();
+        capturePanel = new javax.swing.JPanel();
+        capturedImage = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(640, 480));
+
+        controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Controls"));
+        controlPanel.setName(""); // NOI18N
+
+        camIdLabel.setText("Camera Id:");
+
+        camIdSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        captureToggleButton.setText("Start capture");
+        captureToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                captureToggleButtonActionPerformed(evt);
+            }
+        });
+
+        clusterToggleButton.setText("Cluster: off");
+        clusterToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clusterToggleButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
+        controlPanel.setLayout(controlPanelLayout);
+        controlPanelLayout.setHorizontalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(camIdLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(camIdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(7, Short.MAX_VALUE))
+            .addComponent(captureToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        controlPanelLayout.setVerticalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(camIdLabel)
+                    .addComponent(camIdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(captureToggleButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(clusterToggleButton)
+                .addContainerGap(347, Short.MAX_VALUE))
+        );
+
+        capturePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Capture"));
+        capturePanel.setName(""); // NOI18N
+
+        javax.swing.GroupLayout capturePanelLayout = new javax.swing.GroupLayout(capturePanel);
+        capturePanel.setLayout(capturePanelLayout);
+        capturePanelLayout.setHorizontalGroup(
+            capturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, capturePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        capturePanelLayout.setVerticalGroup(
+            capturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(capturePanelLayout.createSequentialGroup()
+                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addComponent(capturePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(capturePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void captureToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureToggleButtonActionPerformed
+        if (captureToggleButton.isSelected()) {
+            boolean cameraIsOn;
+            synchronized (imageCapturerController) {
+                cameraIsOn = imageCapturerController.openCapture((int) camIdSpinner.getValue());
+            }
+            if (cameraIsOn) {
+                captureToggleButton.setText("Stop capture");
+                executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
+            } else {
+                captureToggleButton.setSelected(false);
+            }
+        } else {
+            boolean cameraIsOff;
+            synchronized (imageCapturerController) {
+                cameraIsOff = imageCapturerController.closeCapture();
+            }
+            if (cameraIsOff) {
+                captureToggleButton.setText("Start capture");
+                capturedImage.setIcon(null);
+            } else {
+                captureToggleButton.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_captureToggleButtonActionPerformed
+
+    private void clusterToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterToggleButtonActionPerformed
+        synchronized (clusterToggleButton) {
+            clusterToggleButton.setEnabled(false);
+        }
+        executorService.schedule(clusterConnectionRunnable, 0, TimeUnit.MILLISECONDS);
+    }//GEN-LAST:event_clusterToggleButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,13 +269,18 @@ public class ImageCapturerView extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ImageCapturerView().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ImageCapturerView().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel camIdLabel;
+    private javax.swing.JSpinner camIdSpinner;
+    private javax.swing.JPanel capturePanel;
+    private javax.swing.JToggleButton captureToggleButton;
+    private javax.swing.JLabel capturedImage;
+    private final javax.swing.JToggleButton clusterToggleButton = new javax.swing.JToggleButton();
+    private javax.swing.JPanel controlPanel;
     // End of variables declaration//GEN-END:variables
 }
