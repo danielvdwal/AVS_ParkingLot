@@ -11,5 +11,4 @@ public interface IImageCapture {
     boolean open(int camId);
     Mat nextFrame();
     boolean close();
-    
 }
