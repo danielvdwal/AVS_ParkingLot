@@ -44,3 +44,7 @@ ParkingLot/ParkingLot.xcodeproj/project.pbxproj
 /AVS_Global/nbproject/private/
 /AVS_Global/build/
 /AVS_Global/dist/
+/AVS_ImageProcessor/nbproject/private/
+/AVS_ClusterManager/dist/
+/AVS_ImageProcessor/build/
+/AVS_ImageProcessor/dist/
