@@ -7,6 +7,8 @@ import com.hazelcast.core.HazelcastException;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -53,7 +55,14 @@ public class ClusterManager implements IClusterManager {
 
     @Override
     public void sendRawImage(ImageData image) {
-        IQueue queue = hz.getQueue(hz.getName());
+        IQueue queue = hz.getQueue(String.format("imagecapturer_%s", hz.getName()));
+        while(queue.size() > 10) {
+            try {
+                queue.take();
+            } catch (InterruptedException ex) {
+                Logger.getLogger(ClusterManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         queue.offer(image);
     }
 }

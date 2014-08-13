@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
  */
 public class ImageCapturerView extends javax.swing.JFrame {
 
-    private final ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
     private final Runnable imageCaptureRunnable;
     private final Runnable clusterConnectionRunnable;
     private final IImageCapturerController imageCapturerController;
@@ -228,6 +228,8 @@ public class ImageCapturerView extends javax.swing.JFrame {
             if (cameraIsOff) {
                 captureToggleButton.setText("Start capture");
                 capturedImage.setIcon(null);
+                executorService.shutdown();
+                executorService = Executors.newScheduledThreadPool(0);
             } else {
                 captureToggleButton.setSelected(true);
             }
