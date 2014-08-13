@@ -1,6 +1,15 @@
 package de.fh_koeln.avs.imageprocessor.view;
 
 import de.fh_koeln.avs.imageprocessor.IImageProcessorController;
+import de.fh_koeln.avs.imageprocessor.ImageProcessorController;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -8,13 +17,85 @@ import de.fh_koeln.avs.imageprocessor.IImageProcessorController;
  */
 public class ImageProcessorView extends javax.swing.JFrame {
 
-    private IImageProcessorController imageProcessorController;
-    
+    private final IImageProcessorController imageProcessorController;
+    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+
     /**
      * Creates new form ImageProcessorView
      */
     public ImageProcessorView() {
         initComponents();
+        this.imageProcessorController = new ImageProcessorController();
+    }
+
+    private class GetRawImageRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            synchronized (imageProcessorController) {
+                imageProcessorController.getRawImage();
+            }
+        }
+    }
+
+    private class ClusterConnectionRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            boolean buttonActive;
+            synchronized (clusterToggleButton) {
+                buttonActive = clusterToggleButton.isSelected();
+            }
+            if (buttonActive) {
+                boolean connected;
+                synchronized (imageProcessorController) {
+                    connected = imageProcessorController.connectToCluster();
+                }
+                synchronized (clusterToggleButton) {
+                    if (connected) {
+                        clusterToggleButton.setText("Cluster: on");
+                        drawLinesButton.setEnabled(true);
+                        executorService.scheduleAtFixedRate(new GetRawImageRunnable(), 0, 40, TimeUnit.MILLISECONDS);
+                    } else {
+                        clusterToggleButton.setSelected(false);
+                    }
+                }
+            } else {
+                boolean disconnected;
+                synchronized (imageProcessorController) {
+                    executorService.shutdown();
+                    executorService = Executors.newScheduledThreadPool(1);
+                    disconnected = imageProcessorController.disconnectFromCluster();
+                }
+                synchronized (clusterToggleButton) {
+                    if (disconnected) {
+                        clusterToggleButton.setText("Cluster: off");
+                    } else {
+                        clusterToggleButton.setSelected(true);
+                    }
+                }
+            }
+            synchronized (clusterToggleButton) {
+                clusterToggleButton.setEnabled(true);
+            }
+        }
+    }
+
+    /**
+     * Resizes an image using a Graphics2D object backed by a BufferedImage.
+     *
+     * @param srcImg - source image to scale
+     * @param w - desired width
+     * @param h - desired height
+     * @return - the new resized image
+     */
+    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, w, h, null);
+        g2.dispose();
+        return new ImageIcon(resizedImg);
     }
 
     /**
@@ -26,21 +107,149 @@ public class ImageProcessorView extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        controlPanel = new javax.swing.JPanel();
+        drawLinesButton = new javax.swing.JButton();
+        thresholdLabel = new javax.swing.JLabel();
+        thresholdSpinner = new javax.swing.JSpinner();
+        minLineSizeLabel = new javax.swing.JLabel();
+        minLineSizeSpinner = new javax.swing.JSpinner();
+        lineGapSpinner = new javax.swing.JSpinner();
+        lineGapLabel = new javax.swing.JLabel();
+        previewPanel = new javax.swing.JPanel();
+        preview = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Controls"));
+
+        clusterToggleButton.setText("Cluster: off");
+        clusterToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clusterToggleButtonActionPerformed(evt);
+            }
+        });
+
+        drawLinesButton.setText("Draw lines");
+        drawLinesButton.setEnabled(false);
+        drawLinesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                drawLinesButtonActionPerformed(evt);
+            }
+        });
+
+        thresholdLabel.setText("Threshold");
+
+        thresholdSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(50), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        minLineSizeLabel.setText("Min Line Size");
+
+        minLineSizeSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(20), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        lineGapSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(20), Integer.valueOf(0), null, Integer.valueOf(1)));
+
+        lineGapLabel.setText("Line Gap");
+
+        javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
+        controlPanel.setLayout(controlPanelLayout);
+        controlPanelLayout.setHorizontalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(drawLinesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(thresholdSpinner)
+                    .addComponent(minLineSizeSpinner)
+                    .addComponent(lineGapSpinner)
+                    .addGroup(controlPanelLayout.createSequentialGroup()
+                        .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(thresholdLabel)
+                            .addComponent(minLineSizeLabel)
+                            .addComponent(lineGapLabel))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        controlPanelLayout.setVerticalGroup(
+            controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(controlPanelLayout.createSequentialGroup()
+                .addComponent(clusterToggleButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(drawLinesButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(thresholdLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(thresholdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(minLineSizeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(minLineSizeSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lineGapLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lineGapSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 213, Short.MAX_VALUE))
+        );
+
+        previewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Image preview"));
+
+        javax.swing.GroupLayout previewPanelLayout = new javax.swing.GroupLayout(previewPanel);
+        previewPanel.setLayout(previewPanelLayout);
+        previewPanelLayout.setHorizontalGroup(
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(previewPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        previewPanelLayout.setVerticalGroup(
+            previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(previewPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(controlPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(previewPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void clusterToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterToggleButtonActionPerformed
+        synchronized (clusterToggleButton) {
+            clusterToggleButton.setEnabled(false);
+        }
+        new Thread(new ClusterConnectionRunnable()).start();
+    }//GEN-LAST:event_clusterToggleButtonActionPerformed
+
+    private void drawLinesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_drawLinesButtonActionPerformed
+        synchronized (imageProcessorController) {
+            imageProcessorController.drawLines((int) thresholdSpinner.getValue(), (int) minLineSizeSpinner.getValue(), (int) lineGapSpinner.getValue());
+            BufferedImage previewImage = imageProcessorController.getImageWithLines();
+            preview.setIcon(getScaledImage(previewImage, preview.getHeight(), preview.getHeight()));
+        }
+    }//GEN-LAST:event_drawLinesButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,13 +279,22 @@ public class ImageProcessorView extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ImageProcessorView().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new ImageProcessorView().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private final javax.swing.JToggleButton clusterToggleButton = new javax.swing.JToggleButton();
+    private javax.swing.JPanel controlPanel;
+    private javax.swing.JButton drawLinesButton;
+    private javax.swing.JLabel lineGapLabel;
+    private javax.swing.JSpinner lineGapSpinner;
+    private javax.swing.JLabel minLineSizeLabel;
+    private javax.swing.JSpinner minLineSizeSpinner;
+    private javax.swing.JLabel preview;
+    private javax.swing.JPanel previewPanel;
+    private javax.swing.JLabel thresholdLabel;
+    private javax.swing.JSpinner thresholdSpinner;
     // End of variables declaration//GEN-END:variables
 }

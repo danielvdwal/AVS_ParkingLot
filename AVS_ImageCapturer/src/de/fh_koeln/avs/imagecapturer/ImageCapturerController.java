@@ -16,8 +16,8 @@ public class ImageCapturerController implements IImageCapturerController {
     private final MatToBufferedImageConverter matToBufferedImageConverter;
 
     public ImageCapturerController() {
-        //this.imageCapture = new CameraImageCapture();
-        this.imageCapture = new FileImageCapture();
+        this.imageCapture = new CameraImageCapture();
+        //this.imageCapture = new FileImageCapture();
         this.clusterManager = new ClusterManager();
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
     }

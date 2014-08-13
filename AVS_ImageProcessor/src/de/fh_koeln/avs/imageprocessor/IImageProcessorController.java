@@ -11,7 +11,7 @@ public interface IImageProcessorController {
     boolean connectToCluster();
     boolean disconnectFromCluster();
     void getRawImage();
-    void drawLines();
+    void drawLines(int threshold, int minLineSize, int lineGap);
     BufferedImage getImageWithLines();
     void processImage();
     String getProcessedImageChunksInformation();

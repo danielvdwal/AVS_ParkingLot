@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 public interface IImageProcessor {
     
     void setRawImage(ImageData image);
-    void drawLines();
+    void drawLines(int threshold, int minLineSize, int lineGap);
     BufferedImage getImageWithLines();
     void processImage();
     ImageChunkData[] getImageChunks();

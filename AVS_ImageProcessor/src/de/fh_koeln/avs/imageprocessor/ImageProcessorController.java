@@ -1,6 +1,7 @@
 package de.fh_koeln.avs.imageprocessor;
 
 import java.awt.image.BufferedImage;
+import org.opencv.core.Core;
 
 /**
  *
@@ -8,42 +9,50 @@ import java.awt.image.BufferedImage;
  */
 public class ImageProcessorController implements IImageProcessorController {
 
-    private IImageProcessor imageProcessor;
-    private IClusterManager clusterManager;
+    static {
+        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+    }
+    
+    private final IImageProcessor imageProcessor;
+    private final IClusterManager clusterManager;
+    
+    public ImageProcessorController() {
+        this.imageProcessor = new ImageProcessor();
+        this.clusterManager = new ClusterManager();
+    }
     
     @Override
     public boolean connectToCluster() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return clusterManager.connect();
     }
 
     @Override
     public boolean disconnectFromCluster() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return clusterManager.disconnect();
     }
 
     @Override
     public void getRawImage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        imageProcessor.setRawImage(clusterManager.getRawImage());
     }
 
     @Override
-    public void drawLines() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void drawLines(int threshold, int minLineSize, int lineGap) {
+        imageProcessor.drawLines(threshold, minLineSize, lineGap);
     }
 
     @Override
     public BufferedImage getImageWithLines() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return imageProcessor.getImageWithLines();
     }
 
     @Override
     public void processImage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        imageProcessor.processImage();
     }
 
     @Override
     public String getProcessedImageChunksInformation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return imageProcessor.getProcessedImageChunksInformation();
     }
-    
 }

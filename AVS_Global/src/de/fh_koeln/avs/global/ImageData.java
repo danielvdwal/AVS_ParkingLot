@@ -14,7 +14,7 @@ public class ImageData implements Serializable {
     private final int height;
     
     public ImageData(Mat image) {
-        this(image.width(), image.height(), new byte[image.width() * image.height() * 3]);
+        this(image.cols(), image.rows(), new byte[image.cols() * image.rows() * 3]);
         image.get(0, 0, this.data);
     }
     

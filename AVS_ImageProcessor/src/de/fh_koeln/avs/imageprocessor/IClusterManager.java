@@ -11,7 +11,7 @@ public interface IClusterManager {
     
     boolean connect();
     boolean disconnect();
-    ImageData getRawImage(int id);
+    ImageData getRawImage();
     // ImageChunkData... == ImageChunkData[] ^^
     void sendImageChunks(int id, ImageChunkData... imageChunks);
 }
