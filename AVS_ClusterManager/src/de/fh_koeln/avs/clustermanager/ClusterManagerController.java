@@ -10,28 +10,19 @@ import com.hazelcast.core.HazelcastInstance;
  */
 public class ClusterManagerController implements IClusterManagerController {
 
-    private final Config config;
-    private HazelcastInstance hz;
+    private final IClusterManager clusterManager;
 
     public ClusterManagerController() {
-        this.config = new Config();
+        this.clusterManager = new ClusterManager();
     }
 
     @Override
     public boolean createCluster() {
-        if (hz == null) {
-            hz = Hazelcast.newHazelcastInstance(config);
-        }
-        return true;
-
+        return clusterManager.createCluster();
     }
 
     @Override
     public boolean destroyCluster() {
-        if (hz != null) {
-            hz.shutdown();
-            hz = null;
-        }
-        return true;
+        return clusterManager.destroyCluster();
     }
 }
