@@ -42,6 +42,11 @@ public class ImageProcessorController implements IImageProcessorController {
     }
 
     @Override
+    public BufferedImage getCannyImage() {
+        return imageProcessor.getCannyImage();
+    }
+
+    @Override
     public BufferedImage getImageWithLines() {
         return imageProcessor.getImageWithLines();
     }

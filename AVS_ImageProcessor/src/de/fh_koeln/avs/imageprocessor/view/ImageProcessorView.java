@@ -117,6 +117,7 @@ public class ImageProcessorView extends javax.swing.JFrame {
         lineGapLabel = new javax.swing.JLabel();
         previewPanel = new javax.swing.JPanel();
         preview = new javax.swing.JLabel();
+        cannyPreview = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -190,7 +191,7 @@ public class ImageProcessorView extends javax.swing.JFrame {
                 .addComponent(lineGapLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lineGapSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 213, Short.MAX_VALUE))
+                .addGap(0, 355, Short.MAX_VALUE))
         );
 
         previewPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Image preview"));
@@ -199,16 +200,20 @@ public class ImageProcessorView extends javax.swing.JFrame {
         previewPanel.setLayout(previewPanelLayout);
         previewPanelLayout.setHorizontalGroup(
             previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(previewPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, previewPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                .addGroup(previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cannyPreview, javax.swing.GroupLayout.DEFAULT_SIZE, 496, Short.MAX_VALUE)
+                    .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         previewPanelLayout.setVerticalGroup(
             previewPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(previewPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(preview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(preview, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(cannyPreview, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -248,6 +253,9 @@ public class ImageProcessorView extends javax.swing.JFrame {
             imageProcessorController.drawLines((int) thresholdSpinner.getValue(), (int) minLineSizeSpinner.getValue(), (int) lineGapSpinner.getValue());
             BufferedImage previewImage = imageProcessorController.getImageWithLines();
             preview.setIcon(getScaledImage(previewImage, preview.getHeight(), preview.getHeight()));
+            
+            BufferedImage cannyImage = imageProcessorController.getCannyImage();
+            cannyPreview.setIcon(getScaledImage(cannyImage, cannyPreview.getHeight(), cannyPreview.getHeight()));
         }
     }//GEN-LAST:event_drawLinesButtonActionPerformed
 
@@ -285,6 +293,7 @@ public class ImageProcessorView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel cannyPreview;
     private final javax.swing.JToggleButton clusterToggleButton = new javax.swing.JToggleButton();
     private javax.swing.JPanel controlPanel;
     private javax.swing.JButton drawLinesButton;

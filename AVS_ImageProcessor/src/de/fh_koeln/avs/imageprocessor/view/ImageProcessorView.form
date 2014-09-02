@@ -106,7 +106,7 @@
                   <Component id="lineGapLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lineGapSpinner" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace min="0" pref="213" max="32767" attributes="0"/>
+                  <EmptySpace min="0" pref="355" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -186,9 +186,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" alignment="1" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="preview" pref="475" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="1" attributes="0">
+                      <Component id="cannyPreview" pref="496" max="32767" attributes="0"/>
+                      <Component id="preview" max="32767" attributes="0"/>
+                  </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -197,7 +200,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="preview" max="32767" attributes="0"/>
+                  <Component id="preview" min="-2" pref="303" max="-2" attributes="0"/>
+                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <Component id="cannyPreview" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -205,6 +210,8 @@
       </Layout>
       <SubComponents>
         <Component class="javax.swing.JLabel" name="preview">
+        </Component>
+        <Component class="javax.swing.JLabel" name="cannyPreview">
         </Component>
       </SubComponents>
     </Container>
