@@ -7,16 +7,10 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
-import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
@@ -186,64 +180,62 @@ public class MainView extends javax.swing.JFrame {
     private void streamTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamTButtonActionPerformed
         /*imgCapCon = new ImageCapturerController();
 
-        if (streamTButton.isSelected()) {
-            synchronized (captureLock) {
-                imgCapCon.startCamera();
-            }
-            executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
-            executorService.scheduleAtFixedRate(imageForwardRunnable, 10, 1000, TimeUnit.MILLISECONDS);
-        } else {
-            executorService.shutdown();
-            synchronized (captureLock) {
-                imgCapCon.stopCamera();
-                imgCapCon = null;
-            }
-            streamView.setIcon(null);*/
-            /*BufferedImage image = houghLinesP(imgCapCon.getRawCapturedImage());
-                        //BufferedImage image = imgCapCon.getCapturedImage(true);
-                        frameCounter++;
-                        streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
-                        image.flush();
+         if (streamTButton.isSelected()) {
+         synchronized (captureLock) {
+         imgCapCon.startCamera();
+         }
+         executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
+         executorService.scheduleAtFixedRate(imageForwardRunnable, 10, 1000, TimeUnit.MILLISECONDS);
+         } else {
+         executorService.shutdown();
+         synchronized (captureLock) {
+         imgCapCon.stopCamera();
+         imgCapCon = null;
+         }
+         streamView.setIcon(null);*/
+        /*BufferedImage image = houghLinesP(imgCapCon.getRawCapturedImage());
+         //BufferedImage image = imgCapCon.getCapturedImage(true);
+         frameCounter++;
+         streamView.setIcon(getScaledImage(image, streamView.getHeight(), streamView.getHeight()));
+         image.flush();
 
-                        Thread.sleep(40);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-                imgCapCon.stopCamera();
-                imgCapCon = null;
-                streamView.setIcon(null);
-            }).start();
+         Thread.sleep(40);
+         } catch (InterruptedException ex) {
+         Logger.getLogger(MainView.class.getName()).log(Level.SEVERE, null, ex);
+         }
+         }
+         imgCapCon.stopCamera();
+         imgCapCon = null;
+         streamView.setIcon(null);
+         }).start();
 
-            new Thread(() -> {
-                frameCounter = 0;
-                while (streamTButton.isSelected()) {
-                    fpsLabel.setText("FPS: " + frameCounter);
-                    frameCounter = 0;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ex) {}
-                }
-                fpsLabel.setText("FPS: ");
-            }).start();
+         new Thread(() -> {
+         frameCounter = 0;
+         while (streamTButton.isSelected()) {
+         fpsLabel.setText("FPS: " + frameCounter);
+         frameCounter = 0;
+         try {
+         Thread.sleep(1000);
+         } catch (InterruptedException ex) {}
+         }
+         fpsLabel.setText("FPS: ");
+         }).start();
              
-        }*/
+         }*/
 
     }//GEN-LAST:event_streamTButtonActionPerformed
 
     private void clusterTButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterTButtonActionPerformed
         /*if (clusterTButton.isSelected()) {
-            stream.set(true);
-        } else {
-            stream.set(false);
-        }*/
+         stream.set(true);
+         } else {
+         stream.set(false);
+         }*/
     }//GEN-LAST:event_clusterTButtonActionPerformed
 
-    
-    
     /**
      * Detects lines with houghlines algorithm.
-     * 
+     *
      * @param image The source image.
      * @return The new image containing the source image and the detected lines.
      */
@@ -282,7 +274,7 @@ public class MainView extends javax.swing.JFrame {
 
         return bufferedHoughImage;
     }
-    
+
     private class CaptureTask implements Runnable {
 
         @Override
@@ -293,7 +285,7 @@ public class MainView extends javax.swing.JFrame {
             }
         }
     }
-    
+
     /**
      * @param args the command line arguments
      */

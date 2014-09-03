@@ -1,5 +1,6 @@
 package de.fh_koeln.avs.imageprocessor;
 
+import com.hazelcast.core.IMap;
 import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
@@ -7,13 +8,14 @@ import de.fh_koeln.avs.global.converter.MatToBufferedImageConverterGray;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -30,7 +32,8 @@ public class ImageProcessor implements IImageProcessor {
     private Mat cannyImage;
     private Mat lines;
     private Mat imageWithLines;
-    private List<ImageChunkData> processedImageChunks;
+    private Map<Integer, ImageChunkData> processedImageChunks;
+    private String processedImageChunkInformation;
 
     private Mat firstChunk;
     private Mat contourImage;
@@ -48,7 +51,6 @@ public class ImageProcessor implements IImageProcessor {
 
     @Override
     public void drawLines(int threshold, int minLineSize, int lineGap) {
-        // TODO 
         if (cannyImage != null) {
             cannyImage.release();
         }
@@ -69,37 +71,28 @@ public class ImageProcessor implements IImageProcessor {
 
         processedImageChunks = createChunkData(filteredLines);
 
-        // TODO kleine Mat in die ImageChunks
-        for (int i = 0; i < filteredLines.length; i++) {
-            double[] vec = filteredLines[i];
-            double x1 = vec[0],
-                    y1 = vec[1],
-                    x2 = vec[2],
-                    y2 = vec[3];
-            Point start = new Point(x1, y1);
-            Point end = new Point(x2, y2);
-            Core.line(imageWithLines, start, end, new Scalar(0, 0, 255), 3);
-            System.out.println("line " + i + ": x1 - " + x1 + " y1 - " + y1 + " x2 - " + x2 + " y2 - " + y2 + "\n");
-        }
-
-        processedImageChunks.stream().forEach((chunk) -> {
+        processedImageChunks.values().stream().forEach((chunk) -> {
             Point start = new Point(chunk.getX1(), chunk.getY1());
             Point end = new Point(chunk.getX2(), chunk.getY2());
-            Core.rectangle(imageWithLines, start, end, new Scalar(0, 255, 0), 3);
+            Core.rectangle(imageWithLines, start, end, new Scalar(0, 256, 0), 3);
         });
 
         grayImage.release();
         lines.release();
     }
 
-    private List<ImageChunkData> createChunkData(double[][] filteredLines) {
-        List<ImageChunkData> chunkData = new ArrayList<>();
+    private Map<Integer, ImageChunkData> createChunkData(double[][] filteredLines) {
+        Map<Integer, ImageChunkData> chunkData = new HashMap<>();
         for (int i = 0; i < filteredLines.length - 1; i++) {
             double[] line1 = filteredLines[i];
             double[] line2 = filteredLines[i + 1];
 
             if (line1[3] - 20 <= line2[3] && line1[3] + 20 >= line2[3]) {
-                chunkData.add(new ImageChunkData(line1[0], line1[3], line2[2], line2[1]));
+                double x1 = line1[0] < line2[2] ? line1[0] : line2[2];
+                double y1 = line1[3] < line2[1] ? line1[3] : line2[1];
+                double x2 = line2[2] > line1[0] ? line2[2] : line1[0];
+                double y2 = line2[1] > line1[3] ? line2[1] : line1[3];
+                chunkData.put(i, new ImageChunkData(i, x1, y1, x2, y2));
             }
         }
         return chunkData;
@@ -122,15 +115,15 @@ public class ImageProcessor implements IImageProcessor {
 
     private void sortLines(double[][] lines) {
         Arrays.sort(lines, (final double[] entry1, final double[] entry2) -> {
-            final double x1Entry1 = entry1[0];
-            final double y2Entry1 = entry1[3];
-            final double x1Entry2 = entry2[0];
-            final double y2Entry2 = entry2[3];
+            final double xEntry1 = entry1[0];
+            final double yEntry1 = entry1[3];
+            final double xEntry2 = entry2[0];
+            final double yEntry2 = entry2[3];
 
-            if (y2Entry1 + 20 < y2Entry2) {
+            if (yEntry1 + 20 < yEntry2) {
                 return -1;
-            } else if (y2Entry1 - 20 <= y2Entry2 && y2Entry1 + 20 >= y2Entry2) {
-                return x1Entry1 < x1Entry2 ? -1 : 1;
+            } else if (yEntry1 - 20 <= yEntry2 && yEntry1 + 20 >= yEntry2) {
+                return xEntry1 < xEntry2 ? -1 : 1;
             } else {
                 return 1;
             }
@@ -152,9 +145,9 @@ public class ImageProcessor implements IImageProcessor {
     public void processImage() {
         List<MatOfPoint> contours;
         int i = 0;
-        for (ImageChunkData chunkData : processedImageChunks) {
+        StringBuilder strBuilder = new StringBuilder();
+        for (ImageChunkData chunkData : processedImageChunks.values()) {
             chunkData.setRoi(rawImage);
-            System.out.println("chunk " + i + ": ");
             Mat imageChunk = chunkData.getImageChunk();
 
             // TODO Remove
@@ -173,19 +166,18 @@ public class ImageProcessor implements IImageProcessor {
 
             contours = new ArrayList<>();
             Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-            for (MatOfPoint contour : contours) {
-                System.out.println("ContourArea: " + Imgproc.contourArea(contour));
-
-                Rect rect = Imgproc.boundingRect(contour);
-                // TODO remove
-                if (i == 0) {
-                    //System.out.println(rect.x +","+rect.y+","+rect.height+","+rect.width);
-                    Core.rectangle(contourImage, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255));
-                }
+            if (contours.size() > 5) {
+                chunkData.setObjectDetected(true);
+                strBuilder.append("Car detected on: ");
+            } else {
+                chunkData.setObjectDetected(false);
+                strBuilder.append("No car on: ");
             }
-            System.out.println("-------------------------------");
+            strBuilder.append(i);
+            strBuilder.append("\n");
             i++;
         }
+        processedImageChunkInformation = strBuilder.toString();
     }
 
     @Override
@@ -199,12 +191,12 @@ public class ImageProcessor implements IImageProcessor {
     }
 
     @Override
-    public ImageChunkData[] getImageChunks() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Map<Integer, ImageChunkData> getImageChunks() {
+        return processedImageChunks;
     }
 
     @Override
     public String getProcessedImageChunksInformation() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return processedImageChunkInformation;
     }
 }

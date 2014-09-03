@@ -1,9 +1,5 @@
 package de.fh_koeln.avs.clustermanager;
 
-import com.hazelcast.config.Config;
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
-
 /**
  *
  * @author Daniel van der Wal, Nadim Khan

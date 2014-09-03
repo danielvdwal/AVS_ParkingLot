@@ -1,6 +1,8 @@
 package de.fh_koeln.avs.imageprocessor;
 
+import de.fh_koeln.avs.global.ImageChunkData;
 import java.awt.image.BufferedImage;
+import java.util.Map;
 import org.opencv.core.Core;
 
 /**
@@ -12,15 +14,15 @@ public class ImageProcessorController implements IImageProcessorController {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
-    
+
     private final IImageProcessor imageProcessor;
     private final IClusterManager clusterManager;
-    
+
     public ImageProcessorController() {
         this.imageProcessor = new ImageProcessor();
         this.clusterManager = new ClusterManager();
     }
-    
+
     @Override
     public boolean connectToCluster() {
         return clusterManager.connect();
@@ -64,6 +66,7 @@ public class ImageProcessorController implements IImageProcessorController {
     @Override
     public void processImage() {
         imageProcessor.processImage();
+        clusterManager.sendImageChunks(imageProcessor.getImageChunks());
     }
 
     @Override

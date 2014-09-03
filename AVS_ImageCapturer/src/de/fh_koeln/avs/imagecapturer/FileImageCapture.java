@@ -13,10 +13,10 @@ public class FileImageCapture implements IImageCapture {
     static {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
     }
-    
+
     private final Mat[] images;
     private Mat currentFrame;
-    
+
     public FileImageCapture() {
         images = new Mat[5];
         images[0] = Highgui.imread("parking_lot_0.jpg", Highgui.CV_LOAD_IMAGE_COLOR);
@@ -25,10 +25,10 @@ public class FileImageCapture implements IImageCapture {
         images[3] = Highgui.imread("parkingLot_2.jpg", Highgui.CV_LOAD_IMAGE_COLOR);
         images[4] = Highgui.imread("parkingLot_4.jpg", Highgui.CV_LOAD_IMAGE_COLOR);
     }
-    
+
     @Override
     public boolean open(int camId) {
-        if(camId >= images.length) {
+        if (camId >= images.length) {
             return false;
         }
         currentFrame = images[camId];

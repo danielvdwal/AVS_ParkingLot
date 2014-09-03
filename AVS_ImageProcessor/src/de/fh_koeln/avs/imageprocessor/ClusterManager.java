@@ -5,9 +5,13 @@ import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IList;
+import com.hazelcast.core.IMap;
 import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,8 +72,9 @@ public class ClusterManager implements IClusterManager {
     }
 
     @Override
-    public void sendImageChunks(int id, ImageChunkData... imageChunks) {
-        // TODO
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void sendImageChunks(Map<Integer, ImageChunkData> imageChunks) {
+        System.out.printf("Send image to: imageprocessor_%s_%s\n", hz.getName(), imageCapturerQueueId);
+        IMap map = hz.getMap(String.format("imageprocessor_%s_%s", hz.getName(), imageCapturerQueueId));
+        map.putAll(imageChunks);
     }
 }

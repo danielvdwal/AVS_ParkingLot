@@ -8,22 +8,22 @@ import org.opencv.core.Mat;
  * @author Daniel van der Wal
  */
 public class ImageData implements Serializable {
-    
+
     private final byte[] data;
     private final int width;
     private final int height;
-    
+
     public ImageData(Mat image) {
         this(image.cols(), image.rows(), new byte[image.cols() * image.rows() * 3]);
         image.get(0, 0, this.data);
     }
-    
+
     private ImageData(int width, int height, byte[] data) {
         this.width = width;
         this.height = height;
         this.data = data;
     }
-    
+
     public byte[] getData() {
         return data;
     }

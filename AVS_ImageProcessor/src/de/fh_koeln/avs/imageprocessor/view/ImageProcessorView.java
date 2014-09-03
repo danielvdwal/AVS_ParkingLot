@@ -282,6 +282,7 @@ public class ImageProcessorView extends javax.swing.JFrame {
             firstChunkPreview.setIcon(getScaledImage(firstChunkImage, firstChunkPreview.getHeight(), firstChunkPreview.getHeight()));
             BufferedImage contoursImage = imageProcessorController.getContoursImage();
             contoursPreview.setIcon(getScaledImage(contoursImage, contoursPreview.getHeight(), contoursPreview.getHeight()));
+            System.out.println(imageProcessorController.getProcessedImageChunksInformation());
         }
     }//GEN-LAST:event_processButtonActionPerformed
 

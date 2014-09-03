@@ -46,7 +46,7 @@ public class ClusterManager implements IClusterManager {
         }
         return true;
     }
-    
+
     @Override
     public boolean isConnected() {
         return hz != null;
@@ -56,7 +56,7 @@ public class ClusterManager implements IClusterManager {
     public void sendRawImage(ImageData image) {
         System.out.printf("Send image to: imagecapturer_%s\n", hz.getName());
         IQueue queue = hz.getQueue(String.format("imagecapturer_%s", hz.getName()));
-        while(queue.size() > 10) {
+        while (queue.size() > 10) {
             try {
                 queue.take();
             } catch (InterruptedException ex) {

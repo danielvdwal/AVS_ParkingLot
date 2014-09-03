@@ -10,7 +10,7 @@ import de.fh_koeln.avs.clustermanager.IClusterManagerController;
 public class ClusterManagerView extends javax.swing.JFrame {
 
     private final IClusterManagerController clusterManagerController;
-    
+
     /**
      * Creates new form ClusterManagerView
      */
@@ -64,7 +64,7 @@ public class ClusterManagerView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void clusterToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterToggleButtonActionPerformed
-        if(clusterToggleButton.isSelected()) {
+        if (clusterToggleButton.isSelected()) {
             clusterManagerController.createCluster();
             clusterToggleButton.setText("Destroy Cluster");
         } else {

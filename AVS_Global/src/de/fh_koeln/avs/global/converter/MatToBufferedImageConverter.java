@@ -3,7 +3,6 @@ package de.fh_koeln.avs.global.converter;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.util.concurrent.ForkJoinPool;
-import static java.util.concurrent.ForkJoinTask.invokeAll;
 import java.util.concurrent.RecursiveAction;
 import org.opencv.core.Mat;
 
@@ -65,7 +64,7 @@ public final class MatToBufferedImageConverter {
         private final int length;
         private final byte[] data;
         private final byte[] rgbData;
-        
+
         public BGRToRGBSwitcher(int i, int length, byte[] data, byte[] rgbData) {
             this.i = i;
             this.length = length;

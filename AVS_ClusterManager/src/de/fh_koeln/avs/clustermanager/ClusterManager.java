@@ -9,7 +9,7 @@ import com.hazelcast.core.HazelcastInstance;
  * @author Daniel van der Wal
  */
 public class ClusterManager implements IClusterManager {
-    
+
     private final Config config;
     private HazelcastInstance hz;
 
@@ -34,5 +34,5 @@ public class ClusterManager implements IClusterManager {
         }
         return true;
     }
-    
+
 }
