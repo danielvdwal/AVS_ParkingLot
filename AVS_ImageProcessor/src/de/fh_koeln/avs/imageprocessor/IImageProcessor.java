@@ -13,6 +13,8 @@ public interface IImageProcessor {
     void setRawImage(ImageData image);
     void drawLines(int threshold, int minLineSize, int lineGap);
     BufferedImage getCannyImage();
+    BufferedImage getFirstChunkImage();
+    BufferedImage getContoursImage();
     BufferedImage getImageWithLines();
     void processImage();
     ImageChunkData[] getImageChunks();

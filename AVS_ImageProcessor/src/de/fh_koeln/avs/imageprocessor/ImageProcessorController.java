@@ -47,6 +47,16 @@ public class ImageProcessorController implements IImageProcessorController {
     }
 
     @Override
+    public BufferedImage getFirstChunkImage() {
+        return imageProcessor.getFirstChunkImage();
+    }
+
+    @Override
+    public BufferedImage getContoursImage() {
+        return imageProcessor.getContoursImage();
+    }
+
+    @Override
     public BufferedImage getImageWithLines() {
         return imageProcessor.getImageWithLines();
     }

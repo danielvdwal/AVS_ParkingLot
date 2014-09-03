@@ -4,15 +4,18 @@ import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverterGray;
-import java.util.List;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 /**
@@ -27,7 +30,10 @@ public class ImageProcessor implements IImageProcessor {
     private Mat cannyImage;
     private Mat lines;
     private Mat imageWithLines;
-    private ImageChunkData[] processedImageChunks;
+    private List<ImageChunkData> processedImageChunks;
+
+    private Mat firstChunk;
+    private Mat contourImage;
 
     public ImageProcessor() {
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
@@ -61,10 +67,9 @@ public class ImageProcessor implements IImageProcessor {
         double[][] filteredLines = filterLines();
         sortLines(filteredLines);
 
-        List<ImageChunkData> chunkData = createChunkData(filteredLines);
-        
-        // TODO kleine Mat in die ImageChunks
+        processedImageChunks = createChunkData(filteredLines);
 
+        // TODO kleine Mat in die ImageChunks
         for (int i = 0; i < filteredLines.length; i++) {
             double[] vec = filteredLines[i];
             double x1 = vec[0],
@@ -77,10 +82,10 @@ public class ImageProcessor implements IImageProcessor {
             System.out.println("line " + i + ": x1 - " + x1 + " y1 - " + y1 + " x2 - " + x2 + " y2 - " + y2 + "\n");
         }
 
-        chunkData.stream().forEach((chunk) -> {
+        processedImageChunks.stream().forEach((chunk) -> {
             Point start = new Point(chunk.getX1(), chunk.getY1());
             Point end = new Point(chunk.getX2(), chunk.getY2());
-            Core.line(imageWithLines, start, end, new Scalar(0, 255, 0), 3);
+            Core.rectangle(imageWithLines, start, end, new Scalar(0, 255, 0), 3);
         });
 
         grayImage.release();
@@ -145,7 +150,52 @@ public class ImageProcessor implements IImageProcessor {
 
     @Override
     public void processImage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<MatOfPoint> contours;
+        int i = 0;
+        for (ImageChunkData chunkData : processedImageChunks) {
+            chunkData.setRoi(rawImage);
+            System.out.println("chunk " + i + ": ");
+            Mat imageChunk = chunkData.getImageChunk();
+
+            // TODO Remove
+            if (i == 0) {
+                firstChunk = chunkData.getImageChunk();
+                contourImage = new Mat(firstChunk.rows(), firstChunk.cols(), CvType.CV_8UC3);
+                contourImage.put(0, 0, chunkData.getData());
+            }
+
+            Mat imageHSV = new Mat(imageChunk.size(), Core.DEPTH_MASK_8U);
+            Mat imageBlurr = new Mat(imageChunk.size(), Core.DEPTH_MASK_8U);
+            Mat imageA = new Mat(imageChunk.size(), Core.DEPTH_MASK_ALL);
+            Imgproc.cvtColor(imageChunk, imageHSV, Imgproc.COLOR_BGR2GRAY);
+            Imgproc.GaussianBlur(imageHSV, imageBlurr, new Size(5, 5), 0);
+            Imgproc.adaptiveThreshold(imageBlurr, imageA, 255, Imgproc.ADAPTIVE_THRESH_MEAN_C, Imgproc.THRESH_BINARY, 7, 5);
+
+            contours = new ArrayList<>();
+            Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+            for (MatOfPoint contour : contours) {
+                System.out.println("ContourArea: " + Imgproc.contourArea(contour));
+
+                Rect rect = Imgproc.boundingRect(contour);
+                // TODO remove
+                if (i == 0) {
+                    //System.out.println(rect.x +","+rect.y+","+rect.height+","+rect.width);
+                    Core.rectangle(contourImage, new Point(rect.x, rect.y), new Point(rect.x + rect.width, rect.y + rect.height), new Scalar(0, 0, 255));
+                }
+            }
+            System.out.println("-------------------------------");
+            i++;
+        }
+    }
+
+    @Override
+    public BufferedImage getFirstChunkImage() {
+        return matToBufferedImageConverter.convertToBufferedImage(firstChunk, true);
+    }
+
+    @Override
+    public BufferedImage getContoursImage() {
+        return matToBufferedImageConverter.convertToBufferedImage(contourImage, true);
     }
 
     @Override

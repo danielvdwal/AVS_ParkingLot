@@ -54,6 +54,7 @@ public class ClusterManager implements IClusterManager {
 
     @Override
     public void sendRawImage(ImageData image) {
+        System.out.printf("Send image to: imagecapturer_%s\n", hz.getName());
         IQueue queue = hz.getQueue(String.format("imagecapturer_%s", hz.getName()));
         while(queue.size() > 10) {
             try {
