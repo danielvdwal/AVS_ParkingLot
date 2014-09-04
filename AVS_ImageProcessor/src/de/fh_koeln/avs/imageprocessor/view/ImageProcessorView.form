@@ -206,11 +206,6 @@
                       <Component id="cannyPreview" pref="460" max="32767" attributes="0"/>
                       <Component id="preview" max="32767" attributes="0"/>
                   </Group>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="firstChunkPreview" max="32767" attributes="0"/>
-                      <Component id="contoursPreview" pref="282" max="32767" attributes="0"/>
-                  </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -219,15 +214,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="preview" min="-2" pref="375" max="-2" attributes="0"/>
-                      <Component id="firstChunkPreview" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="preview" min="-2" pref="375" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="cannyPreview" max="32767" attributes="0"/>
-                      <Component id="contoursPreview" pref="369" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="cannyPreview" pref="369" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
@@ -240,16 +229,6 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="cannyPreview">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="18"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JLabel" name="firstChunkPreview">
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="18"/>
-          </AuxValues>
-        </Component>
-        <Component class="javax.swing.JLabel" name="contoursPreview">
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="18"/>
           </AuxValues>

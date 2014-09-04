@@ -17,11 +17,7 @@ public interface IImageProcessorController {
     void drawLines(int threshold, int minLineSize, int lineGap);
 
     BufferedImage getCannyImage();
-
-    BufferedImage getFirstChunkImage();
-
-    BufferedImage getContoursImage();
-
+    
     BufferedImage getImageWithLines();
 
     void processImage();

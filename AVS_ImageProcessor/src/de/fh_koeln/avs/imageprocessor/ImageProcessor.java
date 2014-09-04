@@ -1,7 +1,7 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
+import de.fh_koeln.avs.global.ROI;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverterGray;
 import java.awt.image.BufferedImage;
@@ -15,6 +15,7 @@ import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -31,11 +32,8 @@ public class ImageProcessor implements IImageProcessor {
     private Mat cannyImage;
     private Mat lines;
     private Mat imageWithLines;
-    private Map<Integer, ImageChunkData> processedImageChunks;
+    private Map<Integer, ROI> rois;
     private String processedImageChunkInformation;
-
-    private Mat firstChunk;
-    private Mat contourImage;
 
     public ImageProcessor() {
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
@@ -68,14 +66,14 @@ public class ImageProcessor implements IImageProcessor {
         double[][] filteredLines = filterLines();
         sortLines(filteredLines);
 
-        processedImageChunks = createChunkData(filteredLines);
+        rois = createROIs(filteredLines);
 
-        processedImageChunks.values().stream().forEach((chunk) -> {
-            Point start = new Point(chunk.getX1(), chunk.getY1());
-            Point end = new Point(chunk.getX2(), chunk.getY2());
+        rois.values().stream().forEach((roi) -> {
+            Point start = new Point(roi.getX(), roi.getY());
+            Point end = new Point(roi.getX() + roi.getWidth(), roi.getY() + roi.getHeight());
             Core.rectangle(imageWithLines, start, end, new Scalar(0, 255, 0), 1);
-            Core.putText(imageWithLines, chunk.getId() + "", 
-                    new Point(chunk.getX1() + (chunk.getX2() - chunk.getX1())/2, chunk.getY1() + (chunk.getY2() - chunk.getY1())/2), 
+            Core.putText(imageWithLines, roi.getId() + "", 
+                    new Point(roi.getX() + (double)roi.getWidth()/2, roi.getY() + (double)roi.getHeight()/2), 
                     Core.FONT_HERSHEY_COMPLEX_SMALL, 1.2, new Scalar(0, 0, 0), 1);
         });
 
@@ -83,23 +81,27 @@ public class ImageProcessor implements IImageProcessor {
         lines.release();
     }
 
-    private Map<Integer, ImageChunkData> createChunkData(double[][] filteredLines) {
-        Map<Integer, ImageChunkData> chunkData = new HashMap<>();
+    private Map<Integer, ROI> createROIs(double[][] filteredLines) {
+        Map<Integer, ROI> temp = new HashMap<>();
         int id = 0;
         for (int i = 0; i < filteredLines.length - 1; i++) {
             double[] line1 = filteredLines[i];
             double[] line2 = filteredLines[i + 1];
 
             if (line1[3] - 20 <= line2[3] && line1[3] + 20 >= line2[3]) {
-                double x1 = line1[0] < line2[2] ? line1[0] : line2[2];
+                /*double x1 = line1[0] < line2[2] ? line1[0] : line2[2];
                 double y1 = line1[3] < line2[1] ? line1[3] : line2[1];
                 double x2 = line2[2] > line1[0] ? line2[2] : line1[0];
                 double y2 = line2[1] > line1[3] ? line2[1] : line1[3];
-                chunkData.put(id, new ImageChunkData(id, x1, y1, x2, y2));
+                temp.put(id, new ROI(id, x1, y1, x2, y2));*/
+                ROI roi = new ROI(id, (int)line1[0], (int)line1[3]);
+                roi.calculateValues((int)line2[2], (int)line2[1]);
+                temp.put(id, roi);
+                
                 id++;
             }
         }
-        return chunkData;
+        return temp;
     }
 
     private double[][] filterLines() {
@@ -150,16 +152,11 @@ public class ImageProcessor implements IImageProcessor {
         List<MatOfPoint> contours;
         int i = 0;
         StringBuilder strBuilder = new StringBuilder();
-        for (ImageChunkData chunkData : processedImageChunks.values()) {
-            chunkData.setRoi(rawImage);
-            Mat imageChunk = chunkData.getImageChunk();
-
-            // TODO Remove
-            if (i == 0) {
-                firstChunk = chunkData.getImageChunk();
-                contourImage = new Mat(firstChunk.rows(), firstChunk.cols(), CvType.CV_8UC3);
-                contourImage.put(0, 0, chunkData.getData());
-            }
+        for (ROI roi : rois.values()) {
+            //roi.setRoi(rawImage);
+            //Mat imageChunk = chunkData.getImageChunk();
+            
+            Mat imageChunk = new Mat(rawImage, new Rect(new Point(roi.getX(), roi.getY()), new Point(roi.getX() + roi.getWidth(), roi.getY() + roi.getHeight())));
 
             Mat imageHSV = new Mat(imageChunk.size(), Core.DEPTH_MASK_8U);
             Mat imageBlurr = new Mat(imageChunk.size(), Core.DEPTH_MASK_8U);
@@ -171,10 +168,10 @@ public class ImageProcessor implements IImageProcessor {
             contours = new ArrayList<>();
             Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
             if (contours.size() > 5) {
-                chunkData.setObjectDetected(true);
+                roi.setObjectDetected(true);
                 strBuilder.append("Car detected on: ");
             } else {
-                chunkData.setObjectDetected(false);
+                roi.setObjectDetected(false);
                 strBuilder.append("No car on: ");
             }
             strBuilder.append(i);
@@ -185,18 +182,8 @@ public class ImageProcessor implements IImageProcessor {
     }
 
     @Override
-    public BufferedImage getFirstChunkImage() {
-        return matToBufferedImageConverter.convertToBufferedImage(firstChunk, true);
-    }
-
-    @Override
-    public BufferedImage getContoursImage() {
-        return matToBufferedImageConverter.convertToBufferedImage(contourImage, true);
-    }
-
-    @Override
-    public Map<Integer, ImageChunkData> getImageChunks() {
-        return processedImageChunks;
+    public Map<Integer, ROI> getROIs() {
+        return rois;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import de.fh_koeln.avs.global.ImageChunkData;
+import de.fh_koeln.avs.global.ROI;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 import org.opencv.core.Core;
@@ -49,16 +49,6 @@ public class ImageProcessorController implements IImageProcessorController {
     }
 
     @Override
-    public BufferedImage getFirstChunkImage() {
-        return imageProcessor.getFirstChunkImage();
-    }
-
-    @Override
-    public BufferedImage getContoursImage() {
-        return imageProcessor.getContoursImage();
-    }
-
-    @Override
     public BufferedImage getImageWithLines() {
         return imageProcessor.getImageWithLines();
     }
@@ -66,7 +56,7 @@ public class ImageProcessorController implements IImageProcessorController {
     @Override
     public void processImage() {
         imageProcessor.processImage();
-        clusterManager.sendImageChunks(imageProcessor.getImageChunks());
+        clusterManager.sendROIs(imageProcessor.getROIs());
     }
 
     @Override

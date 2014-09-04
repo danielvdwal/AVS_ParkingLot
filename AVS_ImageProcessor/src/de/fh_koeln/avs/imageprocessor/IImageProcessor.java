@@ -1,7 +1,7 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
+import de.fh_koeln.avs.global.ROI;
 import java.awt.image.BufferedImage;
 import java.util.Map;
 
@@ -17,15 +17,11 @@ public interface IImageProcessor {
 
     BufferedImage getCannyImage();
 
-    BufferedImage getFirstChunkImage();
-
-    BufferedImage getContoursImage();
-
     BufferedImage getImageWithLines();
 
     void processImage();
 
-    Map<Integer, ImageChunkData> getImageChunks();
+    Map<Integer, ROI> getROIs();
 
     String getProcessedImageChunksInformation();
 }

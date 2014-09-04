@@ -3,17 +3,11 @@ package de.fh_koeln.avs.imageprocessor;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
-import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
-import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
-import java.util.List;
+import de.fh_koeln.avs.global.ROI;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -61,9 +55,9 @@ public class ClusterManager implements IClusterManager {
     }
 
     @Override
-    public void sendImageChunks(Map<Integer, ImageChunkData> imageChunks) {
+    public void sendROIs(Map<Integer, ROI> rois) {
         System.out.printf("Send image to: imageprocessor_%s\n", hz.getName());
         IMap map = hz.getMap(String.format("imageprocessor_%s", hz.getName()));
-        map.putAll(imageChunks);
+        map.putAll(rois);
     }
 }

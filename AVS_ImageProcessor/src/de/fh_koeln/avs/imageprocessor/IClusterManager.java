@@ -1,7 +1,7 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
+import de.fh_koeln.avs.global.ROI;
 import java.util.Map;
 
 /**
@@ -16,5 +16,5 @@ public interface IClusterManager {
 
     ImageData getRawImage();
 
-    void sendImageChunks(Map<Integer, ImageChunkData> imageChunks);
+    void sendROIs(Map<Integer, ROI> rois);
 }
