@@ -1,5 +1,6 @@
 package test;
 
+import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
@@ -19,25 +20,34 @@ import javax.swing.JLabel;
  */
 public class TestFrame extends JFrame {
 
-    private final ROICanvas canvas;
+    private final JLabel image;
+    private final ROIPanel panel;
 
     public TestFrame() {
         super();
-        canvas = new ROICanvas();
-        canvas.setSize(640, 480);
+        BufferedImage temp = null;
         try {
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-            BufferedImage img = ImageIO.read(new File("parkinglot_0.jpg"));
-            canvas.setImage(img);
-
-            add(canvas);
-
-            pack();
-            setVisible(true);
+            temp = ImageIO.read(new File("parkinglot_0.jpg"));
         } catch (IOException ex) {
             Logger.getLogger(TestFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(null);
+        
+        panel = new ROIPanel();
+        panel.setOpaque(false);
+        panel.setSize(new Dimension(640, 480));
+        add(panel);
+        
+        image = new JLabel();
+        image.setSize(new Dimension(640, 480));
+        image.setIcon(getScaledImage(temp, 640, 480));
+        add(image);
+
+        //pack();
+        setSize(660, 520);
+        setVisible(true);
     }
 
     private ImageIcon getScaledImage(Image srcImg, int w, int h) {

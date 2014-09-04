@@ -89,13 +89,9 @@ public class ImageProcessor implements IImageProcessor {
             double[] line2 = filteredLines[i + 1];
 
             if (line1[3] - 20 <= line2[3] && line1[3] + 20 >= line2[3]) {
-                /*double x1 = line1[0] < line2[2] ? line1[0] : line2[2];
-                double y1 = line1[3] < line2[1] ? line1[3] : line2[1];
-                double x2 = line2[2] > line1[0] ? line2[2] : line1[0];
-                double y2 = line2[1] > line1[3] ? line2[1] : line1[3];
-                temp.put(id, new ROI(id, x1, y1, x2, y2));*/
-                ROI roi = new ROI(id, (int)line1[0], (int)line1[3]);
-                roi.calculateValues((int)line2[2], (int)line2[1]);
+                ROI roi = new ROI(id);
+                roi.setStartPoint((int)line1[0], (int)line1[3]);
+                roi.setEndPoint((int)line2[2], (int)line2[1]);
                 temp.put(id, roi);
                 
                 id++;
@@ -153,9 +149,6 @@ public class ImageProcessor implements IImageProcessor {
         int i = 0;
         StringBuilder strBuilder = new StringBuilder();
         for (ROI roi : rois.values()) {
-            //roi.setRoi(rawImage);
-            //Mat imageChunk = chunkData.getImageChunk();
-            
             Mat imageChunk = new Mat(rawImage, new Rect(new Point(roi.getX(), roi.getY()), new Point(roi.getX() + roi.getWidth(), roi.getY() + roi.getHeight())));
 
             Mat imageHSV = new Mat(imageChunk.size(), Core.DEPTH_MASK_8U);

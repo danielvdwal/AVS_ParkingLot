@@ -9,23 +9,26 @@ import java.io.Serializable;
 public final class ROI implements Serializable {
 
     private final int id;
-    private int x, y;
-    private int width, height;
+    private int x1, y1;
+    private int x2, y2;
     private boolean objectDetected;
 
-    public ROI(int id, int x, int y) {
+    public ROI(int id) {
         this.id = id;
-        this.x = x;
-        this.y = y;
-        this.width = 0;
-        this.height = 0;
+        this.x1 = 0;
+        this.y1 = 0;
+        this.x2 = 0;
+        this.y2 = 0;
     }
-
-    public void calculateValues(int newX, int newY) {
-        x = x < newX ? x : newX;
-        y = y < newY ? y : newY;
-        width = x < newX ? newX - x : x - newX;
-        height = y < newY ? newY - y : y - newY;
+    
+    public void setStartPoint(int x, int y) {
+        this.x1 = x;
+        this.y1 = y;
+    }
+    
+    public void setEndPoint(int x, int y) {
+        this.x2 = x;
+        this.y2 = y;
     }
 
     public int getId() {
@@ -33,19 +36,19 @@ public final class ROI implements Serializable {
     }
 
     public int getX() {
-        return x;
+        return x1 < x2 ? x1 : x2;
     }
 
     public int getY() {
-        return y;
+        return y1 < y2 ? y1 : y2;
     }
 
     public int getWidth() {
-        return width;
+        return x1 < x2 ? x2 - x1 : x1 - x2;
     }
 
     public int getHeight() {
-        return height;
+        return y1 < y2 ? y2 - y1 : y1 - y2;
     }
 
     public boolean isObjectDetected() {

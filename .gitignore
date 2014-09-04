@@ -51,3 +51,6 @@ ParkingLot/ParkingLot.xcodeproj/project.pbxproj
 /AVS_Dashboard/nbproject/private/
 /test/nbproject/private/
 /test/build/
+/AVS_Dashboard/build/
+/AVS_Dashboard/dist/
+/test/dist/
