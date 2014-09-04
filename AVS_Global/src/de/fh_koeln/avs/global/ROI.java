@@ -11,14 +11,17 @@ public final class ROI implements Serializable {
     private final int id;
     private int x1, y1;
     private int x2, y2;
+    private final int maxX, maxY;
     private boolean objectDetected;
 
-    public ROI(int id) {
+    public ROI(int id, int maxX, int maxY) {
         this.id = id;
         this.x1 = 0;
         this.y1 = 0;
         this.x2 = 0;
         this.y2 = 0;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
     
     public void setStartPoint(int x, int y) {
@@ -27,8 +30,8 @@ public final class ROI implements Serializable {
     }
     
     public void setEndPoint(int x, int y) {
-        this.x2 = x;
-        this.y2 = y;
+        this.x2 = x >= 0 ? x < maxX ? x : maxX-1 : 0;
+        this.y2 = y >= 0 ? y < maxY ? y : maxY-1 : 0;
     }
 
     public int getId() {

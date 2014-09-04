@@ -96,7 +96,6 @@ public class ImageProcessorView extends javax.swing.JFrame {
         lineGapSpinner = new javax.swing.JSpinner();
         lineGapLabel = new javax.swing.JLabel();
         previewPanel = new javax.swing.JPanel();
-        preview = new javax.swing.JLabel();
         cannyPreview = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -298,7 +297,7 @@ public class ImageProcessorView extends javax.swing.JFrame {
     private javax.swing.JSpinner lineGapSpinner;
     private javax.swing.JLabel minLineSizeLabel;
     private javax.swing.JSpinner minLineSizeSpinner;
-    private javax.swing.JLabel preview;
+    private final javax.swing.JLabel preview = new javax.swing.JLabel();
     private javax.swing.JPanel previewPanel;
     private final javax.swing.JButton processButton = new javax.swing.JButton();
     private javax.swing.JLabel thresholdLabel;

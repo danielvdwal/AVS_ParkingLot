@@ -16,9 +16,13 @@ import javax.swing.JPanel;
 public class ROIPanel extends JPanel {
 
     private final ConcurrentHashMap<Integer, ROI> rois;
+    private final int maxX, maxY;
     private int counter = 0;
 
-    public ROIPanel() {
+    public ROIPanel(int maxX, int maxY) {
+        super();
+        this.maxX = maxX;
+        this.maxY = maxY;
         rois = new ConcurrentHashMap<>();
         addMouseListener(new MouseAdapter() {
 
@@ -52,7 +56,7 @@ public class ROIPanel extends JPanel {
     }
 
     public void addROI(int id, int x, int y) {
-        ROI roi = new ROI(id);
+        ROI roi = new ROI(id, maxX, maxY);
         roi.setStartPoint(x, y);
         rois.put(id, roi);
     }

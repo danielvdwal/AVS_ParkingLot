@@ -89,7 +89,7 @@ public class ImageProcessor implements IImageProcessor {
             double[] line2 = filteredLines[i + 1];
 
             if (line1[3] - 20 <= line2[3] && line1[3] + 20 >= line2[3]) {
-                ROI roi = new ROI(id);
+                ROI roi = new ROI(id, rawImage.cols(), rawImage.rows());
                 roi.setStartPoint((int)line1[0], (int)line1[3]);
                 roi.setEndPoint((int)line2[2], (int)line2[1]);
                 temp.put(id, roi);
