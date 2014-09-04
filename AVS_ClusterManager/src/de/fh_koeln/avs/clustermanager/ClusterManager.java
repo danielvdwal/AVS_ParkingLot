@@ -23,7 +23,6 @@ public class ClusterManager implements IClusterManager {
             hz = Hazelcast.newHazelcastInstance(config);
         }
         return true;
-
     }
 
     @Override
@@ -34,5 +33,4 @@ public class ClusterManager implements IClusterManager {
         }
         return true;
     }
-
 }

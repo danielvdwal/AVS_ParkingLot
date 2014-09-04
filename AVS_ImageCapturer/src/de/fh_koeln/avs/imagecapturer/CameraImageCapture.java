@@ -17,9 +17,16 @@ public class CameraImageCapture implements IImageCapture {
 
     private VideoCapture camera;
     private Mat capturedFrame;
+    private int camId;
 
     @Override
-    public boolean open(int camId) {
+    public int setCamId(int camId) {
+        this.camId = camId;
+        return camId;
+    }
+
+    @Override
+    public boolean open() {
         if (camera == null) {
             camera = new VideoCapture(camId);
             camera.set(Highgui.CV_CAP_PROP_FRAME_WIDTH, 640);
@@ -46,13 +53,11 @@ public class CameraImageCapture implements IImageCapture {
 
     @Override
     public boolean close() {
-        camera = null;
-        if (camera == null) {
+        if (camera != null) {
+            camera = null;
             System.out.println("Camera stopped");
             return true;
-        } else {
-            System.out.println("Couldn't stop camera");
-            return false;
         }
+        return false;
     }
 }

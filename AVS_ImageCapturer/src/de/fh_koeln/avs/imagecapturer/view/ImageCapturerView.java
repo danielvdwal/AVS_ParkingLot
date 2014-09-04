@@ -1,5 +1,6 @@
 package de.fh_koeln.avs.imagecapturer.view;
 
+import de.fh_koeln.avs.global.ImageUtils;
 import de.fh_koeln.avs.imagecapturer.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
 import java.awt.Graphics2D;
@@ -42,7 +43,7 @@ public class ImageCapturerView extends javax.swing.JFrame {
         @Override
         public void run() {
             BufferedImage displayedImage = imageCapturerController.nextFrame();
-            capturedImage.setIcon(getScaledImage(displayedImage, capturedImage.getWidth(), (int) ((double) (capturedImage.getWidth() * 3)) / 4));
+            capturedImage.setIcon(ImageUtils.getScaledImage(displayedImage, capturedImage.getWidth(), (int) ((double) (capturedImage.getWidth() * 3)) / 4));
         }
     }
 
@@ -50,11 +51,7 @@ public class ImageCapturerView extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            try {
-                imageCapturerController.sendRawImage();
-            } catch (RejectedExecutionException ex) {
-
-            }
+            imageCapturerController.sendRawImage();
         }
     }
 
@@ -62,52 +59,29 @@ public class ImageCapturerView extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            boolean buttonActive;
             synchronized (clusterToggleButton) {
-                buttonActive = clusterToggleButton.isSelected();
+                clusterToggleButton.setEnabled(false);
             }
+            boolean buttonActive = clusterToggleButton.isSelected();
             if (buttonActive) {
                 boolean connected = imageCapturerController.connectToCluster();
-                synchronized (clusterToggleButton) {
-                    if (connected) {
-                        clusterToggleButton.setText("Cluster: on");
-                        streamToggleButton.setEnabled(true);
-                    } else {
-                        clusterToggleButton.setSelected(false);
-                    }
+                if (connected) {
+                    clusterToggleButton.setText("Cluster: on");
+                    streamToggleButton.setEnabled(true);
+                } else {
+                    clusterToggleButton.setSelected(false);
                 }
             } else {
                 boolean disconnected = imageCapturerController.disconnectFromCluster();
-                synchronized (clusterToggleButton) {
-                    if (disconnected) {
-                        streamToggleButton.setEnabled(false);
-                        clusterToggleButton.setText("Cluster: off");
-                    } else {
-                        clusterToggleButton.setSelected(true);
-                    }
+                if (disconnected) {
+                    streamToggleButton.setEnabled(false);
+                    clusterToggleButton.setText("Cluster: off");
+                } else {
+                    clusterToggleButton.setSelected(true);
                 }
             }
-            synchronized (clusterToggleButton) {
-                clusterToggleButton.setEnabled(true);
-            }
+            clusterToggleButton.setEnabled(true);
         }
-    }
-
-    /**
-     * Resizes an image using a Graphics2D object backed by a BufferedImage.
-     *
-     * @param srcImg - source image to scale
-     * @param w - desired width
-     * @param h - desired height
-     * @return - the new resized image
-     */
-    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
-        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(srcImg, 0, 0, w, h, null);
-        g2.dispose();
-        return new ImageIcon(resizedImg);
     }
 
     /**
@@ -232,26 +206,25 @@ public class ImageCapturerView extends javax.swing.JFrame {
 
     private void captureToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_captureToggleButtonActionPerformed
         if (captureToggleButton.isSelected()) {
-            boolean cameraIsOn;
-            synchronized (imageCapturerController) {
-                cameraIsOn = imageCapturerController.openCapture((int) camIdSpinner.getValue());
-            }
+            int camId = (int) camIdSpinner.getValue();
+            imageCapturerController.setCamId(camId);
+            boolean cameraIsOn = imageCapturerController.openCapture();
             if (cameraIsOn) {
                 captureToggleButton.setText("Stop capture");
                 imageCaptureService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
+                clusterToggleButton.setEnabled(true);
+                camIdSpinner.setEnabled(false);
             } else {
                 captureToggleButton.setSelected(false);
             }
         } else {
-            boolean cameraIsOff;
-            synchronized (imageCapturerController) {
-                cameraIsOff = imageCapturerController.closeCapture();
-            }
+            boolean cameraIsOff = imageCapturerController.closeCapture();
             if (cameraIsOff) {
                 captureToggleButton.setText("Start capture");
                 capturedImage.setIcon(null);
                 imageCaptureService.shutdown();
                 imageCaptureService = Executors.newSingleThreadScheduledExecutor();
+                camIdSpinner.setEnabled(true);
             } else {
                 captureToggleButton.setSelected(true);
             }
@@ -268,10 +241,12 @@ public class ImageCapturerView extends javax.swing.JFrame {
     private void streamToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamToggleButtonActionPerformed
         if (streamToggleButton.isSelected()) {
             clusterToggleButton.setEnabled(false);
+            captureToggleButton.setEnabled(false);
             streamToggleButton.setText("Stop streaming");
             sendRawImageService.scheduleWithFixedDelay(sendRawImageRunnable, 0, 40, TimeUnit.MILLISECONDS);
         } else {
             clusterToggleButton.setEnabled(true);
+            captureToggleButton.setEnabled(true);
             streamToggleButton.setText("Start streaming");
             sendRawImageService.shutdown();
             sendRawImageService = Executors.newSingleThreadScheduledExecutor();

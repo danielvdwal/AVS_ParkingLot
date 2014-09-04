@@ -15,4 +15,6 @@ public interface IClusterManager {
     boolean isConnected();
 
     void sendRawImage(ImageData image);
+    
+    void setCamId(int camId);
 }

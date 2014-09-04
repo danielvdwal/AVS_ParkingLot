@@ -1,15 +1,12 @@
 package de.fh_koeln.avs.imageprocessor.view;
 
+import de.fh_koeln.avs.global.ImageUtils;
 import de.fh_koeln.avs.imageprocessor.IImageProcessorController;
 import de.fh_koeln.avs.imageprocessor.ImageProcessorController;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -79,23 +76,6 @@ public class ImageProcessorView extends javax.swing.JFrame {
                 clusterToggleButton.setEnabled(true);
             }
         }
-    }
-
-    /**
-     * Resizes an image using a Graphics2D object backed by a BufferedImage.
-     *
-     * @param srcImg - source image to scale
-     * @param w - desired width
-     * @param h - desired height
-     * @return - the new resized image
-     */
-    private ImageIcon getScaledImage(Image srcImg, int w, int h) {
-        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        Graphics2D g2 = resizedImg.createGraphics();
-        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g2.drawImage(srcImg, 0, 0, w, h, null);
-        g2.dispose();
-        return new ImageIcon(resizedImg);
     }
 
     /**
@@ -262,10 +242,10 @@ public class ImageProcessorView extends javax.swing.JFrame {
         synchronized (imageProcessorController) {
             imageProcessorController.drawLines((int) thresholdSpinner.getValue(), (int) minLineSizeSpinner.getValue(), (int) lineGapSpinner.getValue());
             BufferedImage previewImage = imageProcessorController.getImageWithLines();
-            preview.setIcon(getScaledImage(previewImage, preview.getHeight(), preview.getHeight()));
+            preview.setIcon(ImageUtils.getScaledImage(previewImage, preview.getHeight(), preview.getHeight()));
             
             BufferedImage cannyImage = imageProcessorController.getCannyImage();
-            cannyPreview.setIcon(getScaledImage(cannyImage, cannyPreview.getHeight(), cannyPreview.getHeight()));
+            cannyPreview.setIcon(ImageUtils.getScaledImage(cannyImage, cannyPreview.getHeight(), cannyPreview.getHeight()));
         }
     }//GEN-LAST:event_drawLinesButtonActionPerformed
 

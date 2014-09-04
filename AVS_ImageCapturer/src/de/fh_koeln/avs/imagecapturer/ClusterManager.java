@@ -6,6 +6,10 @@ import com.hazelcast.client.config.ClientNetworkConfig;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import de.fh_koeln.avs.global.ImageData;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,7 +20,9 @@ public class ClusterManager implements IClusterManager {
     private ClientNetworkConfig networkConfig;
     private ClientConfig clientConfig;
     private HazelcastInstance hz;
-    private IMap<Integer, ImageData> imageMap;
+    private IMap<String, ImageData> imageMap;
+    private String id;
+    private int camId;
 
     @Override
     public boolean connect() {
@@ -28,10 +34,13 @@ public class ClusterManager implements IClusterManager {
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
             imageMap = hz.getMap("capturedImages");
-            return true;
+            id = String.format("%s_%d", InetAddress.getLocalHost().getHostName(), camId);
         } catch (IllegalStateException ex) {
             return false;
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(ClusterManager.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return true;
     }
 
     @Override
@@ -54,7 +63,12 @@ public class ClusterManager implements IClusterManager {
 
     @Override
     public void sendRawImage(ImageData image) {
-        System.out.println("picture send: " + System.currentTimeMillis());
-        imageMap.put(1, image);
+        System.out.println("picture send to: " + id);
+        imageMap.put(id, image);
+    }
+
+    @Override
+    public void setCamId(int camId) {
+        this.camId = camId;
     }
 }

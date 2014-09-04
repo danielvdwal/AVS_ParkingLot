@@ -8,7 +8,9 @@ import org.opencv.core.Mat;
  */
 public interface IImageCapture {
 
-    boolean open(int camId);
+    int setCamId(int camId);
+    
+    boolean open();
 
     Mat nextFrame();
 

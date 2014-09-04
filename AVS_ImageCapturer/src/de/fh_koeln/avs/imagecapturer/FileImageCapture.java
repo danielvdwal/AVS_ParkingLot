@@ -16,6 +16,8 @@ public class FileImageCapture implements IImageCapture {
 
     private final Mat[] images;
     private Mat currentFrame;
+    private int camId = 0;
+    private int imageId = 0;
 
     public FileImageCapture() {
         images = new Mat[5];
@@ -27,11 +29,22 @@ public class FileImageCapture implements IImageCapture {
     }
 
     @Override
-    public boolean open(int camId) {
-        if (camId >= images.length) {
+    public int setCamId(int camId) {
+        if (camId == 0 || camId == 1) {
+            this.camId = 2;
+        } else {
+            this.camId = 3;
+        }
+        imageId = camId;
+        return this.camId;
+    }
+
+    @Override
+    public boolean open() {
+        if (imageId >= images.length) {
             return false;
         }
-        currentFrame = images[camId];
+        currentFrame = images[imageId];
         return true;
     }
 

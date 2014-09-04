@@ -8,7 +8,9 @@ import java.awt.image.BufferedImage;
  */
 public interface IImageCapturerController {
 
-    boolean openCapture(int camId);
+    void setCamId(int camId);
+    
+    boolean openCapture();
 
     boolean closeCapture();
 
