@@ -18,7 +18,8 @@ public class ClusterManager implements IClusterManager {
     private ClientNetworkConfig networkConfig;
     private ClientConfig clientConfig;
     private HazelcastInstance hz;
-    private IMap<Integer, ImageData> imageMap;
+    private IMap<String, ImageData> imageMap;
+    private String id;
 
     @Override
     public boolean connect() {
@@ -30,10 +31,11 @@ public class ClusterManager implements IClusterManager {
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
             imageMap = hz.getMap("capturedImages");
-            return true;
-        } catch (IllegalStateException hzex) {
+            id = imageMap.keySet().iterator().next();
+        } catch (IllegalStateException ex) {
             return false;
         }
+        return true;
     }
 
     @Override
@@ -51,13 +53,13 @@ public class ClusterManager implements IClusterManager {
 
     @Override
     public ImageData getRawImage() {
-        return imageMap.get(1);
+        return imageMap.get(id);
     }
 
     @Override
     public void sendROIs(Map<Integer, ROI> rois) {
-        System.out.printf("Send image to: imageprocessor_%s\n", hz.getName());
-        IMap map = hz.getMap(String.format("imageprocessor_%s", hz.getName()));
+        System.out.printf("Send image to: imageprocessor_%s\n", id);
+        IMap map = hz.getMap(String.format("imageprocessor_%s", id));
         map.putAll(rois);
     }
 }

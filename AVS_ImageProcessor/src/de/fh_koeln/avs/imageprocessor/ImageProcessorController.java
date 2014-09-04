@@ -1,8 +1,6 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import de.fh_koeln.avs.global.ROI;
 import java.awt.image.BufferedImage;
-import java.util.Map;
 import org.opencv.core.Core;
 
 /**
