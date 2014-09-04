@@ -1,11 +1,18 @@
-package de.fh_koeln.avs.imagecapturer;
+package de.fh_koeln.avs.dashboard;
 
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
+import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
+import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
+import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -29,7 +36,7 @@ public class ClusterManager implements IClusterManager {
             hz = HazelcastClient.newHazelcastClient(clientConfig);
             imageMap = hz.getMap("capturedImages");
             return true;
-        } catch (IllegalStateException ex) {
+        } catch (IllegalStateException hzex) {
             return false;
         }
     }
@@ -40,7 +47,7 @@ public class ClusterManager implements IClusterManager {
             try {
                 hz.shutdown();
                 return true;
-            } catch (IllegalStateException ex) {
+            } catch (IllegalStateException hzex) {
                 return false;
             }
         }
@@ -48,13 +55,8 @@ public class ClusterManager implements IClusterManager {
     }
 
     @Override
-    public boolean isConnected() {
-        return hz != null;
+    public ImageData getRawImage() {
+        return imageMap.get(1);
     }
 
-    @Override
-    public void sendRawImage(ImageData image) {
-        System.out.println("picture send: " + System.currentTimeMillis());
-        imageMap.put(1, image);
-    }
 }
