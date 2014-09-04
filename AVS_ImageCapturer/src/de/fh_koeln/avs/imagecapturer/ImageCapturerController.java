@@ -14,10 +14,12 @@ public class ImageCapturerController implements IImageCapturerController {
     private final IImageCapture imageCapture;
     private final IClusterManager clusterManager;
     private final MatToBufferedImageConverter matToBufferedImageConverter;
+    private Mat currentFrame;
+    private ImageData imageData;
 
     public ImageCapturerController() {
-        //this.imageCapture = new CameraImageCapture();
-        this.imageCapture = new FileImageCapture();
+        this.imageCapture = new CameraImageCapture();
+        //this.imageCapture = new FileImageCapture();
         this.clusterManager = new ClusterManager();
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
     }
@@ -34,12 +36,8 @@ public class ImageCapturerController implements IImageCapturerController {
 
     @Override
     public BufferedImage nextFrame() {
-        Mat frame = imageCapture.nextFrame();
-        if (clusterManager.isConnected()) {
-            ImageData data = new ImageData(frame);
-            clusterManager.sendRawImage(data);
-        }
-        return matToBufferedImageConverter.convertToBufferedImage(frame, true);
+        currentFrame = imageCapture.nextFrame();
+        return matToBufferedImageConverter.convertToBufferedImage(currentFrame, true);
     }
 
     @Override
@@ -50,5 +48,16 @@ public class ImageCapturerController implements IImageCapturerController {
     @Override
     public boolean disconnectFromCluster() {
         return clusterManager.disconnect();
+    }
+    
+    @Override
+    public void sendRawImage() {
+        if (clusterManager.isConnected()) {
+            if(imageData == null) {
+                imageData = new ImageData(currentFrame.cols(), currentFrame.rows());
+            }
+            currentFrame.get(0, 0, imageData.getData());
+            clusterManager.sendRawImage(imageData);
+        }
     }
 }

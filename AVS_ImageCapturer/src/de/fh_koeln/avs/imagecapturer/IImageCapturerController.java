@@ -17,4 +17,6 @@ public interface IImageCapturerController {
     boolean connectToCluster();
 
     boolean disconnectFromCluster();
+    
+    void sendRawImage();
 }

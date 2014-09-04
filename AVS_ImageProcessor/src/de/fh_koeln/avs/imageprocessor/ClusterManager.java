@@ -21,10 +21,10 @@ import java.util.logging.Logger;
  */
 public class ClusterManager implements IClusterManager {
 
-    private String imageCapturerQueueId;
     private ClientNetworkConfig networkConfig;
     private ClientConfig clientConfig;
     private HazelcastInstance hz;
+    private IMap<Integer, ImageData> imageMap;
 
     @Override
     public boolean connect() {
@@ -35,12 +35,7 @@ public class ClusterManager implements IClusterManager {
             clientConfig = new ClientConfig();
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
-            for (DistributedObject distObj : hz.getDistributedObjects()) {
-                if (distObj instanceof IQueue && distObj.getName().startsWith("imagecapturer_")) {
-                    imageCapturerQueueId = distObj.getName();
-                    break;
-                }
-            }
+            imageMap = hz.getMap("capturedImages");
             return true;
         } catch (IllegalStateException hzex) {
             return false;
@@ -62,19 +57,13 @@ public class ClusterManager implements IClusterManager {
 
     @Override
     public ImageData getRawImage() {
-        try {
-            IQueue<ImageData> queue = hz.getQueue(imageCapturerQueueId);
-            return queue.take();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(ClusterManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        return imageMap.get(1);
     }
 
     @Override
     public void sendImageChunks(Map<Integer, ImageChunkData> imageChunks) {
-        System.out.printf("Send image to: imageprocessor_%s_%s\n", hz.getName(), imageCapturerQueueId);
-        IMap map = hz.getMap(String.format("imageprocessor_%s_%s", hz.getName(), imageCapturerQueueId));
+        System.out.printf("Send image to: imageprocessor_%s\n", hz.getName());
+        IMap map = hz.getMap(String.format("imageprocessor_%s", hz.getName()));
         map.putAll(imageChunks);
     }
 }

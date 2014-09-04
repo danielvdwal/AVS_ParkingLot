@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.swing.ImageIcon;
@@ -17,8 +18,11 @@ import javax.swing.ImageIcon;
  */
 public class ImageCapturerView extends javax.swing.JFrame {
 
-    private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
+    private ScheduledExecutorService imageCaptureService = Executors.newSingleThreadScheduledExecutor();
+    private ScheduledExecutorService sendRawImageService = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService clusterConnectionService = Executors.newSingleThreadScheduledExecutor();
     private final Runnable imageCaptureRunnable;
+    private final Runnable sendRawImageRunnable;
     private final Runnable clusterConnectionRunnable;
     private final IImageCapturerController imageCapturerController;
 
@@ -28,6 +32,7 @@ public class ImageCapturerView extends javax.swing.JFrame {
     public ImageCapturerView() {
         initComponents();
         this.imageCaptureRunnable = new CaptureTask();
+        this.sendRawImageRunnable = new SendRawImageTask();
         this.clusterConnectionRunnable = new ClusterConnectTask();
         this.imageCapturerController = new ImageCapturerController();
     }
@@ -36,9 +41,19 @@ public class ImageCapturerView extends javax.swing.JFrame {
 
         @Override
         public void run() {
-            synchronized (imageCapturerController) {
-                BufferedImage displayedImage = imageCapturerController.nextFrame();
-                capturedImage.setIcon(getScaledImage(displayedImage, capturedImage.getHeight(), capturedImage.getHeight()));
+            BufferedImage displayedImage = imageCapturerController.nextFrame();
+            capturedImage.setIcon(getScaledImage(displayedImage, capturedImage.getWidth(), (int) ((double) (capturedImage.getWidth() * 3)) / 4));
+        }
+    }
+
+    private class SendRawImageTask implements Runnable {
+
+        @Override
+        public void run() {
+            try {
+                imageCapturerController.sendRawImage();
+            } catch (RejectedExecutionException ex) {
+
             }
         }
     }
@@ -52,24 +67,20 @@ public class ImageCapturerView extends javax.swing.JFrame {
                 buttonActive = clusterToggleButton.isSelected();
             }
             if (buttonActive) {
-                boolean connected;
-                synchronized (imageCapturerController) {
-                    connected = imageCapturerController.connectToCluster();
-                }
+                boolean connected = imageCapturerController.connectToCluster();
                 synchronized (clusterToggleButton) {
                     if (connected) {
                         clusterToggleButton.setText("Cluster: on");
+                        streamToggleButton.setEnabled(true);
                     } else {
                         clusterToggleButton.setSelected(false);
                     }
                 }
             } else {
-                boolean disconnected;
-                synchronized (imageCapturerController) {
-                    disconnected = imageCapturerController.disconnectFromCluster();
-                }
+                boolean disconnected = imageCapturerController.disconnectFromCluster();
                 synchronized (clusterToggleButton) {
                     if (disconnected) {
+                        streamToggleButton.setEnabled(false);
                         clusterToggleButton.setText("Cluster: off");
                     } else {
                         clusterToggleButton.setSelected(true);
@@ -139,18 +150,27 @@ public class ImageCapturerView extends javax.swing.JFrame {
             }
         });
 
+        streamToggleButton.setText("Start streaming");
+        streamToggleButton.setEnabled(false);
+        streamToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                streamToggleButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
         controlPanelLayout.setHorizontalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(captureToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(camIdLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(camIdSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(7, Short.MAX_VALUE))
-            .addComponent(captureToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(streamToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,7 +183,9 @@ public class ImageCapturerView extends javax.swing.JFrame {
                 .addComponent(captureToggleButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(clusterToggleButton)
-                .addContainerGap(347, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(streamToggleButton)
+                .addContainerGap(312, Short.MAX_VALUE))
         );
 
         capturePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Capture"));
@@ -175,7 +197,7 @@ public class ImageCapturerView extends javax.swing.JFrame {
             capturePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, capturePanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 471, Short.MAX_VALUE)
+                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
                 .addContainerGap())
         );
         capturePanelLayout.setVerticalGroup(
@@ -216,7 +238,7 @@ public class ImageCapturerView extends javax.swing.JFrame {
             }
             if (cameraIsOn) {
                 captureToggleButton.setText("Stop capture");
-                executorService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
+                imageCaptureService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
             } else {
                 captureToggleButton.setSelected(false);
             }
@@ -228,8 +250,8 @@ public class ImageCapturerView extends javax.swing.JFrame {
             if (cameraIsOff) {
                 captureToggleButton.setText("Start capture");
                 capturedImage.setIcon(null);
-                executorService.shutdown();
-                executorService = Executors.newScheduledThreadPool(0);
+                imageCaptureService.shutdown();
+                imageCaptureService = Executors.newSingleThreadScheduledExecutor();
             } else {
                 captureToggleButton.setSelected(true);
             }
@@ -240,8 +262,21 @@ public class ImageCapturerView extends javax.swing.JFrame {
         synchronized (clusterToggleButton) {
             clusterToggleButton.setEnabled(false);
         }
-        executorService.schedule(clusterConnectionRunnable, 0, TimeUnit.MILLISECONDS);
+        clusterConnectionService.schedule(clusterConnectionRunnable, 0, TimeUnit.MILLISECONDS);
     }//GEN-LAST:event_clusterToggleButtonActionPerformed
+
+    private void streamToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_streamToggleButtonActionPerformed
+        if (streamToggleButton.isSelected()) {
+            clusterToggleButton.setEnabled(false);
+            streamToggleButton.setText("Stop streaming");
+            sendRawImageService.scheduleWithFixedDelay(sendRawImageRunnable, 0, 40, TimeUnit.MILLISECONDS);
+        } else {
+            clusterToggleButton.setEnabled(true);
+            streamToggleButton.setText("Start streaming");
+            sendRawImageService.shutdown();
+            sendRawImageService = Executors.newSingleThreadScheduledExecutor();
+        }
+    }//GEN-LAST:event_streamToggleButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -284,5 +319,6 @@ public class ImageCapturerView extends javax.swing.JFrame {
     private javax.swing.JLabel capturedImage;
     private final javax.swing.JToggleButton clusterToggleButton = new javax.swing.JToggleButton();
     private javax.swing.JPanel controlPanel;
+    private final javax.swing.JToggleButton streamToggleButton = new javax.swing.JToggleButton();
     // End of variables declaration//GEN-END:variables
 }

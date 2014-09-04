@@ -1,6 +1,5 @@
 package de.fh_koeln.avs.imageprocessor;
 
-import com.hazelcast.core.IMap;
 import de.fh_koeln.avs.global.ImageChunkData;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
@@ -74,7 +73,10 @@ public class ImageProcessor implements IImageProcessor {
         processedImageChunks.values().stream().forEach((chunk) -> {
             Point start = new Point(chunk.getX1(), chunk.getY1());
             Point end = new Point(chunk.getX2(), chunk.getY2());
-            Core.rectangle(imageWithLines, start, end, new Scalar(0, 256, 0), 3);
+            Core.rectangle(imageWithLines, start, end, new Scalar(0, 255, 0), 1);
+            Core.putText(imageWithLines, chunk.getId() + "", 
+                    new Point(chunk.getX1() + (chunk.getX2() - chunk.getX1())/2, chunk.getY1() + (chunk.getY2() - chunk.getY1())/2), 
+                    Core.FONT_HERSHEY_COMPLEX_SMALL, 1.2, new Scalar(0, 0, 0), 1);
         });
 
         grayImage.release();
@@ -83,6 +85,7 @@ public class ImageProcessor implements IImageProcessor {
 
     private Map<Integer, ImageChunkData> createChunkData(double[][] filteredLines) {
         Map<Integer, ImageChunkData> chunkData = new HashMap<>();
+        int id = 0;
         for (int i = 0; i < filteredLines.length - 1; i++) {
             double[] line1 = filteredLines[i];
             double[] line2 = filteredLines[i + 1];
@@ -92,7 +95,8 @@ public class ImageProcessor implements IImageProcessor {
                 double y1 = line1[3] < line2[1] ? line1[3] : line2[1];
                 double x2 = line2[2] > line1[0] ? line2[2] : line1[0];
                 double y2 = line2[1] > line1[3] ? line2[1] : line1[3];
-                chunkData.put(i, new ImageChunkData(i, x1, y1, x2, y2));
+                chunkData.put(id, new ImageChunkData(id, x1, y1, x2, y2));
+                id++;
             }
         }
         return chunkData;

@@ -1,7 +1,6 @@
 package de.fh_koeln.avs.global;
 
 import java.io.Serializable;
-import org.opencv.core.Mat;
 
 /**
  *
@@ -13,17 +12,12 @@ public class ImageData implements Serializable {
     private final int width;
     private final int height;
 
-    public ImageData(Mat image) {
-        this(image.cols(), image.rows(), new byte[image.cols() * image.rows() * 3]);
-        image.get(0, 0, this.data);
-    }
-
-    private ImageData(int width, int height, byte[] data) {
+    public ImageData(int width, int height) {
         this.width = width;
         this.height = height;
-        this.data = data;
+        this.data = new byte[width * height * 3];
     }
-
+    
     public byte[] getData() {
         return data;
     }
