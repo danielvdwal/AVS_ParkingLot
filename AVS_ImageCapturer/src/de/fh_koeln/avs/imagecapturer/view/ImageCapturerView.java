@@ -3,15 +3,10 @@ package de.fh_koeln.avs.imagecapturer.view;
 import de.fh_koeln.avs.global.ImageUtils;
 import de.fh_koeln.avs.imagecapturer.IImageCapturerController;
 import de.fh_koeln.avs.imagecapturer.ImageCapturerController;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -232,9 +227,6 @@ public class ImageCapturerView extends javax.swing.JFrame {
     }//GEN-LAST:event_captureToggleButtonActionPerformed
 
     private void clusterToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clusterToggleButtonActionPerformed
-        synchronized (clusterToggleButton) {
-            clusterToggleButton.setEnabled(false);
-        }
         clusterConnectionService.schedule(clusterConnectionRunnable, 0, TimeUnit.MILLISECONDS);
     }//GEN-LAST:event_clusterToggleButtonActionPerformed
 

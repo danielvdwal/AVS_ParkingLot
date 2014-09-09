@@ -2,6 +2,7 @@ package de.fh_koeln.avs.imageprocessor;
 
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.ROI;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -17,4 +18,8 @@ public interface IClusterManager {
     ImageData getRawImage();
 
     void sendROIs(Map<Integer, ROI> rois);
+    
+    void setId(String id);
+    
+    Collection<String> getConnectedImageCapturerNames();
 }

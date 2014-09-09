@@ -3,7 +3,6 @@ package de.fh_koeln.avs.imageprocessor;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.ROI;
 import de.fh_koeln.avs.global.converter.MatToBufferedImageConverter;
-import de.fh_koeln.avs.global.converter.MatToBufferedImageConverterGray;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,17 +26,12 @@ import org.opencv.imgproc.Imgproc;
 public class ImageProcessor implements IImageProcessor {
 
     private final MatToBufferedImageConverter matToBufferedImageConverter;
-    private final MatToBufferedImageConverterGray matToBufferedImageConverterGray;
     private Mat rawImage;
-    private Mat cannyImage;
-    private Mat lines;
-    private Mat imageWithLines;
     private Map<Integer, ROI> rois;
     private String processedImageChunkInformation;
 
     public ImageProcessor() {
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
-        this.matToBufferedImageConverterGray = new MatToBufferedImageConverterGray();
     }
 
     @Override
@@ -47,38 +41,23 @@ public class ImageProcessor implements IImageProcessor {
     }
 
     @Override
-    public void drawLines(int threshold, int minLineSize, int lineGap) {
-        if (cannyImage != null) {
-            cannyImage.release();
-        }
+    public void drawROIsAutomatically(int threshold, int minLineSize, int lineGap, boolean horizontalLines) {
         Mat grayImage = new Mat(rawImage.rows(), rawImage.cols(), CvType.CV_8UC1);
-        cannyImage = new Mat(rawImage.rows(), rawImage.cols(), CvType.CV_8UC1);
-        imageWithLines = new Mat(rawImage.rows(), rawImage.cols(), CvType.CV_8UC3);
-        byte[] temp = new byte[rawImage.rows() * rawImage.cols() * 3];
-        rawImage.get(0, 0, temp);
-        imageWithLines.put(0, 0, temp);
+        Mat cannyImage = new Mat(rawImage.rows(), rawImage.cols(), CvType.CV_8UC1);
+        Mat lines = new Mat();
+
         Imgproc.cvtColor(rawImage, grayImage, Imgproc.COLOR_RGB2GRAY, 4);
         Imgproc.Canny(grayImage, cannyImage, 80, 100);
-        lines = new Mat();
-
         Imgproc.HoughLinesP(cannyImage, lines, 1, Math.PI / 180, threshold, minLineSize, lineGap);
 
-        double[][] filteredLines = filterLines();
-        sortLines(filteredLines);
+        double[][] filteredLines = filterLines(lines, horizontalLines);
+        sortLines(filteredLines, horizontalLines);
 
         rois = createROIs(filteredLines);
 
-        rois.values().stream().forEach((roi) -> {
-            Point start = new Point(roi.getX(), roi.getY());
-            Point end = new Point(roi.getX() + roi.getWidth(), roi.getY() + roi.getHeight());
-            Core.rectangle(imageWithLines, start, end, new Scalar(0, 255, 0), 1);
-            Core.putText(imageWithLines, roi.getId() + "", 
-                    new Point(roi.getX() + (double)roi.getWidth()/2, roi.getY() + (double)roi.getHeight()/2), 
-                    Core.FONT_HERSHEY_COMPLEX_SMALL, 1.2, new Scalar(0, 0, 0), 1);
-        });
-
-        grayImage.release();
         lines.release();
+        cannyImage.release();
+        grayImage.release();
     }
 
     private Map<Integer, ROI> createROIs(double[][] filteredLines) {
@@ -90,22 +69,28 @@ public class ImageProcessor implements IImageProcessor {
 
             if (line1[3] - 20 <= line2[3] && line1[3] + 20 >= line2[3]) {
                 ROI roi = new ROI(id, rawImage.cols(), rawImage.rows());
-                roi.setStartPoint((int)line1[0], (int)line1[3]);
-                roi.setEndPoint((int)line2[2], (int)line2[1]);
+                roi.setStartPoint((int) line1[0], (int) line1[3]);
+                roi.setEndPoint((int) line2[2], (int) line2[1]);
                 temp.put(id, roi);
-                
+
                 id++;
             }
         }
         return temp;
     }
 
-    private double[][] filterLines() {
+    private double[][] filterLines(Mat lines, boolean horizontalLines) {
         List<double[]> temp = new ArrayList<>();
         for (int i = 0; i < lines.cols(); i++) {
             double[] vec = lines.get(0, i);
-            if (vec[1] != vec[3]) {
-                temp.add(vec);
+            if (horizontalLines) {
+                if (vec[0] < vec[2] - 20 || vec[0] > vec[2] + 20) {
+                    temp.add(vec);
+                }
+            } else {
+                if (vec[1] < vec[3] - 20 || vec[1] > vec[3] + 20) {
+                    temp.add(vec);
+                }
             }
         }
         double[][] filteredLines = new double[temp.size()][4];
@@ -115,32 +100,36 @@ public class ImageProcessor implements IImageProcessor {
         return filteredLines;
     }
 
-    private void sortLines(double[][] lines) {
+    private void sortLines(double[][] lines, boolean horizontalLines) {
         Arrays.sort(lines, (final double[] entry1, final double[] entry2) -> {
             final double xEntry1 = entry1[0];
             final double yEntry1 = entry1[3];
             final double xEntry2 = entry2[0];
             final double yEntry2 = entry2[3];
 
-            if (yEntry1 + 20 < yEntry2) {
-                return -1;
-            } else if (yEntry1 - 20 <= yEntry2 && yEntry1 + 20 >= yEntry2) {
-                return xEntry1 < xEntry2 ? -1 : 1;
+            if (horizontalLines) {
+                if (xEntry1 + 20 < xEntry2) {
+                    return -1;
+                } else if (xEntry1 - 20 <= xEntry2 && xEntry1 + 20 >= xEntry2) {
+                    return yEntry1 < yEntry2 ? -1 : 1;
+                } else {
+                    return 1;
+                }
             } else {
-                return 1;
+                if (yEntry1 + 20 < yEntry2) {
+                    return -1;
+                } else if (yEntry1 - 20 <= yEntry2 && yEntry1 + 20 >= yEntry2) {
+                    return xEntry1 < xEntry2 ? -1 : 1;
+                } else {
+                    return 1;
+                }
             }
-
         });
     }
 
     @Override
-    public BufferedImage getCannyImage() {
-        return matToBufferedImageConverterGray.convertToBufferedImage(cannyImage, true);
-    }
-
-    @Override
-    public BufferedImage getImageWithLines() {
-        return matToBufferedImageConverter.convertToBufferedImage(imageWithLines, true);
+    public BufferedImage getImage() {
+        return matToBufferedImageConverter.convertToBufferedImage(rawImage, true);
     }
 
     @Override
@@ -177,6 +166,11 @@ public class ImageProcessor implements IImageProcessor {
     @Override
     public Map<Integer, ROI> getROIs() {
         return rois;
+    }
+
+    @Override
+    public void setROIs(Map<Integer, ROI> rois) {
+        this.rois = rois;
     }
 
     @Override

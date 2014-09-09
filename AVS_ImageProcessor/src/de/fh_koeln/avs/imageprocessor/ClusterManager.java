@@ -7,6 +7,7 @@ import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.IMap;
 import de.fh_koeln.avs.global.ImageData;
 import de.fh_koeln.avs.global.ROI;
+import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -26,12 +27,11 @@ public class ClusterManager implements IClusterManager {
         try {
             networkConfig = new ClientNetworkConfig();
             // TODO hazelcast config file
-            networkConfig.addAddress("192.168.178.32:5701");
+            networkConfig.addAddress("139.6.65.26:5701");
             clientConfig = new ClientConfig();
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
             imageMap = hz.getMap("capturedImages");
-            id = imageMap.keySet().iterator().next();
         } catch (IllegalStateException ex) {
             return false;
         }
@@ -55,11 +55,21 @@ public class ClusterManager implements IClusterManager {
     public ImageData getRawImage() {
         return imageMap.get(id);
     }
-
+    
     @Override
     public void sendROIs(Map<Integer, ROI> rois) {
         System.out.printf("Send image to: imageprocessor_%s\n", id);
         IMap map = hz.getMap(String.format("imageprocessor_%s", id));
         map.putAll(rois);
+    }
+    
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    @Override
+    public Collection<String> getConnectedImageCapturerNames() {
+        return imageMap.keySet();
     }
 }

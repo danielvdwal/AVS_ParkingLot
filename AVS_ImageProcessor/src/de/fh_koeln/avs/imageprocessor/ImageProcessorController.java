@@ -1,6 +1,9 @@
 package de.fh_koeln.avs.imageprocessor;
 
+import de.fh_koeln.avs.global.ROI;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.Map;
 import org.opencv.core.Core;
 
 /**
@@ -32,23 +35,28 @@ public class ImageProcessorController implements IImageProcessorController {
     }
 
     @Override
-    public void getRawImage() {
+    public void pullRawImage() {
         imageProcessor.setRawImage(clusterManager.getRawImage());
     }
 
     @Override
-    public void drawLines(int threshold, int minLineSize, int lineGap) {
-        imageProcessor.drawLines(threshold, minLineSize, lineGap);
+    public void drawROIsAutomatically(int threshold, int minLineSize, int lineGap, boolean horizontal) {
+        imageProcessor.drawROIsAutomatically(threshold, minLineSize, lineGap, horizontal);
+    }
+    
+    @Override
+    public Map<Integer, ROI> getROIs() {
+        return imageProcessor.getROIs();
     }
 
     @Override
-    public BufferedImage getCannyImage() {
-        return imageProcessor.getCannyImage();
+    public void setROIs(Map<Integer, ROI> rois) {
+        imageProcessor.setROIs(rois);
     }
 
     @Override
-    public BufferedImage getImageWithLines() {
-        return imageProcessor.getImageWithLines();
+    public BufferedImage getImage() {
+        return imageProcessor.getImage();
     }
 
     @Override
@@ -60,5 +68,15 @@ public class ImageProcessorController implements IImageProcessorController {
     @Override
     public String getProcessedImageChunksInformation() {
         return imageProcessor.getProcessedImageChunksInformation();
+    }
+
+    @Override
+    public void setSelectedImageCapturerName(String name) {
+        clusterManager.setId(name);
+    }
+
+    @Override
+    public Collection<String> getImageCapturerNames() {
+        return clusterManager.getConnectedImageCapturerNames();
     }
 }

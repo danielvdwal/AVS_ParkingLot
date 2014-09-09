@@ -29,7 +29,7 @@ public class ClusterManager implements IClusterManager {
         try {
             networkConfig = new ClientNetworkConfig();
             // TODO hazelcast config file
-            networkConfig.addAddress("192.168.178.32:5701");
+            networkConfig.addAddress("139.6.65.26:5701");
             clientConfig = new ClientConfig();
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
@@ -47,6 +47,7 @@ public class ClusterManager implements IClusterManager {
     public boolean disconnect() {
         if (hz != null) {
             try {
+                imageMap.remove(id);
                 hz.shutdown();
                 return true;
             } catch (IllegalStateException ex) {

@@ -13,15 +13,15 @@ public interface IImageProcessor {
 
     void setRawImage(ImageData image);
 
-    void drawLines(int threshold, int minLineSize, int lineGap);
+    void drawROIsAutomatically(int threshold, int minLineSize, int lineGap, boolean horizontalLines);
 
-    BufferedImage getCannyImage();
-
-    BufferedImage getImageWithLines();
+    BufferedImage getImage();
 
     void processImage();
 
     Map<Integer, ROI> getROIs();
+    
+    void setROIs(Map<Integer, ROI> rois);
 
     String getProcessedImageChunksInformation();
 }
