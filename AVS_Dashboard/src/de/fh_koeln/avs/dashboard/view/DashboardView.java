@@ -1,27 +1,42 @@
 package de.fh_koeln.avs.dashboard.view;
 
 import de.fh_koeln.avs.dashboard.DashboardController;
+import de.fh_koeln.avs.global.ImageUtils;
+import de.fh_koeln.avs.global.ROI;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  *
  * @author Daniel van der Wal
  */
 public class DashboardView extends javax.swing.JFrame {
-    
+
     private ScheduledExecutorService imageCaptureService = Executors.newSingleThreadScheduledExecutor();
-    private final ScheduledExecutorService clusterConnectionService = Executors.newSingleThreadScheduledExecutor();   
+    private final ScheduledExecutorService clusterConnectionService = Executors.newSingleThreadScheduledExecutor();
     private final Runnable clusterConnectionRunnable;
     private final DashboardController dashboardController;
     private final Runnable imageCaptureRunnable;
-    
+    private String selectedCam;
+    private BufferedImage displayedImage;
+    private final ROIPanel roiPanel = new ROIPanel();
+    private final JLabel imageLabel = new JLabel();
+
     /**
      * Creates new form DashboardView
      */
@@ -30,6 +45,30 @@ public class DashboardView extends javax.swing.JFrame {
         this.clusterConnectionRunnable = new ClusterConnectTask();
         this.dashboardController = new DashboardController();
         this.imageCaptureRunnable = new CaptureTask();
+        this.camList.setModel(new DefaultListModel());
+        this.camList.addListSelectionListener((ListSelectionEvent e) -> {
+            if (e.getValueIsAdjusting() == false) {
+                if (camList.getSelectedValue() != null) {
+                    selectedCam = camList.getSelectedValue().toString();
+                } else {
+                    selectedCam = "";
+                }
+                imageCaptureService.shutdown();
+                imageCaptureService = Executors.newSingleThreadScheduledExecutor();
+                imageCaptureService.scheduleAtFixedRate(imageCaptureRunnable, 0, 1, TimeUnit.SECONDS);
+            }
+        });
+
+        capturedImageWrapper.setLayout(null);
+
+        roiPanel.setOpaque(false);
+        roiPanel.setSize(new Dimension(640, 480));
+        capturedImageWrapper.add(roiPanel);
+
+        imageLabel.setSize(new Dimension(640, 480));
+        capturedImageWrapper.add(imageLabel);
+
+        capturedImageWrapper.setSize(new Dimension(640, 480));
     }
 
     /**
@@ -44,14 +83,17 @@ public class DashboardView extends javax.swing.JFrame {
         controlPanel = new javax.swing.JPanel();
         clusterToggleButton = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        camList = new javax.swing.JList();
         imagePanel = new javax.swing.JPanel();
-        capturedImage = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setSize(new java.awt.Dimension(800, 600));
+        setMaximumSize(new java.awt.Dimension(815, 600));
+        setMinimumSize(new java.awt.Dimension(815, 600));
 
         controlPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Controls"));
+        controlPanel.setMaximumSize(new java.awt.Dimension(300, 518));
+        controlPanel.setMinimumSize(new java.awt.Dimension(300, 518));
+        controlPanel.setSize(new java.awt.Dimension(300, 518));
 
         clusterToggleButton.setText("Cluster: on");
         clusterToggleButton.setActionCommand("");
@@ -61,12 +103,10 @@ public class DashboardView extends javax.swing.JFrame {
             }
         });
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        camList.setMaximumSize(new java.awt.Dimension(240, 500));
+        camList.setPreferredSize(new java.awt.Dimension(240, 500));
+        camList.setSize(new java.awt.Dimension(240, 500));
+        jScrollPane1.setViewportView(camList);
 
         javax.swing.GroupLayout controlPanelLayout = new javax.swing.GroupLayout(controlPanel);
         controlPanel.setLayout(controlPanelLayout);
@@ -74,10 +114,10 @@ public class DashboardView extends javax.swing.JFrame {
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(controlPanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(clusterToggleButton, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
         controlPanelLayout.setVerticalGroup(
             controlPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -90,20 +130,30 @@ public class DashboardView extends javax.swing.JFrame {
 
         imagePanel.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(0, 0, 0), 1, true), "Parking Lot"));
 
+        capturedImageWrapper.setMinimumSize(new java.awt.Dimension(640, 480));
+        capturedImageWrapper.setPreferredSize(new java.awt.Dimension(640, 480));
+        capturedImageWrapper.setSize(new java.awt.Dimension(640, 480));
+
+        javax.swing.GroupLayout capturedImageWrapperLayout = new javax.swing.GroupLayout(capturedImageWrapper);
+        capturedImageWrapper.setLayout(capturedImageWrapperLayout);
+        capturedImageWrapperLayout.setHorizontalGroup(
+            capturedImageWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 640, Short.MAX_VALUE)
+        );
+        capturedImageWrapperLayout.setVerticalGroup(
+            capturedImageWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout imagePanelLayout = new javax.swing.GroupLayout(imagePanel);
         imagePanel.setLayout(imagePanelLayout);
         imagePanelLayout.setHorizontalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, imagePanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, 625, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(capturedImageWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         imagePanelLayout.setVerticalGroup(
             imagePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(imagePanelLayout.createSequentialGroup()
-                .addComponent(capturedImage, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(capturedImageWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,8 +172,8 @@ public class DashboardView extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(imagePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(controlPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(imagePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -135,19 +185,22 @@ public class DashboardView extends javax.swing.JFrame {
             clusterToggleButton.setEnabled(false);
         }
         clusterConnectionService.schedule(clusterConnectionRunnable, 0, TimeUnit.MILLISECONDS);
+
     }//GEN-LAST:event_clusterToggleButtonActionPerformed
-     
+
     private class CaptureTask implements Runnable {
 
         @Override
         public void run() {
-            BufferedImage displayedImage = dashboardController.getRawImage();
-            capturedImage.setIcon(getScaledImage(displayedImage, capturedImage.getWidth(), (int) ((double) (capturedImage.getWidth() * 3)) / 4));
+            if (!selectedCam.isEmpty()) {
+                displayedImage = dashboardController.getRawImage(selectedCam);
+                imageLabel.setIcon(ImageUtils.getScaledImage(displayedImage, 640, 480));
+                Map<Integer, ROI> rois = dashboardController.getROIs(selectedCam);
+                roiPanel.setROIs(rois);
+            }
         }
     }
-    
-    
-    
+
     /**
      * @param args the command line arguments
      */
@@ -184,52 +237,57 @@ public class DashboardView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel capturedImage;
+    private javax.swing.JList camList;
+    private final javax.swing.JPanel capturedImageWrapper = new javax.swing.JPanel();
     private javax.swing.JToggleButton clusterToggleButton;
     private javax.swing.JPanel controlPanel;
     private javax.swing.JPanel imagePanel;
-    private javax.swing.JList jList1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-private class ClusterConnectTask implements Runnable {
+    private class ClusterConnectTask implements Runnable {
 
         @Override
         public void run() {
-            boolean buttonActive;
-            synchronized (clusterToggleButton) {
-                buttonActive = clusterToggleButton.isSelected();
-            }
-            if (buttonActive) {
-                boolean connected = dashboardController.connectToCluster();
-                synchronized (clusterToggleButton) {
+            boolean buttonActive = clusterToggleButton.isSelected();
+            try {
+                if (buttonActive) {
+                    boolean connected = dashboardController.connectToCluster();
                     if (connected) {
                         clusterToggleButton.setText("Cluster: on");
-                        imageCaptureService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);
-                        //streamToggleButton.setEnabled(true);
+
+                        DefaultListModel dlm = (DefaultListModel) camList.getModel();
+                        Collection<String> names = dashboardController.getImageCapturerNames();
+                        int size = names.size();
+
+                        names.stream().forEach((name) -> {
+                            dlm.addElement(name);
+                        });
+
                     } else {
                         clusterToggleButton.setSelected(false);
                     }
-                }
-            } else {
-                boolean disconnected = dashboardController.disconnectFromCluster();
-                synchronized (clusterToggleButton) {
+                } else {
+                    boolean disconnected = dashboardController.disconnectFromCluster();
                     if (disconnected) {
-                        //streamToggleButton.setEnabled(false);
                         clusterToggleButton.setText("Cluster: off");
+
                         imageCaptureService.shutdown();
                         imageCaptureService = Executors.newSingleThreadScheduledExecutor();
+
+                        imageLabel.setIcon(null);
+                        displayedImage = null;
+                        DefaultListModel dlm = (DefaultListModel) camList.getModel();
+                        dlm.clear();
                     } else {
                         clusterToggleButton.setSelected(true);
                     }
                 }
-            }
-            synchronized (clusterToggleButton) {
+            } finally {
                 clusterToggleButton.setEnabled(true);
             }
         }
     }
-
 
     private ImageIcon getScaledImage(Image srcImg, int w, int h) {
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
@@ -239,4 +297,5 @@ private class ClusterConnectTask implements Runnable {
         g2.dispose();
         return new ImageIcon(resizedImg);
     }
+
 }

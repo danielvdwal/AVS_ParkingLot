@@ -18,8 +18,8 @@ public class ImageCapturerController implements IImageCapturerController {
     private ImageData imageData;
 
     public ImageCapturerController() {
-        //this.imageCapture = new CameraImageCapture();
-        this.imageCapture = new FileImageCapture();
+        this.imageCapture = new CameraImageCapture();
+        //this.imageCapture = new FileImageCapture();
         this.clusterManager = new ClusterManager();
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
     }

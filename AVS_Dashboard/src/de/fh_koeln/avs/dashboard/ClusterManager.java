@@ -3,16 +3,12 @@ package de.fh_koeln.avs.dashboard;
 import com.hazelcast.client.HazelcastClient;
 import com.hazelcast.client.config.ClientConfig;
 import com.hazelcast.client.config.ClientNetworkConfig;
-import com.hazelcast.core.DistributedObject;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.IList;
 import com.hazelcast.core.IMap;
-import com.hazelcast.core.IQueue;
 import de.fh_koeln.avs.global.ImageData;
-import java.util.List;
+import de.fh_koeln.avs.global.ROI;
+import java.util.Collection;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -23,7 +19,7 @@ public class ClusterManager implements IClusterManager {
     private ClientNetworkConfig networkConfig;
     private ClientConfig clientConfig;
     private HazelcastInstance hz;
-    private IMap<Integer, ImageData> imageMap;
+    private IMap<String, ImageData> imageMap;
 
     @Override
     public boolean connect() {
@@ -55,8 +51,18 @@ public class ClusterManager implements IClusterManager {
     }
 
     @Override
-    public ImageData getRawImage() {
-        return imageMap.get(1);
+    public ImageData getRawImage(String clientName) {
+        return imageMap.get(clientName);
     }
 
+    @Override
+    public Collection<String> getConnectedImageCapturerNames() {
+        return imageMap.keySet();
+    }
+
+    @Override
+    public Map<Integer, ROI> getROIs(String clientName) {
+        String id = String.format("imageprocessor_%s", clientName);
+        return hz.getMap(id);
+    }
 }
