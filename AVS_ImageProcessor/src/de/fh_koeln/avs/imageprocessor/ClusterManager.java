@@ -26,8 +26,8 @@ public class ClusterManager implements IClusterManager {
     public boolean connect() {
         try {
             networkConfig = new ClientNetworkConfig();
-            // TODO hazelcast config file
-            networkConfig.addAddress("139.6.65.27:5701");
+            //Cluster Config
+            networkConfig.addAddress("139.6.65.26:5701").addAddress("139.6.65.27:5701").addAddress("139.6.65.28:5701").addAddress("139.6.65.29:5701").addAddress("139.6.65.26:5701");
             clientConfig = new ClientConfig();
             clientConfig.setNetworkConfig(networkConfig);
             hz = HazelcastClient.newHazelcastClient(clientConfig);
