@@ -321,6 +321,7 @@ public class ImageProcessorView extends JFrame {
     private void imageCapturerComboBoxItemChanged(ItemEvent e) {
         String name = (String) e.getItem();
         imageProcessorController.setSelectedImageCapturerName(name);
+        roiPanel.setROIs(imageProcessorController.getROIs());
         imageCaptureService.shutdown();
         imageCaptureService = Executors.newSingleThreadScheduledExecutor();
         imageCaptureService.scheduleAtFixedRate(imageCaptureRunnable, 0, 40, TimeUnit.MILLISECONDS);

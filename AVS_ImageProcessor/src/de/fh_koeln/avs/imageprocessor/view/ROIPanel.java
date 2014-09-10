@@ -39,8 +39,12 @@ public class ROIPanel extends JPanel {
 
     public void setROIs(Map<Integer, ROI> rois) {
         this.rois.clear();
-        this.rois.putAll(rois);
-        counter = rois.size();
+        if (rois != null) {
+            this.rois.putAll(rois);
+            counter = rois.size();
+        } else {
+            counter = 0;
+        }
         repaint();
     }
 

@@ -60,6 +60,7 @@ public class ClusterManager implements IClusterManager {
     public void sendROIs(Map<Integer, ROI> rois) {
         System.out.printf("Send image to: imageprocessor_%s\n", id);
         IMap map = hz.getMap(String.format("imageprocessor_%s", id));
+        map.clear();
         map.putAll(rois);
     }
     

@@ -18,10 +18,15 @@ public class ImageProcessorController implements IImageProcessorController {
 
     private final IImageProcessor imageProcessor;
     private final IClusterManager clusterManager;
+    private final ROIFileReader roiFileReader;
+    private final ROIFileWriter roiFileWriter;
+    private String currentImageCapturerId;
 
     public ImageProcessorController() {
         this.imageProcessor = new ImageProcessor();
         this.clusterManager = new ClusterManager();
+        this.roiFileReader = new ROIFileReader();
+        this.roiFileWriter = new ROIFileWriter();
     }
 
     @Override
@@ -52,6 +57,7 @@ public class ImageProcessorController implements IImageProcessorController {
     @Override
     public void setROIs(Map<Integer, ROI> rois) {
         imageProcessor.setROIs(rois);
+        roiFileWriter.writeROIFile(currentImageCapturerId, rois);
     }
 
     @Override
@@ -73,6 +79,12 @@ public class ImageProcessorController implements IImageProcessorController {
     @Override
     public void setSelectedImageCapturerName(String name) {
         clusterManager.setId(name);
+        currentImageCapturerId = name;
+        if(roiFileReader.roiFileExists(name)) {
+            imageProcessor.setROIs(roiFileReader.readROIFile(name));
+        } else {
+            imageProcessor.setROIs(null);
+        }
     }
 
     @Override

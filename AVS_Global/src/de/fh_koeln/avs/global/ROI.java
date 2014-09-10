@@ -13,7 +13,7 @@ public final class ROI implements Serializable {
     private int x2, y2;
     private final int maxX, maxY;
     private boolean objectDetected;
-
+    
     public ROI(int id, int maxX, int maxY) {
         this.id = id;
         this.x1 = 0;
@@ -60,5 +60,9 @@ public final class ROI implements Serializable {
 
     public void setObjectDetected(boolean objectDetected) {
         this.objectDetected = objectDetected;
+    }
+    
+    public String getROIInformationAsString() {
+        return id + ";" + x1 + ";" + y1 + ";" + x2 + ";" + y2 + ";" + maxX + ";" + maxY;
     }
 }

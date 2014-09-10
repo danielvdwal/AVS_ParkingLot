@@ -149,7 +149,8 @@ public class ImageProcessor implements IImageProcessor {
 
             contours = new ArrayList<>();
             Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
-            if (contours.size() > 5) {
+            System.out.println("Contours for " + i + ": " + contours.size());
+            if (contours.size() > 20) {
                 roi.setObjectDetected(true);
                 strBuilder.append("Car detected on: ");
             } else {
