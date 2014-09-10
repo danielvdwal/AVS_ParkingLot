@@ -3,15 +3,12 @@ package de.fh_koeln.avs.dashboard.view;
 import de.fh_koeln.avs.dashboard.DashboardController;
 import de.fh_koeln.avs.global.ImageUtils;
 import de.fh_koeln.avs.global.ROI;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -279,6 +276,10 @@ public class DashboardView extends javax.swing.JFrame {
                         displayedImage = null;
                         DefaultListModel dlm = (DefaultListModel) camList.getModel();
                         dlm.clear();
+                        
+                        //Clear ROIs
+                        roiPanel.setROIs(null);
+                        
                     } else {
                         clusterToggleButton.setSelected(true);
                     }

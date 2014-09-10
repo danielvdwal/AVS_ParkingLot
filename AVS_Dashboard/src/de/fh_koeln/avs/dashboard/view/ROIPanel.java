@@ -42,4 +42,5 @@ public class ROIPanel extends JPanel {
             g.drawString(roi.getId() + "", (int) (roi.getX() + (double) roi.getWidth() / 2), (int) (roi.getY() + (double) roi.getHeight() / 2));
         });
     }
+    
 }
