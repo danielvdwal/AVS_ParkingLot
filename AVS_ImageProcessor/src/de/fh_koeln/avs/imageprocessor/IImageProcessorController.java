@@ -27,8 +27,6 @@ public interface IImageProcessorController {
 
     void processImage();
 
-    String getProcessedImageChunksInformation();
-
     void setSelectedImageCapturerName(String name);
 
     Collection<String> getImageCapturerNames();

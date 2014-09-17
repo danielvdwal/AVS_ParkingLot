@@ -22,6 +22,4 @@ public interface IImageProcessor {
     Map<Integer, ROI> getROIs();
     
     void setROIs(Map<Integer, ROI> rois);
-
-    String getProcessedImageChunksInformation();
 }

@@ -120,7 +120,6 @@ public class ImageProcessorView extends JFrame {
         @Override
         public void run() {
             imageProcessorController.processImage();
-            System.out.println(imageProcessorController.getProcessedImageChunksInformation());
         }
     }
 

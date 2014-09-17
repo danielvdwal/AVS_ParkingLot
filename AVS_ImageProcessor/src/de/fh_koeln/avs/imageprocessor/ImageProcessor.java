@@ -15,7 +15,6 @@ import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
-import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
@@ -28,7 +27,6 @@ public class ImageProcessor implements IImageProcessor {
     private final MatToBufferedImageConverter matToBufferedImageConverter;
     private Mat rawImage;
     private Map<Integer, ROI> rois;
-    private String processedImageChunkInformation;
 
     public ImageProcessor() {
         this.matToBufferedImageConverter = new MatToBufferedImageConverter();
@@ -136,7 +134,6 @@ public class ImageProcessor implements IImageProcessor {
     public void processImage() {
         List<MatOfPoint> contours;
         int i = 0;
-        StringBuilder strBuilder = new StringBuilder();
         for (ROI roi : rois.values()) {
             Mat imageChunk = new Mat(rawImage, new Rect(new Point(roi.getX(), roi.getY()), new Point(roi.getX() + roi.getWidth(), roi.getY() + roi.getHeight())));
 
@@ -150,18 +147,13 @@ public class ImageProcessor implements IImageProcessor {
             contours = new ArrayList<>();
             Imgproc.findContours(imageA, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
             System.out.println("Contours for " + i + ": " + contours.size());
-            if (contours.size() > 20) {
+            if (contours.size() > 10) {
                 roi.setObjectDetected(true);
-                strBuilder.append("Car detected on: ");
             } else {
                 roi.setObjectDetected(false);
-                strBuilder.append("No car on: ");
             }
-            strBuilder.append(i);
-            strBuilder.append("\n");
             i++;
         }
-        processedImageChunkInformation = strBuilder.toString();
     }
 
     @Override
@@ -172,10 +164,5 @@ public class ImageProcessor implements IImageProcessor {
     @Override
     public void setROIs(Map<Integer, ROI> rois) {
         this.rois = rois;
-    }
-
-    @Override
-    public String getProcessedImageChunksInformation() {
-        return processedImageChunkInformation;
     }
 }

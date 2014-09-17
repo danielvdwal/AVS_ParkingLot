@@ -72,11 +72,6 @@ public class ImageProcessorController implements IImageProcessorController {
     }
 
     @Override
-    public String getProcessedImageChunksInformation() {
-        return imageProcessor.getProcessedImageChunksInformation();
-    }
-
-    @Override
     public void setSelectedImageCapturerName(String name) {
         clusterManager.setId(name);
         currentImageCapturerId = name;
